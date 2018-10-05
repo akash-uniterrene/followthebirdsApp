@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { User } from '../../providers';
 /**
  * Generated class for the FriendsPage page.
  *
@@ -15,11 +16,13 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class FriendsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-  }
+	public friendLists = [];
+	constructor(public navCtrl: NavController, public user: User, public navParams: NavParams) {
+	  
+	}
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad FriendsPage');
+	console.log(this.user.getfriends({id: 41}));
   }
 
 }

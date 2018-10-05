@@ -30,7 +30,6 @@ export class MyApp {
   rootPage = FirstRunPage;
 
   @ViewChild(Nav) nav: Nav;
-
   pages: any[] = [
     { title: 'Tutorial', component: 'TutorialPage' },
     { title: 'Welcome', component: 'WelcomePage' },
@@ -40,6 +39,10 @@ export class MyApp {
     { title: 'Login', component: 'LoginPage' },
     { title: 'Signup', component: 'SignupPage' },
     { title: 'Master Detail', component: 'ListMasterPage' },
+    { title: 'Friends', component: 'FriendsPage' },
+    { title: 'Photos', component: 'PhotosPage' },
+    { title: 'Events', component: 'EventsPage' },
+    { title: 'Groups', component: 'GroupsPage' },
     { title: 'Menu', component: 'MenuPage' },
     { title: 'Settings', component: 'SettingsPage' },
     { title: 'Search', component: 'SearchPage' }

@@ -81,4 +81,21 @@ export class User {
   _loggedIn(resp) {
     this._user = resp.user;
   }
+  
+  /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  getfriends(params?: any) {
+	 
+	let seq = this.api.get('friends/41', '').share();
+
+    seq.subscribe((res: any) => {
+		return res;
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    
+  }
 }

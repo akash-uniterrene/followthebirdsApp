@@ -12,6 +12,7 @@ export class Api {
   }
 
   get(endpoint: string, params?: any, reqOpts?: any) {
+	  
     if (!reqOpts) {
       reqOpts = {
         params: new HttpParams()
@@ -25,7 +26,6 @@ export class Api {
         reqOpts.params = reqOpts.params.set(k, params[k]);
       }
     }
-
     return this.http.get(this.url + '/' + endpoint, reqOpts);
   }
 
