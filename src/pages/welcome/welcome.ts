@@ -17,6 +17,7 @@ import { MainPage } from '../';
 })
 export class WelcomePage {
 	
+	/*
 	account: { first_name: string, last_name: string, username: string, email: string, password: string } = {
 		first_name: 'John',
 		last_name: 'Doe',
@@ -24,7 +25,11 @@ export class WelcomePage {
 		email: 'test@example.com',
 		password: 'test'
 	};
-	
+	*/
+	account: { user_name: string, user_password: string } = {
+		user_name: '',
+		user_password: ''
+	};
 	// Our translated text strings
 	private signupErrorString: string;
 	constructor(
@@ -34,22 +39,19 @@ export class WelcomePage {
 		public translateService: TranslateService
 	)
 	{
-		this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
-		  this.signupErrorString = value;
+		this.translateService.get('LOGIN_ERROR').subscribe((value) => {
+		  this.loginErrorString = value;
 		})
 	}
 
-	doSignup() {
-		// Attempt to login in through our User service
-		this.user.signup(this.account).subscribe((resp) => {
+	// Attempt to login in through our User service
+	doLogin() {
+		this.user.login(this.account).subscribe((resp) => {
 		  this.navCtrl.push(MainPage);
 		}, (err) => {
-
-		  this.navCtrl.push(MainPage);
-
-		  // Unable to sign up
+		  // Unable to log in
 		  let toast = this.toastCtrl.create({
-			message: this.signupErrorString,
+			message: this.loginErrorString,
 			duration: 3000,
 			position: 'top'
 		  });
@@ -57,9 +59,9 @@ export class WelcomePage {
 		});
 	}
   
-  login() {
-    this.navCtrl.push('LoginPage');
-  }
+	signup() {
+		this.navCtrl.push('SignupPage');
+	}
 
  
 }
