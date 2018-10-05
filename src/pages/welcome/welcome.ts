@@ -17,21 +17,12 @@ import { MainPage } from '../';
 })
 export class WelcomePage {
 	
-	/*
-	account: { first_name: string, last_name: string, username: string, email: string, password: string } = {
-		first_name: 'John',
-		last_name: 'Doe',
-		username: 'johndoe',
-		email: 'test@example.com',
-		password: 'test'
-	};
-	*/
 	account: { user_name: string, user_password: string } = {
 		user_name: '',
 		user_password: ''
 	};
 	// Our translated text strings
-	private signupErrorString: string;
+	private loginErrorString: string;
 	constructor(
 		public navCtrl: NavController,
 		public user: User,
