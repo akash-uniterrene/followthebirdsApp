@@ -41,6 +41,9 @@ export class WelcomePage {
 		this.loading = this.loadingCtrl.create({
 			content: 'Verifing details...'
 		});
+		if(localStorage.getItem('user_firstname')){
+		this.navCtrl.push(MainPage);
+		}
 
 		
 	}
@@ -56,8 +59,9 @@ export class WelcomePage {
 			console.log(resp);
 			this.loading.dismiss();
 			this.storage.setUser(resp);			
-		 // this.navCtrl.push(MainPage, resp);
+		  this.navCtrl.push(MainPage, resp);
 		}, (err) => {
+			this.loading.dismiss();
 		  // Unable to log in
 		  let toast = this.toastCtrl.create({
 			message: this.loginErrorString,

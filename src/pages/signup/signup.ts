@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
 
 import { User } from '../../providers';
-import { MainPage } from '../';
+import { MainPage, FirstRunPage } from '../';
 
 @IonicPage()
 @Component({
@@ -54,6 +54,6 @@ export class SignupPage {
     });
   }
   loginPage(){
-    
+    this.navCtrl.push(FirstRunPage);
   }
 }

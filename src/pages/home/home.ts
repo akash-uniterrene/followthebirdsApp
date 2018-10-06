@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { MainPage , FirstRunPage} from '../';
 /**
  * Generated class for the HomePage page.
  *
@@ -25,9 +25,10 @@ export class HomePage {
     this.user = this.navParams.data; 
     
     if(localStorage.getItem('user_firstname') && localStorage.getItem('user_id')){
-      alert(localStorage.getItem('user_firstname'));
+      this.user.name = localStorage.getItem('user_firstname');
+      
     }else{
-     alert('no fouund');
+      this.navCtrl.push(FirstRunPage);
       
     }
   }
