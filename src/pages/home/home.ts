@@ -17,7 +17,7 @@ export class HomePage {
 
   public user: any;
   public savedUser : any;
-
+ 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,   

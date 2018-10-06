@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, LoadingController } from 'ionic-angular';
 
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
@@ -22,6 +22,7 @@ export class WelcomePage {
 		user_name: '',
 		user_password: ''
 	};
+	public loading;
 	// Our translated text strings
 	private loginErrorString: string;
 	constructor(
@@ -29,19 +30,33 @@ export class WelcomePage {
 		public user: User,
 		public toastCtrl: ToastController,
 		public translateService: TranslateService,
-		public storage: StorageProvider
+		public storage: StorageProvider,
+		public loadingCtrl: LoadingController
 	)
 	{
 		this.translateService.get('LOGIN_ERROR').subscribe((value) => {
 		  this.loginErrorString = value;
-		})
+		});
+
+		this.loading = this.loadingCtrl.create({
+			content: 'Verifing details...'
+		});
+
+		
 	}
+
+
+	
 
 	// Attempt to login in through our User service
 	doLogin() {
+		this.loading.present();
+
 		this.user.login(this.account).subscribe((resp) => {
+			console.log(resp);
+			this.loading.dismiss();
 			this.storage.setUser(resp);			
-		  this.navCtrl.push(MainPage, resp);
+		 // this.navCtrl.push(MainPage, resp);
 		}, (err) => {
 		  // Unable to log in
 		  let toast = this.toastCtrl.create({
@@ -56,6 +71,8 @@ export class WelcomePage {
 	signup() {
 		this.navCtrl.push('SignupPage');
 	}
+
+	
 
  
 }

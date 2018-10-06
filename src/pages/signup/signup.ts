@@ -53,4 +53,7 @@ export class SignupPage {
       toast.present();
     });
   }
+  loginPage(){
+    
+  }
 }
