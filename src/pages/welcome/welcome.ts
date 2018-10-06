@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
 
 import { User } from '../../providers';
+import { StorageProvider } from '../../providers/storage/storage';
 import { MainPage } from '../';
 /**
  * The Welcome Page is a splash page that quickly describes the app,
@@ -27,7 +28,8 @@ export class WelcomePage {
 		public navCtrl: NavController,
 		public user: User,
 		public toastCtrl: ToastController,
-		public translateService: TranslateService
+		public translateService: TranslateService,
+		public storage: StorageProvider
 	)
 	{
 		this.translateService.get('LOGIN_ERROR').subscribe((value) => {
@@ -38,7 +40,8 @@ export class WelcomePage {
 	// Attempt to login in through our User service
 	doLogin() {
 		this.user.login(this.account).subscribe((resp) => {
-		  this.navCtrl.push(MainPage);
+			this.storage.setUser(resp);			
+		  this.navCtrl.push(MainPage, resp);
 		}, (err) => {
 		  // Unable to log in
 		  let toast = this.toastCtrl.create({

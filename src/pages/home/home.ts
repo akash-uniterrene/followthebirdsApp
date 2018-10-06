@@ -15,10 +15,25 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public user: any;
+  public savedUser : any;
+
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,   
+    ) {    
+    this.user = this.navParams.data; 
+    
+    if(localStorage.getItem('user_firstname') && localStorage.getItem('user_id')){
+      alert(localStorage.getItem('user_firstname'));
+    }else{
+     alert('no fouund');
+      
+    }
   }
 
   ionViewDidLoad() {
+    
     console.log('ionViewDidLoad HomePage');
   }
   
