@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, LoadingController, Nav, NavParams } from 'ionic-angular';
 
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
 import { MainPage } from '../';
+
 /**
  * The Welcome Page is a splash page that quickly describes the app,
  * and then directs the user to create an account or log in.
@@ -31,7 +32,8 @@ export class WelcomePage {
 		public toastCtrl: ToastController,
 		public translateService: TranslateService,
 		public storage: StorageProvider,
-		public loadingCtrl: LoadingController
+		public loadingCtrl: LoadingController,
+		public nav: Nav
 	)
 	{
 		this.translateService.get('LOGIN_ERROR').subscribe((value) => {
@@ -76,6 +78,9 @@ export class WelcomePage {
 		this.navCtrl.push('SignupPage');
 	}
 
+	forgetPasswordpage(){
+		this.nav.push('ForgetPasswordPage');
+	}
 	
 
  

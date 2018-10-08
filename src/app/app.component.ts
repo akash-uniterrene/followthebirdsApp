@@ -45,7 +45,9 @@ export class MyApp {
     { title: 'Groups', component: 'GroupsPage' },
     { title: 'Menu', component: 'MenuPage' },
     { title: 'Settings', component: 'SettingsPage' },
-    { title: 'Search', component: 'SearchPage' }
+    { title: 'Search', component: 'SearchPage' },
+    { title: 'Forget Password', component: 'ForgetPasswordPage' },
+    { title: 'OTP page', component: 'OtpPage' }
   ]
 
   constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
