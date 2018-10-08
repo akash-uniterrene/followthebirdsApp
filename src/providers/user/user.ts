@@ -87,15 +87,39 @@ export class User {
    * the user entered on the form.
    */
   getfriends(params?: any) {
-	 
-	let seq = this.api.get('friends/41', '').share();
+	let frindlist = [];	
+	let seq = this.api.get('friends/66', '').share();
 
-    seq.subscribe((res: any) => {
-		return res;
-    }, err => {
-      console.error('ERROR', err);
-    });
-
-    
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			frindlist.push(res);
+			resolve(frindlist);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
   }
+
+  /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  getevents(params?: any) {
+	let eventlist = [];	
+	let seq = this.api.get('events/66', '').share();
+
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			eventlist.push(res);
+			resolve(eventlist);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+
+  
+  
 }

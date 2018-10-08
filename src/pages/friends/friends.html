@@ -17,10 +17,10 @@
 	<ion-list>
 		<ion-item-sliding *ngFor="let friend of friendLists">
 		  <button ion-item>
-			
+			<ion-avatar item-left>
+				<img src="https://dev.followthebirds.com/content/uploads/{{friend.user_picture}}">
+			</ion-avatar>
 			<h2>{{friend.user_firstname}} {{friend.user_lastname}}</h2>
-			<p>{{friend.user_name}}</p>
-			<p>{{friend.user_gender}}</p>
 		  </button>
 
 		  

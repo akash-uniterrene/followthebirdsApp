@@ -16,13 +16,20 @@ import { User } from '../../providers';
 })
 export class FriendsPage {
 
-	public friendLists = [];
+	friendLists: any;
 	constructor(public navCtrl: NavController, public user: User, public navParams: NavParams) {
-	  
+	  this.loadPeople();
 	}
 
   ionViewDidLoad() {
-	console.log(this.user.getfriends({id: 41}));
+	console.log();
+  }
+
+  loadPeople(){
+    this.user.getfriends({id: 41})
+    .then(data => {
+		this.friendLists = data[0];
+    });
   }
 
 }
