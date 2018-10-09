@@ -16,6 +16,28 @@ img.appLogo {
     margin: auto
 }
 page-otp {
+    .formContainer{
+        top: 0;
+        height: 100%;;
+    }
+    .disTabcontent{
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        -webkit-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        padding-bottom: 20px;
+    }
+    .bottomFooter{
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        bottom: 0;
+        width: auto;
+    }
     .list {
         margin-bottom: 0;
     }

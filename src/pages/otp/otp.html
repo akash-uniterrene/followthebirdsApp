@@ -1,6 +1,7 @@
 <ion-content scroll="false" class="login_page optPage">
   
     <div padding class="formContainer">
+      <div class="disTabcontent">
       <div class="logo">
         <img class="appLogo" src="../../assets/followthebirdImgs/logo.png" alt="">
       </div>
@@ -25,14 +26,16 @@
                 </ion-item> 
             </div> 
            
-          <button *ngIf="account.user_email" (tap)="sendUserAuth()" class="login_btn" ion-button color="light" block outline>RESET PASSWORD</button>
-          <button *ngIf="!account.user_email" disabled (tap)="sendUserAuth()" class="login_btn" ion-button color="light" block outline>RESET PASSWORD</button>
+          <button *ngIf="checkAllVal()" (tap)="sendUserAuth()" class="login_btn" ion-button color="light" block outline>Verify OTP</button>
+          <button *ngIf="!checkAllVal()" (tap)="sendUserAuth()" disabled class="login_btn" ion-button color="light" block outline>Verify OTP</button>
+          
           <button class="login_btn backbtn" ion-button color="light" block clear ion-button (click)="resendOTP(account.user_email)">
                Resend OTP
             </button> 
         </ion-list>
       </form>
-      
+    </div>  
+    <div class="bottomFooter">
       <ion-grid>			
         <ion-row>
           <ion-col col-6>
@@ -44,7 +47,7 @@
         
         </ion-row>
       </ion-grid>
-      
+    </div>
     </div>	
     
   </ion-content>

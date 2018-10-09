@@ -47,7 +47,9 @@ export class MyApp {
     { title: 'Settings', component: 'SettingsPage' },
     { title: 'Search', component: 'SearchPage' },
     { title: 'Forget Password', component: 'ForgetPasswordPage' },
-    { title: 'OTP page', component: 'OtpPage' }
+    { title: 'OTP page', component: 'OtpPage' },
+    { title: 'Reset Password page', component: 'ResetPasswordPage' }
+    
   ]
 
   constructor(private translate: TranslateService, platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {

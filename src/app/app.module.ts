@@ -14,6 +14,7 @@ import { Settings, User, Api } from '../providers';
 import { MyApp } from './app.component';
 import { StorageProvider } from '../providers/storage/storage';
 import { EventsProvider } from '../providers/events/events';
+import { ForgetPasswordProvider } from '../providers/forget-password/forget-password';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -47,7 +48,7 @@ export function provideSettings(storage: Storage) {
       loader: {
         provide: TranslateLoader,
         useFactory: (createTranslateLoader),
-        deps: [HttpClient]
+        deps: [HttpClient] 
       }
     }),
     IonicModule.forRoot(MyApp),
@@ -68,7 +69,8 @@ export function provideSettings(storage: Storage) {
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     StorageProvider,
-	EventsProvider     
+	EventsProvider,
+    ForgetPasswordProvider     
   ]
 })
 export class AppModule { }
