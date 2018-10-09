@@ -67,12 +67,8 @@ export function provideSettings(storage: Storage) {
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-<<<<<<< HEAD
     StorageProvider,
-	EventsProvider
-=======
-    StorageProvider,   
->>>>>>> 3ded97718763f0b7cfa9c810c2ea47d8c6b9e80a
+	EventsProvider     
   ]
 })
 export class AppModule { }
