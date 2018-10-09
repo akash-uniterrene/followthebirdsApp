@@ -13,7 +13,7 @@ import { Settings } from '../providers';
       <ion-toolbar>
         <ion-title>Pages</ion-title>
       </ion-toolbar>
-    </ion-header>
+    </ion-header>    
 
     <ion-content>
       <ion-list>
@@ -54,7 +54,8 @@ export class MyApp {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
+      //this.statusBar.styleDefault();
+      this.statusBar.styleBlackOpaque();
       this.splashScreen.hide();
     });
     this.initTranslate();
