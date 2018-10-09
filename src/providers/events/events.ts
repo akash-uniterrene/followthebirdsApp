@@ -10,8 +10,27 @@ import { Api } from '../api/api';
   and Angular DI.
 */
 @Injectable()
-export class Events {
+export class EventsProvider {
 
   constructor(public api: Api) { }
+  
+  /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  getevents(params?: any) {
+	let frindlist = [];	
+	let seq = this.api.get('events', params).share();
+
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			frindlist.push(res);
+			resolve(frindlist);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
 
 }

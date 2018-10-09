@@ -13,6 +13,7 @@ import { Items } from '../mocks/providers/items';
 import { Settings, User, Api } from '../providers';
 import { MyApp } from './app.component';
 import { StorageProvider } from '../providers/storage/storage';
+import { EventsProvider } from '../providers/events/events';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -66,7 +67,12 @@ export function provideSettings(storage: Storage) {
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
+<<<<<<< HEAD
+    StorageProvider,
+	EventsProvider
+=======
     StorageProvider,   
+>>>>>>> 3ded97718763f0b7cfa9c810c2ea47d8c6b9e80a
   ]
 })
 export class AppModule { }

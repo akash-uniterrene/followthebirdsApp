@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-import { Events } from '../../providers';
+import { EventsProvider } from '../../providers/events/events';
 /**
  * Generated class for the EventsPage page.
  *
@@ -16,11 +16,19 @@ import { Events } from '../../providers';
 })
 export class EventsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+	eventLists: any;
+  constructor(public navCtrl: NavController, public events: EventsProvider, public navParams: NavParams) {
+	  this.loadEvent();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad EventsPage');
   }
 
+  loadEvent(){
+    this.events.getevents({suggested: true})
+    .then(data => {
+		this.eventLists = data[0];
+    });
+  }
 }
