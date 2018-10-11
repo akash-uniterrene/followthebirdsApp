@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Nav , LoadingController, ToastController} from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Nav , LoadingController, ToastController, MenuController} from 'ionic-angular';
 
 import { ForgetPasswordProvider } from '../../providers/forget-password/forget-password'
 /**
@@ -28,8 +28,11 @@ export class ResetPasswordPage {
     public nav: Nav,
     public forgetPass : ForgetPasswordProvider,
     public loadingController: LoadingController,
+    public menu: MenuController,
     public toastCtrl: ToastController
   ) {
+
+    this.menu.enable(false); 
 
     if(this.navParams.data.email){
       this.reset_data.user_email = this.navParams.data.email;

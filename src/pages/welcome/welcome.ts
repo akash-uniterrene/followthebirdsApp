@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController, LoadingController, Nav, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, LoadingController, Nav, NavParams, MenuController, Platform } from 'ionic-angular';
 
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
@@ -23,47 +23,52 @@ export class WelcomePage {
 		user_name: '',
 		user_password: ''
 	};
-	public loading;
+	
 	// Our translated text strings
 	private loginErrorString: string;
-	constructor(
+	constructor(		
 		public navCtrl: NavController,
 		public user: User,
 		public toastCtrl: ToastController,
 		public translateService: TranslateService,
 		public storage: StorageProvider,
 		public loadingCtrl: LoadingController,
+		public menu: MenuController,
+		public platform: Platform,
 		public nav: Nav
 	)
 	{
+
+		console.log(platform);
+
+		this.menu.enable(false); 
 		this.translateService.get('LOGIN_ERROR').subscribe((value) => {
 		  this.loginErrorString = value;
 		});
-
-		this.loading = this.loadingCtrl.create({
-			content: 'Verifing details...'
-		});
+		
 		if(localStorage.getItem('user_firstname')){
-		this.navCtrl.push(MainPage);
+		this.nav.setRoot(MainPage);
 		}
 
 		
 	}
-
-
 	
 
 	// Attempt to login in through our User service
 	doLogin() {
-		this.loading.present();
+		let loading = this.loadingCtrl.create({
+			content: 'Verifing details...'
+		});
+		loading.present();
 
 		this.user.login(this.account).subscribe((resp) => {
+			
 			console.log(resp);
-			this.loading.dismiss();
+			loading.dismiss();
 			this.storage.setUser(resp);			
-		  this.navCtrl.push(MainPage, resp);
+		  this.nav.setRoot(MainPage, resp);
 		}, (err) => {
-			this.loading.dismiss();
+			loading.dismiss();
 		  // Unable to log in
 		  let toast = this.toastCtrl.create({
 			message: this.loginErrorString,

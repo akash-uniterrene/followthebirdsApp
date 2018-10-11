@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Nav, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, Nav, NavParams, MenuController } from 'ionic-angular';
 import { FirstRunPage} from '../';
-
+import { Camera, CameraOptions } from '@ionic-native/camera';
 /**
  * Generated class for the HomePage page.
  *
@@ -24,22 +24,54 @@ export class HomePage {
   public user: any;
   public savedUser : any;
   pages: PageList;
+
+  introduction = 'CardsPage';  
+  settingsPage = 'UserSettingsPage';
  
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,  
+    private camera: Camera,
+    public menu: MenuController,
     public nav: Nav 
-    ) {    
+    ) {
+
+     // localStorage.setItem('user_intro', 'false');
+    
+    this.menu.enable(false); 
+      
     this.user = this.navParams.data; 
     
     if(localStorage.getItem('user_firstname') && localStorage.getItem('user_id')){
       this.user.name = localStorage.getItem('user_firstname');
-      
+      console.log(localStorage.getItem('user_picture'));
+      if(localStorage.getItem('user_intro') == 'true'){
+        
+      }else{
+        this.nav.setRoot('GeneralInfoSlidePage');
+      }
     }else{
       this.nav.setRoot(FirstRunPage);
       //this.navCtrl.push(FirstRunPage);
       
     }
+  }
+
+  getPicture(){
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
+    
+    this.camera.getPicture(options).then((imageData) => {
+      // imageData is either a base64 encoded string or a file URI
+      // If it's base64 (DATA_URL):
+      let base64Image = 'data:image/jpeg;base64,' + imageData;
+     }, (err) => {
+      // Handle error
+     });
   }
 
   openPage() {

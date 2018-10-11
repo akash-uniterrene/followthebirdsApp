@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController,Nav, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController,Nav, LoadingController, MenuController } from 'ionic-angular';
 
 import { User } from '../../providers';
 import { MainPage, FirstRunPage } from '../';
@@ -57,8 +57,11 @@ export class SignupPage {
     public loadingCtrl: LoadingController,
     public translateService: TranslateService,
     public storage: StorageProvider,
+    public menu: MenuController,
     public nav: Nav
     ) {
+
+    this.menu.enable(false);   
 
     this.loading = this.loadingCtrl.create({
       content: 'Creating Account...',
@@ -82,10 +85,20 @@ export class SignupPage {
       this.account.user_email &&
       this.account.user_firstname &&
       this.account.user_password
-      ){       
-      return false;
+      ){
+        if(this.account.user_name.length >=5 ){
+          if(this.account.user_password.length >=8){
+            return true;
+          }else{
+            return false;
+          } 
+        }else{
+          return false;
+        }   
+          
+      
     }else{
-      return true;
+      return false;
     }
     
   }
@@ -97,9 +110,9 @@ export class SignupPage {
       this.account.user_DOB_month && 
       this.account.user_DOB_year
       ){       
-      return false;
-    }else{
       return true;
+    }else{
+      return false;
     }
     
   }

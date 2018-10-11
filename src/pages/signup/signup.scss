@@ -23,7 +23,8 @@ page-signup {
     .stepsHold{
         position: relative;
         height: 355px;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
         .backbtn{
             font-size: 13px;
             text-transform: none !important;

@@ -37,7 +37,7 @@
 
           <ion-item>
               <ion-label fixed><ion-icon ios="ios-contact-outline" md="md-contact"></ion-icon></ion-label>
-            <ion-input type="text" [(ngModel)]="account.user_name" placeholder="Username"  name="user_name"></ion-input>
+            <ion-input  type="text" [(ngModel)]="account.user_name" placeholder="Username"  name="user_name"></ion-input>
           </ion-item>
 
           <ion-item>
@@ -50,8 +50,8 @@
             <ion-input type="password" [(ngModel)]="account.user_password" placeholder="Password"  name="user_password"></ion-input>
           </ion-item>
 
-          <button class="login_btn" *ngIf="!checkValidations()"  ion-button color="light" block outline ion-button (click)="gotoStep(2)">CONTINUE</button>
-          <button class="login_btn" *ngIf="checkValidations()" disabled ion-button color="light" block outline ion-button (click)="gotoStep(2)">CONTINUE</button>
+          <button class="login_btn" *ngIf="checkValidations()"  ion-button color="light" block outline ion-button (click)="gotoStep(2)">CONTINUE</button>
+          <button class="login_btn" *ngIf="!checkValidations()" disabled ion-button color="light" block outline ion-button (click)="gotoStep(2)">CONTINUE</button>
 
         </div>
         <div id="step2">
@@ -94,8 +94,8 @@
             </div>    
              
 
-            <button class="login_btn" *ngIf="!checkValidationsStep2()" ion-button color="light" block outline ion-button (click)="doSignup()">SIGN UP</button>
-            <button class="login_btn" *ngIf="checkValidationsStep2()" disabled ion-button color="light" block outline ion-button (click)="doSignup()">SIGN UP</button>
+            <button class="login_btn" *ngIf="checkValidationsStep2()" ion-button color="light" block outline ion-button (click)="doSignup()">SIGN UP</button>
+            <button class="login_btn" *ngIf="!checkValidationsStep2()" disabled ion-button color="light" block outline ion-button (click)="doSignup()">SIGN UP</button>
             <button class="login_btn backbtn" ion-button color="light" block clear ion-button (click)="gotoStep(1)">
               <ion-icon ios="ios-arrow-back" md="md-arrow-back"></ion-icon> Previous
             </button>

@@ -1,13 +1,24 @@
-<ion-header>
+<!-- <ion-header>
 
   <ion-navbar>
     <ion-title>{{ 'CARDS_TITLE' | translate }}</ion-title>
   </ion-navbar>
 
-</ion-header>
+</ion-header> -->
 
 
 <ion-content>
+
+    <ion-list >
+      <ion-item>
+        <ion-avatar item-start>
+          <img src="../../assets/followthebirdImgs/no-profile-img.jpeg">
+        </ion-avatar>
+        <button (tap)="updateStatus('photo')" class="no_bgBtn" item-end  ion-button icon-only >  <ion-icon ios="ios-images" md="md-images"></ion-icon></button>
+        <ion-input type="text" value="" placeholder="Whats on your mind?"></ion-input>     
+      </ion-item>       
+    </ion-list>
+    
 
   <ion-card *ngFor="let item of cardItems">
 

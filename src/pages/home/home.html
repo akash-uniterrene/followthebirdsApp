@@ -1,5 +1,5 @@
 
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar color="primary">
     <ion-searchbar (input)="getItems($event)"></ion-searchbar>
 	<ion-buttons end>
@@ -8,8 +8,30 @@
       </button>
     </ion-buttons>
   </ion-toolbar>
+</ion-header> -->
+
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-buttons left>
+        <button ion-button icon-only (tap)="getPicture()">          
+          <ion-icon name="camera"></ion-icon>
+        </button>
+    </ion-buttons>
+    <ion-searchbar (input)="getItems($event)"></ion-searchbar>
+    <ion-buttons right>
+      <button ion-button icon-only><ion-icon ios="ios-chatbubbles" md="md-chatbubbles"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h1>Welcome {{ user.name }}</h1>
+<ion-content padding> 
+  <ion-tabs selectedIndex="0">
+    <ion-tab [root]="introduction"  tabIcon="images"></ion-tab>
+    <ion-tab [root]="introduction"  tabIcon="contacts"></ion-tab>
+    <ion-tab [root]="introduction"  tabIcon="contact"></ion-tab>
+    <ion-tab [root]="introduction"  tabIcon="notifications"></ion-tab>
+    <ion-tab [root]="settingsPage"  tabIcon="menu"></ion-tab>
+</ion-tabs>
+
+
 </ion-content>
