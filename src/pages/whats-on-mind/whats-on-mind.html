@@ -1,0 +1,47 @@
+<ion-header>
+    <ion-navbar color="primary">
+      <ion-buttons right>
+          <button ion-button icon-only (tap)="closeModal()">          
+              <ion-icon ios="ios-close" md="md-close"></ion-icon>
+          </button>
+      </ion-buttons>
+      <h4 style="color:#fff; margin:0; padding-left: 6px;" >Create post</h4>
+      <!-- <ion-buttons right>
+        <button ion-button icon-only style="text-transform:none;">Share</button>
+      </ion-buttons> -->
+    </ion-navbar>
+  </ion-header>
+  <ion-content>
+    <ion-card>
+      <ion-card-header>
+          <ion-list>
+              <ion-item style="padding-left:0">
+                <ion-avatar item-start>      
+                  <img src="../../assets/followthebirdImgs/no-profile-img.jpeg">
+                </ion-avatar>
+                <h5 style="text-transform:capitalize;">{{userName}}</h5>                    
+              </ion-item>       
+            </ion-list>
+      </ion-card-header>
+      <ion-card-content>
+          <ion-textarea placeholder="Whats on your mind" class="main_textarea_field"></ion-textarea>
+      </ion-card-content>
+      <ion-row>
+          <ion-col>
+            
+          </ion-col>
+          <ion-col> 
+            <ion-select style="width:100% !important;max-width:100%;">
+                <ion-option selected value="public">Public</ion-option>
+                <ion-option value="friends">Friends</ion-option>
+                <ion-option value="only_me">Only Me</ion-option>
+            </ion-select>             
+          </ion-col>
+          <ion-col center text-center style="padding-right: 16px !important">
+              <button ion-button color="primary"  block icon-start>
+                  Post
+                </button>
+          </ion-col>
+        </ion-row>
+    </ion-card>
+  </ion-content>

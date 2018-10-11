@@ -10,6 +10,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class StorageProvider {
 
+  private profilePicURL = "https://dev.followthebirds.com/content/uploads/";
   constructor(public http: HttpClient) {
     
   }
@@ -27,5 +28,25 @@ export class StorageProvider {
       }
     }
   }
+
+  // profie Picutre module
+
+  checkprofilePic( picure: any ){
+    return true; // if previously stored image and current image is same;
+  }
+
+  getProfilePic(){
+    if(localStorage.getItem('user_picture') != ''){
+      let userPic = localStorage.getItem('user_picture');
+      let FullPath = this.profilePicURL + userPic;
+      console.log('prifile Pic url:'+FullPath);
+    }
+    
+  }
+
+  
+
+
+
 
 }
