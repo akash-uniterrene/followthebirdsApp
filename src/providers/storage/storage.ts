@@ -7,6 +7,9 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { BehaviorSubject } from 'rxjs/Rx';
 import { Storage } from '@ionic/storage';
+
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 /*
   Generated class for the StorageProvider provider.
 
@@ -17,13 +20,15 @@ import { Storage } from '@ionic/storage';
 export class StorageProvider {
 	database: SQLiteObject;
 	private databaseReady: BehaviorSubject<boolean>;
-	private profilePicURL = "https://dev.followthebirds.com/content/uploads/";
+	private imageURL = "https://dev.followthebirds.com/content/uploads/";
   constructor(
 	public httpclient: HttpClient,
 	public sqlitePorter: SQLitePorter, 
 	private storage: Storage, 
 	private sqlite: SQLite, 
 	private platform: Platform, 
+	private transfer: FileTransfer,
+	private file: File,
 	private http: Http
   ) {
     this.databaseReady = new BehaviorSubject(false);
@@ -43,6 +48,8 @@ export class StorageProvider {
         });
     });
   }
+  
+  fileTransfer: FileTransferObject = this.transfer.create();
   
   fillDatabase() {
     this.http.get('assets/followthebirds.sql')
@@ -138,15 +145,39 @@ export class StorageProvider {
   getProfilePic(){
     if(localStorage.getItem('user_picture') != ''){
       let userPic = localStorage.getItem('user_picture');
-      let FullPath = this.profilePicURL + userPic;
+      let FullPath = this.imageURL + userPic;
       console.log('prifile Pic url:'+FullPath);
     }
     
   }
 
-  getDatabaseState() {
-    return this.databaseReady.asObservable();
-  }
+	createFolder(){
+		this.platform.ready().then(() =>{
+			if(this.platform.is('android')) {
+				this.file.checkDir(this.file.externalRootDirectory, 'FollowTheBirds').then(response => {
+				}).catch(err => {
+					this.file.createDir(this.file.externalRootDirectory, 'FollowTheBirds', false).then(response => {
+						this.file.createDir(this.file.externalRootDirectory, 'FollowTheBirds/ProfilePic', false);
+						this.file.createDir(this.file.externalRootDirectory, 'FollowTheBirds/CoverPic', false);
+					}).catch(err => {
+					
+					}); 
+				});
+			}
+		});
+	}
+	
+	imageDownload(url,folder){
+	  const absurl = this.imageURL+url;
+	  this.fileTransfer.download(absurl, this.file.externalRootDirectory + 'FollowTheBirds/'+folder+'/profile_pic.jpg').then((entry) => {
+	  }, (error) => {
+		// handle error
+	  });
+	}
+	
+	getDatabaseState() {
+		return this.databaseReady.asObservable();
+	}
 
 
 

@@ -19,6 +19,10 @@ import { ForgetPasswordProvider } from '../providers/forget-password/forget-pass
 
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
 import { SQLite } from '@ionic-native/sqlite';
+
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
+
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function createTranslateLoader(http: HttpClient) {
@@ -84,6 +88,9 @@ export function provideSettings(storage: Storage) {
     StorageProvider,
 	EventsProvider,
     ForgetPasswordProvider,
+	FileTransfer,
+	FileTransferObject,
+	File,
 	SQLitePorter,
     SQLite	
   ]

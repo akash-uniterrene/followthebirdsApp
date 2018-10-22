@@ -6,6 +6,7 @@ import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
 import { MainPage } from '../';
 
+
 /**
  * The Welcome Page is a splash page that quickly describes the app,
  * and then directs the user to create an account or log in.
@@ -23,7 +24,7 @@ export class WelcomePage {
 		user_name: '',
 		user_password: ''
 	};
-	
+	private imageURL = "https://dev.followthebirds.com/content/uploads/";
 	loggedinUser : any = [];
 	respUser : any = [];
 	// Our translated text strings
@@ -37,24 +38,22 @@ export class WelcomePage {
 		public loadingCtrl: LoadingController,
 		public menu: MenuController,
 		public platform: Platform,
-		public nav: Nav
+		public nav: Nav		
 	)
 	{
 
-		console.log(platform);
-
+		this.createDirectory();
 		this.menu.enable(false); 
 		this.translateService.get('LOGIN_ERROR').subscribe((value) => {
 		  this.loginErrorString = value;
 		});
 		
 		if(localStorage.getItem('user_firstname')){
-		this.nav.setRoot(MainPage);
+			this.nav.setRoot(MainPage);
 		}
 
 		
 	}
-	
 
 	// Attempt to login in through our User service
 	doLogin() {
@@ -88,20 +87,19 @@ export class WelcomePage {
 				this.loggedinUser = user[0];
 				
 				if(this.loggedinUser.user_picture_id != params.user_picture_id){				
-					alert("Profile Pic Need to download");
-				} else {
-					alert("Profile Pic already exist");
+					this.download(params.user_picture,'ProfilePic');
 				}
 				
 				if(this.loggedinUser.user_cover_id != params.user_cover_id){				
-					alert("Cover Pic Need to download");
-				} else {
-					alert("Cover Pic already exist");
+					this.download(params.user_cover,'CoverPic');
 				}
 				
 				
 			} else {
 				this.insertUserData(params);
+				if(params.user_picture_id != '') { this.download(params.user_picture,'ProfilePic'); }
+				if(params.user_cover_id != '') { this.download(params.user_cover,'CoverPic'); }
+					
 			}
 		})  
 	}
@@ -120,6 +118,13 @@ export class WelcomePage {
 		this.nav.push('ForgetPasswordPage');
 	}
 	
+	createDirectory(){
+		this.storage.createFolder();
+	}
+	
+	download(url,folder) {
+	  this.storage.imageDownload(url,folder);
+	}
 
  
 }
