@@ -5,6 +5,7 @@ import { Camera } from '@ionic-native/camera';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule, Storage } from '@ionic/storage';
+import { HttpModule } from '@angular/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -16,6 +17,8 @@ import { StorageProvider } from '../providers/storage/storage';
 import { EventsProvider } from '../providers/events/events';
 import { ForgetPasswordProvider } from '../providers/forget-password/forget-password';
 
+import { SQLitePorter } from '@ionic-native/sqlite-porter';
+import { SQLite } from '@ionic-native/sqlite';
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function createTranslateLoader(http: HttpClient) {
@@ -61,6 +64,7 @@ export function provideSettings(storage: Storage) {
         }
       }
     }),
+	HttpModule,
     IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
@@ -79,7 +83,9 @@ export function provideSettings(storage: Storage) {
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     StorageProvider,
 	EventsProvider,
-    ForgetPasswordProvider     
+    ForgetPasswordProvider,
+	SQLitePorter,
+    SQLite	
   ]
 })
 export class AppModule { }

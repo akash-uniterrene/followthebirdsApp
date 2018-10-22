@@ -24,6 +24,8 @@ export class WelcomePage {
 		user_password: ''
 	};
 	
+	loggedinUser : any = [];
+	respUser : any = [];
 	// Our translated text strings
 	private loginErrorString: string;
 	constructor(		
@@ -59,14 +61,15 @@ export class WelcomePage {
 		let loading = this.loadingCtrl.create({
 			content: 'Verifing details...'
 		});
+		
 		loading.present();
-
-		this.user.login(this.account).subscribe((resp) => {
-			
-			console.log(resp);
+		this.user.login(this.account).subscribe((resp) => {			
 			loading.dismiss();
+			this.getUserData(resp);
+	
 			this.storage.setUser(resp);			
-		  this.nav.setRoot(MainPage, resp);
+		    this.nav.setRoot(MainPage, resp);
+			
 		}, (err) => {
 			loading.dismiss();
 		  // Unable to log in
@@ -77,6 +80,36 @@ export class WelcomePage {
 		  });
 		  toast.present();
 		});
+	}
+	
+	getUserData(params){
+		this.storage.getUser(params.user_id).then(user => {
+			if(user[0]){
+				this.loggedinUser = user[0];
+				
+				if(this.loggedinUser.user_picture_id != params.user_picture_id){				
+					alert("Profile Pic Need to download");
+				} else {
+					alert("Profile Pic already exist");
+				}
+				
+				if(this.loggedinUser.user_cover_id != params.user_cover_id){				
+					alert("Cover Pic Need to download");
+				} else {
+					alert("Cover Pic already exist");
+				}
+				
+				
+			} else {
+				this.insertUserData(params);
+			}
+		})  
+	}
+	
+	insertUserData(resp){
+		this.storage.insertUser(resp).then(user => {
+
+		}) 
 	}
   
 	signup() {

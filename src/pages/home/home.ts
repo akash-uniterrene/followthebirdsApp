@@ -38,24 +38,20 @@ export class HomePage {
 
      // localStorage.setItem('user_intro', 'false');
     
-    this.menu.enable(false); 
-      
-    this.user = this.navParams.data; 
-    
-    if(localStorage.getItem('user_firstname') && localStorage.getItem('user_id')){
-      this.user.name = localStorage.getItem('user_firstname');
-      console.log(localStorage.getItem('user_picture'));
-      if(localStorage.getItem('user_intro') == 'true'){
-        
-      }else{
-        this.nav.setRoot('GeneralInfoSlidePage');
-      }
-    }else{
-      this.nav.setRoot(FirstRunPage);
-      //this.navCtrl.push(FirstRunPage);
-      
-    }
-  }
+		this.menu.enable(false); 
+		  
+		this.user = this.navParams.data; 
+		
+		if(localStorage.getItem('user_firstname') && localStorage.getItem('user_id')){
+		  //this.user.name = localStorage.getItem('user_firstname');
+		  console.log(localStorage.getItem('user_picture'));
+		  if(this.user.user_picture_id <= 0){
+			 this.nav.setRoot('GeneralInfoSlidePage');
+		  }
+		}else{
+		  this.nav.setRoot(FirstRunPage);      
+		}
+	  }
 
   getPicture(){
     const options: CameraOptions = {
