@@ -55,6 +55,22 @@ export class User {
 
     return seq;
   }
+  
+  updateProfile(id:number){
+	  
+	let seq = this.api.get('user/'+id, '').share();
+	seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+      if (res.status == 'success') {
+        this._loggedIn(res);
+      } else {
+      }
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
 
   /**
    * Send a POST request to our signup endpoint with the data

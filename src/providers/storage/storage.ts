@@ -120,9 +120,6 @@ export class StorageProvider {
 		} */
 	}
 	
-	updateUser(){
-		
-	}
 	
 	isExistUser(id:number){
 		return this.database.executeSql("SELECT * FROM users WHERE user_id=?", [id]).then((data) => {

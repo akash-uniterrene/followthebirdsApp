@@ -41,7 +41,6 @@ export class WelcomePage {
 		public nav: Nav		
 	)
 	{
-
 		this.createDirectory();
 		this.menu.enable(false); 
 		this.translateService.get('LOGIN_ERROR').subscribe((value) => {
@@ -64,7 +63,7 @@ export class WelcomePage {
 		loading.present();
 		this.user.login(this.account).subscribe((resp) => {			
 			loading.dismiss();
-			this.getUserData(resp);	
+			//this.getUserData(resp);	
 			
 			this.storage.setUser(resp);			
 		    this.nav.setRoot(MainPage, resp);

@@ -1,3 +1,37 @@
 page-general-info-slide {
-
+	ion-slides {
+		background: rgb(117,11,181);
+		background: -moz-linear-gradient(top, rgba(117,11,181,1) 1%, rgba(146,11,140,1) 100%);
+		background: -webkit-linear-gradient(top, rgba(117,11,181,1) 1%,rgba(146,11,140,1) 100%);
+		background: linear-gradient(to bottom, rgba(117,11,181,1) 1%,rgba(146,11,140,1) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#750bb5', endColorstr='#920b8c',GradientType=0 );
+		color:#fff;
+		text-transform: uppercase;
+		font-size: 17px;
+	}
+	
+	.uploader_outer_1 {
+		border-radius: 50%;
+	}
+	.uploader_outer_2 {
+		border-radius: 50%;
+	}
+	.uploader_outer_3 {
+		border-radius: 50%;
+	}
+	.slide-image {
+		border-radius: 50%;
+	}
+	.profile-img {
+		font-size: 27px;
+		position: absolute;
+		right: 0;
+		background: none;
+		border: none;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		top: 130px;	
+	}
+	
+	
 }

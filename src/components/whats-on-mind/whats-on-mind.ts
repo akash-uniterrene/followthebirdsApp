@@ -31,7 +31,8 @@ export class WhatsOnMindComponent {
   }
   updateStatus(){
     const modal = this.modal.create('WhatsOnMindPage');
-    modal.present()
+    modal.present();
+	alert(this.userPic);
   }
   
   

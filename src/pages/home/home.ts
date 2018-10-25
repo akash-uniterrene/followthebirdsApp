@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Nav, NavParams, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, Nav, NavParams,  ToastController, MenuController } from 'ionic-angular';
 import { FirstRunPage} from '../';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { User } from '../../providers';
+import { StorageProvider } from '../../providers/storage/storage';
 /**
  * Generated class for the HomePage page.
  *
@@ -20,8 +22,6 @@ type PageList = PageItem[]
   templateUrl: 'home.html',
 })
 export class HomePage {
-
-  public user: any;
   public savedUser : any;
   pages: PageList;
 
@@ -30,45 +30,47 @@ export class HomePage {
  
   constructor(
     public navCtrl: NavController, 
+	public user: User,
+	public storage: StorageProvider,
+	public toastCtrl: ToastController,
     public navParams: NavParams,  
     private camera: Camera,
     public menu: MenuController,
     public nav: Nav 
     ) {
-
      // localStorage.setItem('user_intro', 'false');
     
 		this.menu.enable(false); 
 		  
-		this.user = this.navParams.data; 
-		
+		this.getProfileData(localStorage.getItem('user_id'));
+		this.sliderOpen();
+	  }	  	  
+	sliderOpen(){		 
 		if(localStorage.getItem('user_firstname') && localStorage.getItem('user_id')){
-		  //this.user.name = localStorage.getItem('user_firstname');
-		  console.log(localStorage.getItem('user_picture'));
-		  if(this.user.user_picture_id <= 0){
+		  if(localStorage.getItem('user_intro') != "true"){
 			 this.nav.setRoot('GeneralInfoSlidePage');
 		  }
 		}else{
 		  this.nav.setRoot(FirstRunPage);      
 		}
-	  }
-
-  getPicture(){
-    const options: CameraOptions = {
-      quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    };
-    
-    this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-     }, (err) => {
-      // Handle error
-     });
-  }
+	}	
+	
+	getPicture(){
+		const options: CameraOptions = {
+		  quality: 100,
+		  destinationType: this.camera.DestinationType.FILE_URI,
+		  encodingType: this.camera.EncodingType.JPEG,
+		  mediaType: this.camera.MediaType.PICTURE
+		};
+		
+		this.camera.getPicture(options).then((imageData) => {
+		  // imageData is either a base64 encoded string or a file URI
+		  // If it's base64 (DATA_URL):
+		  let base64Image = 'data:image/jpeg;base64,' + imageData;
+		 }, (err) => {
+		  // Handle error
+		 });
+	}
 
   openPage() {
     // Reset the content nav to have just this page
@@ -83,6 +85,20 @@ export class HomePage {
   
   getItems() {
 	  
+  }
+  
+  
+  getProfileData(id){
+	this.user.updateProfile(id).subscribe((resp) => {	
+		this.storage.setUser(resp);			
+	}, (err) => {
+	  let toast = this.toastCtrl.create({
+		message: "unable to refresh",
+		duration: 3000,
+		position: 'top'
+	  });
+	  toast.present();
+	});	
   }
 
 }

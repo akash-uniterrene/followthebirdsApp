@@ -1,8 +1,34 @@
 <ion-slides pager="true" parallax="true" padding>
 
   <ion-slide >
+    <ion-grid>
+	  <ion-row>
+		<ion-col col-12 padding>
+		  <h4>Upload Profile Picture</h4>
+		</ion-col>
+		<ion-col col-2 >
+		</ion-col>
+		<ion-col col-8 >
+			<div padding class="uploader_outer_1" style="background:#870b9c;">
+				<div padding class="uploader_outer_2" style="background:#870ffc;">
+					<div padding class="uploader_outer_3" style="background:#870ccc;">
+						<img src="{{profilePic}}" class="slide-image" />
+						<div class="profile-image" [style.backgroundImage]="this.profilePic"></div>	
+						<button ion-button class="profile-img" (click)="uploadProfilePicture()">
+							<ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
+						</button>						
+					</div>
+				</div>
+			</div>
+		</ion-col>
+		<ion-col col-2 >
+		</ion-col>
+		<ion-col col-12 padding>
+		  <h4>Akash Dutta</h4>
+		</ion-col>
+	  </ion-row>
+	</ion-grid>
     
-    <h2>Upload Profile Picture</h2>
   </ion-slide>
 
   <ion-slide  >
