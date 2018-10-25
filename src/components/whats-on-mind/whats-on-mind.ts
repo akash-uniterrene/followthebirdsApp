@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { ModalController, Nav } from 'ionic-angular';
 
-
+import { User } from '../../providers';
 /**
  * Generated class for the WhatsOnMindComponent component.
  *
@@ -17,19 +17,22 @@ export class WhatsOnMindComponent {
  
   text: string;
   userName: string ;
-
+  userPic: string;
+  
   constructor(
     private modal: ModalController,
-    private nav: Nav
+    private nav: Nav,
+	public user: User,
   ) {
     console.log('Hello WhatsOnMindComponent Component');
     this.text = 'Hello World';
-    
+    this.userPic = this.user.getProfilePic();
     
   }
   updateStatus(){
     const modal = this.modal.create('WhatsOnMindPage');
     modal.present()
   }
+  
   
 }

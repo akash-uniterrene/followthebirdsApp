@@ -17,7 +17,7 @@
           <ion-list>
               <ion-item style="padding-left:0">
                 <ion-avatar item-start>      
-                  <img src="/assets/followthebirdImgs/no-profile-img.jpeg">
+                  <img src="{{userPic}}">
                 </ion-avatar>
                 <h5 style="text-transform:capitalize;">{{userName}}</h5>                    
               </ion-item>       
@@ -28,7 +28,7 @@
       </ion-card-content>
       <ion-row>
           <ion-col>
-            
+			
           </ion-col>
           <ion-col> 
             <ion-select style="width:100% !important;max-width:100%;">
@@ -38,9 +38,9 @@
             </ion-select>             
           </ion-col>
           <ion-col center text-center style="padding-right: 16px !important">
-              <button ion-button color="primary"  block icon-start>
+			<button ion-button color="primary"  block icon-start>
                   Post
-                </button>
+			</button>
           </ion-col>
         </ion-row>
     </ion-card>

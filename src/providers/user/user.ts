@@ -3,7 +3,8 @@ import 'rxjs/add/operator/toPromise';
 import { Injectable } from '@angular/core';
 
 import { Api } from '../api/api';
-
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 /**
  * Most apps have the concept of a User. This is a simple provider
  * with stubs for login/signup/etc.
@@ -26,9 +27,15 @@ import { Api } from '../api/api';
 @Injectable()
 export class User {
   _user: any;
-
-  constructor(public api: Api) { }
-
+   private imageURL = "https://dev.followthebirds.com/content/uploads/";
+	constructor(
+		public api: Api,
+		private transfer: FileTransfer,
+		private file: File
+	)  { 
+					
+		}
+	fileTransfer: FileTransferObject = this.transfer.create();
   /**
    * Send a POST request to our login endpoint with the data
    * the user entered on the form.
@@ -120,6 +127,16 @@ export class User {
 	});
   }
 
-  
+  getProfilePic(){
+    if(localStorage.getItem('user_picture') != ''){
+     /*  let userPic = localStorage.getItem('user_picture');
+	  var arr = userPic.split("/");
+	  var pic_name = arr[arr.length - 1];
+	  let FullPath = this.file.externalRootDirectory+'FollowTheBirds/ProfilePic/' + pic_name; */
+      let FullPath = this.imageURL+localStorage.getItem('user_picture');
+      return FullPath;
+    }
+    
+  }   
   
 }

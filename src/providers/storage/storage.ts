@@ -120,6 +120,10 @@ export class StorageProvider {
 		} */
 	}
 	
+	updateUser(){
+		
+	}
+	
 	isExistUser(id:number){
 		return this.database.executeSql("SELECT * FROM users WHERE user_id=?", [id]).then((data) => {
 		  let user_id : any ;
@@ -142,15 +146,6 @@ export class StorageProvider {
     return true; // if previously stored image and current image is same;
   }
 
-  getProfilePic(){
-    if(localStorage.getItem('user_picture') != ''){
-      let userPic = localStorage.getItem('user_picture');
-      let FullPath = this.imageURL + userPic;
-      console.log('prifile Pic url:'+FullPath);
-    }
-    
-  }
-
 	createFolder(){
 		this.platform.ready().then(() =>{
 			if(this.platform.is('android')) {
@@ -168,8 +163,10 @@ export class StorageProvider {
 	}
 	
 	imageDownload(url,folder){
+	  var arr = url.split("/");
+	  var pic_name = arr[arr.length - 1];
 	  const absurl = this.imageURL+url;
-	  this.fileTransfer.download(absurl, this.file.externalRootDirectory + 'FollowTheBirds/'+folder+'/profile_pic.jpg').then((entry) => {
+	  this.fileTransfer.download(absurl, this.file.externalRootDirectory + 'FollowTheBirds/'+folder+'/'+pic_name).then((entry) => {
 	  }, (error) => {
 		// handle error
 	  });

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,  ViewController } from 'ionic-angular';
-
+import { User } from '../../providers';
 /**
  * Generated class for the WhatsOnMindPage page.
  *
@@ -16,10 +16,12 @@ import { IonicPage, NavController, NavParams,  ViewController } from 'ionic-angu
 export class WhatsOnMindPage {
 
   public userName: string;
+  public userPic: string;
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
+	public user: User,
     public nav: NavController,
     public modal: ViewController
     ) {
@@ -39,7 +41,9 @@ export class WhatsOnMindPage {
     this.modal.dismiss();
   }
   setUser(){    
-    this.userName = (localStorage.getItem('user_name'))+' '+(localStorage.getItem('user_lastname'));    
+    this.userName = (localStorage.getItem('user_name'))+' '+(localStorage.getItem('user_lastname')); 
+	this.userPic = this.user.getProfilePic();
   }
+  
 
 }
