@@ -63,7 +63,7 @@ export class WelcomePage {
 		loading.present();
 		this.user.login(this.account).subscribe((resp) => {			
 			loading.dismiss();
-			//this.getUserData(resp);	
+			this.getUserData(resp);	
 			
 			this.storage.setUser(resp);			
 		    this.nav.setRoot(MainPage, resp);
