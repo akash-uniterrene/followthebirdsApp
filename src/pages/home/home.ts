@@ -40,7 +40,7 @@ export class HomePage {
     ) {
      // localStorage.setItem('user_intro', 'false');
     
-		this.menu.enable(false); 
+		//this.menu.enable(false); 
 		  
 		this.getProfileData(localStorage.getItem('user_id'));
 		this.sliderOpen();

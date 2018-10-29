@@ -33,5 +33,31 @@ page-general-info-slide {
 		top: 130px;	
 	}
 	
+	.cover-img {
+		position: absolute;
+		box-shadow: none;
+		color: #750bb5;
+		background-color: transparent;
+		bottom: 10px;		
+		right: 0;
+	}
+	.cover-img:hover {
+		background-color: transparent;
+	}
 	
+	.cover_profile_photo {
+		position: absolute;
+		bottom: 235px;
+		left: 20px;
+		border: 1px solid;
+		border-radius: 50%;
+	}
+	
+	.upload_cover_button {
+		background: transparent;
+		border: 1px solid;
+		width: 155px;
+		border-radius: 50px;
+		margin-top: 61px;
+	}
 }

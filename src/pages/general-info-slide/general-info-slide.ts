@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav, ActionSheetController , Platform} from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 /**
  * Generated class for the GeneralInfoSlidePage page.
@@ -14,8 +15,10 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
   templateUrl: 'general-info-slide.html',
 })
 export class GeneralInfoSlidePage {
-  @ViewChild('fileInput') fileInput;
+  @ViewChild('profilePhoto') profilePhoto;
+  @ViewChild('coverPhoto') coverPhoto;
   profilePic : any = "assets/followthebirdImgs/no-profile-img.jpeg";
+  coverPic : any = "assets/followthebirdImgs/coverimage.png";
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public nav: Nav, public actionSheetCtrl: ActionSheetController, private camera: Camera) {
   }
   intro(status: string){
@@ -33,13 +36,41 @@ export class GeneralInfoSlidePage {
 			  icon: !this.platform.is('ios') ? 'ios-camera' : null,	
 			  text: 'Take a Picture',
 			  handler: () => {
-				this.takeCameraSnap()
+				this.takeCameraSnap('profile')
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'ios-images' : null,		
 			  text: 'Upload from gallery',
 			  handler: () => {
-				this.uploadFromGallery()
+				this.uploadFromGallery("profile")
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'close' : null,
+			  text: 'Cancel',
+			  role: 'cancel',
+			  handler: () => {
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+	}
+	
+	uploadCoverPicture() {
+		const actionSheet = this.actionSheetCtrl.create({
+		  title: 'Upload Cover Picture',
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-camera' : null,	
+			  text: 'Take a Picture',
+			  handler: () => {
+				this.takeCameraSnap('cover')
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'ios-images' : null,		
+			  text: 'Upload from gallery',
+			  handler: () => {
+				this.uploadFromGallery("cover")
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'close' : null,
@@ -53,7 +84,7 @@ export class GeneralInfoSlidePage {
 		actionSheet.present();
 	}
   
-	takeCameraSnap(){
+	takeCameraSnap(type){
 		const options: CameraOptions = {
 		  quality: 100,
 		  destinationType: this.camera.DestinationType.FILE_URI,
@@ -64,23 +95,26 @@ export class GeneralInfoSlidePage {
 		this.camera.getPicture(options).then((imageData) => {
 		  // imageData is either a base64 encoded string or a file URI
 		  // If it's base64 (DATA_URL):
-		  this.profilePic = imageData;
-		  alert(this.profilePic);
+		  if(type == 'profile'){ this.profilePic = imageData; } else { this.coverPic = imageData; }
 		 }, (err) => {
 		  alert('Unable to take photo');
 		 });
 	}
 	
-	uploadFromGallery(){
-		this.fileInput.nativeElement.click();
+	uploadFromGallery(type){
+		if(type == 'profile'){ this.profilePhoto.nativeElement.click(); } else { this.coverPhoto.nativeElement.click(); }
 	}
 	
-	processWebImage(event) {
+	processWebImage(event,type) {
 		let reader = new FileReader();
 		reader.onload = (readerEvent) => {
-
-		  let imageData = (readerEvent.target as any).result;
-		  this.profilePic = imageData
+		let imageData = (readerEvent.target as any).result;
+		 if(type == 'profile'){	
+			this.profilePic = imageData	
+		 } else {
+			this.coverPic = imageData;
+		 }
+		  
 		};
 
 		reader.readAsDataURL(event.target.files[0]);
