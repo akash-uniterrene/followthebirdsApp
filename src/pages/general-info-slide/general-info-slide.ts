@@ -1,7 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Nav, ActionSheetController , Platform} from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Nav, ActionSheetController , ToastController, Platform} from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+
+import { User } from '../../providers';
 /**
  * Generated class for the GeneralInfoSlidePage page.
  *
@@ -19,7 +21,23 @@ export class GeneralInfoSlidePage {
   @ViewChild('coverPhoto') coverPhoto;
   profilePic : any = "assets/followthebirdImgs/no-profile-img.jpeg";
   coverPic : any = "assets/followthebirdImgs/coverimage.png";
-  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public nav: Nav, public actionSheetCtrl: ActionSheetController, private camera: Camera) {
+  
+	profilePhotoOptions: any = {
+		file: "assets/followthebirdImgs/no-profile-img.jpeg",
+		type: "photos",
+		handle: "picture-user",
+		multiple: false
+	};
+  
+	coverPhotoOptions: any = {
+		file: "assets/followthebirdImgs/coverimage.png",
+		type: "photos",
+		handle: "picture-user",
+		multiple: false
+	};
+  
+	
+  constructor(public navCtrl: NavController, public user: User, public toastCtrl: ToastController, public navParams: NavParams, public platform: Platform, public nav: Nav, public actionSheetCtrl: ActionSheetController, private camera: Camera) {
   }
   intro(status: string){
     if(status == 'done'){
@@ -95,7 +113,7 @@ export class GeneralInfoSlidePage {
 		this.camera.getPicture(options).then((imageData) => {
 		  // imageData is either a base64 encoded string or a file URI
 		  // If it's base64 (DATA_URL):
-		  if(type == 'profile'){ this.profilePic = imageData; } else { this.coverPic = imageData; }
+		  if(type == 'profile'){ this.profilePhotoOptions.file = imageData; } else { this.coverPhotoOptions.file = imageData; }
 		 }, (err) => {
 		  alert('Unable to take photo');
 		 });
@@ -109,17 +127,46 @@ export class GeneralInfoSlidePage {
 		let reader = new FileReader();
 		reader.onload = (readerEvent) => {
 		let imageData = (readerEvent.target as any).result;
-		 if(type == 'profile'){	
-			this.profilePic = imageData	
+		 if(type == 'profile'){
+			 
+			this.profilePhotoOptions.file = imageData	
+			this.uploadProfilePhoto(this.profilePhotoOptions);
 		 } else {
-			this.coverPic = imageData;
-		 }
-		  
+			this.coverPhotoOptions.file = imageData; 
+			this.uploadCoverPhoto(this.coverPhotoOptions); 
+			
+		 }		  
 		};
-
 		reader.readAsDataURL(event.target.files[0]);
-		alert(this.profilePic);
+		
 	}
 	  
-
+	uploadProfilePhoto(params){
+		 this.user.photoUploader(params).subscribe((resp) => {	
+			
+		}, (err) => {
+		  let toast = this.toastCtrl.create({
+			message: "image uploading failed",
+			duration: 3000,
+			position: 'top'
+		  });
+		  toast.present();
+		});
+	}
+	
+	
+	uploadCoverPhoto(params){
+		this.user.photoUploader(params).subscribe((resp) => {	
+			
+		}, (err) => {
+		  let toast = this.toastCtrl.create({
+			message: "image uploading failed",
+			duration: 3000,
+			position: 'top'
+		  });
+		  toast.present();
+		});
+	}
+	
+	
 }

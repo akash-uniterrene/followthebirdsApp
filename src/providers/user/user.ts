@@ -155,4 +155,20 @@ export class User {
     
   }   
   
+  photoUploader(params?:any){
+	let seq = this.api.post('upload', params).share();
+
+	seq.subscribe((res: any) => {
+		  // If the API returned a successful response, mark the user as logged in
+		if (res.status == 'success') {
+			this._loggedIn(res);
+		} else {
+		}
+	}, err => {
+		console.error('ERROR', err);
+	});
+
+		return seq;
+  }
+  
 }

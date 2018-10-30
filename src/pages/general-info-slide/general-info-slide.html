@@ -13,7 +13,7 @@
 			<div padding class="uploader_outer_1" style="background:#870b9c;">
 				<div padding class="uploader_outer_2" style="background:#870ffc;">
 					<div padding class="uploader_outer_3" style="background:#870ccc;">
-						<img [src]="profilePic" class="slide-image" />
+						<img [src]="profilePhotoOptions.file" class="slide-image" />
 						<button ion-button class="profile-img" (click)="uploadProfilePicture()">
 							<ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
 						</button>						
@@ -41,7 +41,7 @@
 		
 		<ion-col col-12 >
 			<div class="uploader_cover" style="background:#870ccc;">
-				<img src="{{coverPic}}" class="slide-image-cover" />			
+				<img src="{{coverPhotoOptions.file}}" class="slide-image-cover" />			
 				<button ion-button class="cover-img" (click)="uploadCoverPicture()" right style="font-size:15px">
 					<ion-icon  style="font-size:31px;padding-right: 5px;" color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
 				</button>						
