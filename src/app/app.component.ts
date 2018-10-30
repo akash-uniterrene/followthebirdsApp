@@ -48,7 +48,8 @@ export class MyApp {
     { title: 'Search', component: 'SearchPage' },
     { title: 'Forget Password', component: 'ForgetPasswordPage' },
     { title: 'OTP page', component: 'OtpPage' },
-    { title: 'Reset Password page', component: 'ResetPasswordPage' }
+    { title: 'Reset Password page', component: 'ResetPasswordPage' },
+    { title: 'Profile page', component: 'ProfilePage' }
     
   ]
 

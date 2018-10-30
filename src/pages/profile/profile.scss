@@ -1,0 +1,47 @@
+page-profile {
+    .scroll-content{
+        padding: 0 !important;
+    }
+    .profileAndCover{
+        width: 100%;
+        height:170px;
+        position: relative;
+        background-size: cover !important;
+        background-position: center center !important;
+        button{
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            z-index: 99999;
+            margin: 0;
+            font-size: 11px;
+            box-shadow: none;
+            height: 27px;
+            background: rgba(255,255,255,.5);
+            color: #000;
+            ion-icon{
+                margin-right: 10px;
+            }
+        }
+        
+    }
+    .profileImgArea{
+        border-radius: 50%;        
+        overflow: hidden;
+        height: 80px;
+        img{
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .profileHeadGrid {
+        margin-top: -50px;
+
+        .profileText{
+            margin-top: 50px;
+            p{
+                font-size: 9px;
+            }
+        }
+    }
+}

@@ -27,7 +27,7 @@ export class HomePage {
 
   introduction = 'CardsPage';  
   settingsPage = 'UserSettingsPage';
- 
+	profilePage = 'ProfilePage';
   constructor(
     public navCtrl: NavController, 
 	public user: User,

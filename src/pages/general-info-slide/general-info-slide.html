@@ -10,11 +10,13 @@
 			<input type="file" #profilePhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'profile')" />
 		</ion-col>		
 		<ion-col col-8 >
-			<div padding class="uploader_outer_1" style="background:#870b9c;">
-				<div padding class="uploader_outer_2" style="background:#870ffc;">
-					<div padding class="uploader_outer_3" style="background:#870ccc;">
-						<img [src]="profilePhotoOptions.file" class="slide-image" />
-						<button ion-button class="profile-img" (click)="uploadProfilePicture()">
+			<div padding class="uploader_outer_1" style="background:#820ba3;">
+				<div padding class="uploader_outer_2" style="background:#9227ab;">
+					<div padding class="uploader_outer_3" style="background:#a346b6;">
+						<div class="imgWrap">
+							<img [src]="profilePhotoOptions.file" class="slide-image" />	
+						</div>				
+						<button ion-fab class="profile-img" (click)="uploadProfilePicture()">								
 							<ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
 						</button>						
 					</div>
@@ -24,8 +26,10 @@
 		<ion-col col-2 >
 		</ion-col>
 		<ion-col col-12 padding>
-		  <h4>Akash Dutta</h4>
+		  <h4>{{fullname}}</h4>
 		</ion-col>
+		<img class="slide_img" src="https://3gp10c1vpy442j63me73gy3s-wpengine.netdna-ssl.com/wp-content/themes/datarobot3/assets/built/images/swipe.gif" alt="">
+		
 	  </ion-row>
 	</ion-grid>
     
@@ -40,11 +44,19 @@
 		</ion-col>
 		
 		<ion-col col-12 >
-			<div class="uploader_cover" style="background:#870ccc;">
+			<div class="uploader_cover">
 				<img src="{{coverPhotoOptions.file}}" class="slide-image-cover" />			
-				<button ion-button class="cover-img" (click)="uploadCoverPicture()" right style="font-size:15px">
+				<button *ngIf="!isCoverUploaded" ion-button class="cover-img" (click)="uploadCoverPicture()" right style="font-size:10px">
 					<ion-icon  style="font-size:31px;padding-right: 5px;" color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
-				</button>						
+					Upload Picture
+				</button>	
+				<button *ngIf="isCoverUploaded" ion-button class="cover-img updated" (click)="uploadCoverPicture()" right style="font-size:10px">
+						<ion-icon  style="font-size:31px;padding-right: 5px;" color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
+						Change Picture
+					</button>	
+				<div class="absProfileImg">
+						<img [src]="profilePhotoOptions.file" />
+				</div>						
 			</div>
 		</ion-col>
 	  </ion-row>
@@ -56,6 +68,7 @@
 				<button ion-button class="upload_cover_button" (tap)="intro('done')" > Got It </button>
 			</ion-col>
 		</ion-row>
+		<img class="slide_img" src="https://3gp10c1vpy442j63me73gy3s-wpengine.netdna-ssl.com/wp-content/themes/datarobot3/assets/built/images/swipe.gif" alt="">
 	</ion-grid>
   </ion-slide>
   

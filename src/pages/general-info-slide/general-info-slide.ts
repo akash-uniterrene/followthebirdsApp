@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Nav, ActionSheetController , ToastController, Platform} from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Nav, ActionSheetController , ToastController, Platform, LoadingController, Slides} from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
@@ -18,9 +18,11 @@ import { User } from '../../providers';
 })
 export class GeneralInfoSlidePage {
   @ViewChild('profilePhoto') profilePhoto;
-  @ViewChild('coverPhoto') coverPhoto;
+	@ViewChild('coverPhoto') coverPhoto;	
   profilePic : any = "assets/followthebirdImgs/no-profile-img.jpeg";
-  coverPic : any = "assets/followthebirdImgs/coverimage.png";
+	coverPic : any = "assets/followthebirdImgs/coverimage.png";
+	fullname: string;
+	isCoverUploaded: boolean = false;
   
 	profilePhotoOptions: any = {
 		file: "assets/followthebirdImgs/no-profile-img.jpeg",
@@ -37,7 +39,18 @@ export class GeneralInfoSlidePage {
 	};
   
 	
-  constructor(public navCtrl: NavController, public user: User, public toastCtrl: ToastController, public navParams: NavParams, public platform: Platform, public nav: Nav, public actionSheetCtrl: ActionSheetController, private camera: Camera) {
+  constructor(
+		public navCtrl: NavController, 
+		public user: User, 
+		public toastCtrl: ToastController, 
+		public navParams: NavParams, 
+		public platform: Platform, 
+		public nav: Nav, 
+		public actionSheetCtrl: ActionSheetController, 
+		private camera: Camera,
+		public loadingCtrl: LoadingController
+		) {
+			this.fullname = localStorage.getItem('user_firstname')+' '+localStorage.getItem('user_lastname');
   }
   intro(status: string){
     if(status == 'done'){
@@ -120,7 +133,11 @@ export class GeneralInfoSlidePage {
 	}
 	
 	uploadFromGallery(type){
-		if(type == 'profile'){ this.profilePhoto.nativeElement.click(); } else { this.coverPhoto.nativeElement.click(); }
+		if(type == 'profile'){ 
+			this.profilePhoto.nativeElement.click(); 
+		} else { 
+			this.coverPhoto.nativeElement.click(); 
+		}
 	}
 	
 	processWebImage(event,type) {
@@ -133,6 +150,7 @@ export class GeneralInfoSlidePage {
 			this.uploadProfilePhoto(this.profilePhotoOptions);
 		 } else {
 			this.coverPhotoOptions.file = imageData; 
+			this.isCoverUploaded = true;
 			this.uploadCoverPhoto(this.coverPhotoOptions); 
 			
 		 }		  
@@ -142,9 +160,22 @@ export class GeneralInfoSlidePage {
 	}
 	  
 	uploadProfilePhoto(params){
+
+		let loading = this.loadingCtrl.create({
+			content: 'Uploading...'
+		});
+		loading.present();
+
 		 this.user.photoUploader(params).subscribe((resp) => {	
-			
+			let toast = this.toastCtrl.create({
+				message: "Profile photo updated!",
+				duration: 3000,
+				position: 'top'
+				});
+				toast.present();
+
 		}, (err) => {
+			loading.dismiss();		
 		  let toast = this.toastCtrl.create({
 			message: "image uploading failed",
 			duration: 3000,
@@ -156,9 +187,14 @@ export class GeneralInfoSlidePage {
 	
 	
 	uploadCoverPhoto(params){
+		let loading = this.loadingCtrl.create({
+			content: 'Uploading...'
+		});
+		loading.present();
 		this.user.photoUploader(params).subscribe((resp) => {	
 			
 		}, (err) => {
+			loading.dismiss();
 		  let toast = this.toastCtrl.create({
 			message: "image uploading failed",
 			duration: 3000,
