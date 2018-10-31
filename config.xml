@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.followthebird.com" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>followthebirds</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+    <description>Follow the bird app.</description>
+    <author email="ranit@uniterrene.com" href="http://ionicframework.com/">Ranit Majumder</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -88,9 +88,9 @@
     <plugin name="cordova-plugin-vibration" spec="3.1.0" />
     <plugin name="cordova-plugin-file-transfer" spec="1.7.1" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
-    <engine name="android" spec="7.0.0" />
-    <engine name="ios" spec="4.5.5" />
-    <engine name="windows" spec="5.0.0" />
     <plugin name="uk.co.workingedge.cordova.plugin.sqliteporter" spec="1.0.5" />
     <plugin name="cordova-sqlite-storage" spec="2.5.0" />
+    <engine name="ios" spec="4.5.5" />
+    <engine name="windows" spec="5.0.0" />
+    <engine name="android" spec="7.1.1" />
 </widget>

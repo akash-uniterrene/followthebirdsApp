@@ -9,15 +9,131 @@
   <ion-grid class="profileHeadGrid">
     <ion-row>
       <ion-col col-3 >
+        <div class="profileWrap">
           <div class="profileImgArea">
-            <img src="../../assets/followthebirdImgs/no-profile-img.jpeg" alt="">
+            <img src="../../assets/followthebirdImgs/no-profile-img.jpeg" alt="">            
           </div>
+          <button ion-fab class="profile-img" (click)="uploadProfilePicture()">								
+							<ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
+						</button>
+        </div>
       </ion-col>
       <ion-col col-9 class="profileText">
         <h5>Ranit Majumder</h5>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
             Maecenas scelerisque metus et libero sollicitudin suscipit.</p>
+        <button ion-button clear>Edit</button>
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-grid class="editGrid">
+    <ion-row>
+      <ion-col col-4>
+        <button ion-button clear block full> 
+            <ion-icon ios="ios-create-outline" md="ios-create-outline"></ion-icon>
+            Edit Profile 
+        </button>
+      </ion-col>
+      <ion-col col-4>
+          <button ion-button clear block full>  
+            <ion-icon ios="ios-list-outline" md="ios-list-outline"></ion-icon>
+            Activity Log
+          </button>
+        </ion-col>
+        <ion-col col-4>
+            <button ion-button clear block full> 
+                <ion-icon ios="ios-more-outline" md="ios-more-outline"></ion-icon>
+                More
+            </button>
+          </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="basicInfoGrid">
+      <ion-row>
+        <ion-col col-12>
+            <ion-list>
+                <ion-item>
+                    <ion-icon ios="ios-briefcase-outline" md="ios-briefcase-outline"></ion-icon>
+                    Work at <b>Lorem ipsum dolor sit amet</b>                
+                </ion-item>
+                <ion-item>
+                    <ion-icon ios="ios-school-outline" md="ios-school-outline"></ion-icon>
+                    Education <b>Lorem ipsum dolor sit amet</b>                
+                </ion-item>
+                <ion-item>
+                    <ion-icon ios="ios-home-outline" md="ios-home-outline"></ion-icon>
+                    Hometown <b>Lorem ipsum dolor </b>                
+                </ion-item>
+                <ion-item>
+                    <ion-icon ios="ios-locate-outline" md="ios-locate-outline"></ion-icon>
+                    Current City  <b>Lorem ipsum dolor </b>                
+                </ion-item>
+                <ion-item>
+                    <ion-icon ios="ios-heart-outline" md="ios-heart-outline"></ion-icon>
+                    Relationship Status               
+                </ion-item>
+                <ion-item>
+                    <ion-icon ios="ios-male-outline" md="ios-male-outline"></ion-icon>
+                    Male                
+                </ion-item>
+              </ion-list>
+        </ion-col>
+        <button ion-button outline block class="mainEditProfile">
+          <ion-icon ios="ios-create-outline" md="ios-create-outline" ></ion-icon>
+          Edit Details </button>
+      </ion-row>
+  </ion-grid>
+
+  <ion-grid class="editGrid lowHeight">
+      <ion-row>
+        <ion-col col-4>
+          <button ion-button clear block full>               
+              About
+          </button>
+        </ion-col>
+        <ion-col col-4>
+            <button ion-button clear block full>               
+              Photos
+            </button>
+          </ion-col>
+          <ion-col col-4>
+              <button ion-button clear block full>                  
+                  Friends
+              </button>
+            </ion-col>
+      </ion-row>
+  </ion-grid>
+
+    <whats-on-mind></whats-on-mind>  
+    <ion-grid class="photosGrid">
+        <ion-row>
+            <ion-col col-12 class="sectionHead">
+                <button ion-fab class="profile-img" (click)="uploadProfilePicture()">								
+                    <ion-icon ios="ios-image" md="ios-image"></ion-icon>
+                </button>
+                <p>Photos</p>
+            </ion-col>
+            <ion-col col-6>
+              <div class="ImgWrapBig" style="background:url(../../assets/followthebirdImgs/big1.png)">                
+              </div>
+            </ion-col>
+            <ion-col col-6>
+                <div class="ImgWrapBig" style="background:url(../../assets/followthebirdImgs/big2.png)">                
+                </div>
+            </ion-col>
+            <ion-col col-4>
+                <div class="ImgWrapSmall" style="background:url(../../assets/followthebirdImgs/small_img_1.png)">                               
+                </div>
+              </ion-col>
+              <ion-col col-4>
+                <div class="ImgWrapSmall" style="background:url(../../assets/followthebirdImgs/small_img_2.png)">                               
+                </div>
+              </ion-col>
+              <ion-col col-4>
+                <div class="ImgWrapSmall" style="background:url(../../assets/followthebirdImgs/small_img_3.png)">                               
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>
