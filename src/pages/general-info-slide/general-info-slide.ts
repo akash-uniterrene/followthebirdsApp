@@ -126,7 +126,14 @@ export class GeneralInfoSlidePage {
 		this.camera.getPicture(options).then((imageData) => {
 		  // imageData is either a base64 encoded string or a file URI
 		  // If it's base64 (DATA_URL):
-		  if(type == 'profile'){ this.profilePhotoOptions.file = imageData; } else { this.coverPhotoOptions.file = imageData; }
+		  if(type == 'profile'){			  
+			  this.profilePhotoOptions.file = imageData;
+			  this.uploadProfilePhoto(this.profilePhotoOptions);
+		  } else {
+			this.coverPhotoOptions.file = imageData; 
+			this.isCoverUploaded = true;
+			this.uploadCoverPhoto(this.coverPhotoOptions); 
+		  }
 		 }, (err) => {
 		  alert('Unable to take photo');
 		 });
@@ -166,13 +173,14 @@ export class GeneralInfoSlidePage {
 		});
 		loading.present();
 
-		 this.user.photoUploader(params).subscribe((resp) => {	
+		 this.user.photoUploader(params).subscribe((resp) => {
+			loading.dismiss();		
 			let toast = this.toastCtrl.create({
 				message: "Profile photo updated!",
 				duration: 3000,
 				position: 'top'
-				});
-				toast.present();
+			});
+			toast.present();
 
 		}, (err) => {
 			loading.dismiss();		
@@ -192,7 +200,13 @@ export class GeneralInfoSlidePage {
 		});
 		loading.present();
 		this.user.photoUploader(params).subscribe((resp) => {	
-			
+			loading.dismiss();		
+			let toast = this.toastCtrl.create({
+				message: "Cover photo updated!",
+				duration: 3000,
+				position: 'top'
+			});
+			toast.present();
 		}, (err) => {
 			loading.dismiss();
 		  let toast = this.toastCtrl.create({
