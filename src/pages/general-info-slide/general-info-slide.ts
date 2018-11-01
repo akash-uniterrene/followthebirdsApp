@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
 import { User } from '../../providers';
+import { StorageProvider } from '../../providers/storage/storage';
 /**
  * Generated class for the GeneralInfoSlidePage page.
  *
@@ -24,12 +25,13 @@ export class GeneralInfoSlidePage {
 	isReadyToSave: boolean;
 	profilePhotoOptions: FormGroup;
 	coverPhotoOptions: FormGroup;
-	
+	private imageURL = "https://dev.followthebirds.com/content/uploads/";
   
 	
   constructor(
 		public navCtrl: NavController, 
 		public user: User, 
+		public storage: StorageProvider,
 		public toastCtrl: ToastController, 
 		public navParams: NavParams, 
 		formBuilder: FormBuilder,
@@ -54,6 +56,10 @@ export class GeneralInfoSlidePage {
 				handle: "cover-user",
 				multiple: false
 			});
+			
+			if(localStorage.getItem("user_cover_id") != 'null'){
+				this.coverPhotoOptions.patchValue({ 'file': imageURL+localStorage.getItem("user_cover") });
+			}
 		
 		}
 		
@@ -61,7 +67,7 @@ export class GeneralInfoSlidePage {
 	  intro(status: string){
 		if(status == 'done'){
 		  localStorage.setItem('user_intro', 'true');
-		  this.nav.setRoot('HomePage');
+		  this.profileReload(localStorage.getItem("user_id"));
 		}
 	  }
   
@@ -139,7 +145,6 @@ export class GeneralInfoSlidePage {
 			this.isCoverUploaded = true;
 			this.uploadCoverPhoto(this.coverPhotoOptions); 
 		  }
-		  alert(imageData);
 		 }, (err) => {
 			alert('Unable to take photo');
 		 });
@@ -227,6 +232,29 @@ export class GeneralInfoSlidePage {
 	
 	getCoverImageStyle() {
 		return this.coverPhotoOptions.controls['file'].value;
+	}
+	
+	// Attempt to login in through our User service
+	profileReload(user_id) {
+		let loading = this.loadingCtrl.create({
+			content: 'reloding details...'
+		});
+		
+		loading.present();
+		this.user.updateProfile(user_id).subscribe((resp) => {			
+			loading.dismiss();			
+			this.storage.setUser(resp);			
+			this.nav.setRoot('HomePage',resp);
+		}, (err) => {
+			loading.dismiss();
+		  // Unable to log in
+		  let toast = this.toastCtrl.create({
+			message: this.loginErrorString,
+			duration: 3000,
+			position: 'top'
+		  });
+		  toast.present();
+		});
 	}
 	
 }

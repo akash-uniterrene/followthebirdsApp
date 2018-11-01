@@ -46,8 +46,8 @@ export class HomePage {
 		this.sliderOpen();
 	  }	  	  
 	sliderOpen(){		 
-		if(localStorage.getItem('user_firstname') && localStorage.getItem('user_id')){
-		  if(localStorage.getItem('user_intro') != "true"){
+		if(localStorage.getItem('user_firstname') || localStorage.getItem('user_id')){
+		  if(localStorage.getItem('user_intro') != "true" && localStorage.getItem('user_picture_id') == 'null'){
 			 this.nav.setRoot('GeneralInfoSlidePage');
 		  }
 		}else{
