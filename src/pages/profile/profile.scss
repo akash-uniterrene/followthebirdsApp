@@ -28,6 +28,8 @@ page-profile {
     }
     .profileWrap{
         position: relative;
+        width: 80px;
+        height: 80px;
         button{
             position: absolute;
             width: 30px;
@@ -42,6 +44,7 @@ page-profile {
     .profileImgArea{
         border-radius: 50%;        
         overflow: hidden;
+        width: 80px;
         height: 80px;
         position: relative;
         
