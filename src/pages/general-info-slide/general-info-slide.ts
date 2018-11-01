@@ -17,26 +17,16 @@ import { User } from '../../providers';
   templateUrl: 'general-info-slide.html',
 })
 export class GeneralInfoSlidePage {
-  @ViewChild('profilePhoto') profilePhoto;
+	@ViewChild('profilePhoto') profilePhoto;
 	@ViewChild('coverPhoto') coverPhoto;	
-  profilePic : any = "assets/followthebirdImgs/no-profile-img.jpeg";
-	coverPic : any = "assets/followthebirdImgs/coverimage.png";
+	//profilePic : any = "assets/followthebirdImgs/no-profile-img.jpeg";
+	//coverPic : any = "assets/followthebirdImgs/coverimage.png";
 	fullname: string;
 	isCoverUploaded: boolean = false;
-  
-	profilePhotoOptions: any = {
-		file: "assets/followthebirdImgs/no-profile-img.jpeg",
-		type: "photos",
-		handle: "picture-user",
-		multiple: false
-	};
-  
-	coverPhotoOptions: any = {
-		file: "assets/followthebirdImgs/coverimage.png",
-		type: "photos",
-		handle: "picture-user",
-		multiple: false
-	};
+	isReadyToSave: boolean;
+	profilePhotoOptions: FormGroup;
+	coverPhotoOptions: FormGroup;
+	
   
 	
   constructor(
@@ -44,6 +34,7 @@ export class GeneralInfoSlidePage {
 		public user: User, 
 		public toastCtrl: ToastController, 
 		public navParams: NavParams, 
+		formBuilder: FormBuilder,
 		public platform: Platform, 
 		public nav: Nav, 
 		public actionSheetCtrl: ActionSheetController, 
@@ -51,13 +42,30 @@ export class GeneralInfoSlidePage {
 		public loadingCtrl: LoadingController
 		) {
 			this.fullname = localStorage.getItem('user_firstname')+' '+localStorage.getItem('user_lastname');
-  }
-  intro(status: string){
-    if(status == 'done'){
-      localStorage.setItem('user_intro', 'true');
-      this.nav.setRoot('HomePage');
-    }
-  }
+			
+			this.profilePhotoOptions = formBuilder.group({
+				file: "assets/followthebirdImgs/no-profile-img.jpeg",
+				type: "photos",
+				handle: "picture-user",
+				multiple: false
+			});
+		  
+			this.coverPhotoOptions = formBuilder.group({
+				file: "assets/followthebirdImgs/coverimage.png",
+				type: "photos",
+				handle: "picture-user",
+				multiple: false
+			});
+		
+		}
+		
+		
+	  intro(status: string){
+		if(status == 'done'){
+		  localStorage.setItem('user_intro', 'true');
+		  this.nav.setRoot('HomePage');
+		}
+	  }
   
 	uploadProfilePicture() {
 		const actionSheet = this.actionSheetCtrl.create({
@@ -125,12 +133,11 @@ export class GeneralInfoSlidePage {
 		
 		this.camera.getPicture(options).then((imageData) => {
 		  // imageData is either a base64 encoded string or a file URI
-		  // If it's base64 (DATA_URL):
 		  if(type == 'profile'){			  
-			  this.profilePhotoOptions.file = imageData;
-			  this.uploadProfilePhoto(this.profilePhotoOptions);
+			this.profilePhotoOptions.patchValue({ 'file': imageData }); 
+			this.uploadProfilePhoto(this.profilePhotoOptions);
 		  } else {
-			this.coverPhotoOptions.file = imageData; 
+			this.coverPhotoOptions.patchValue({ 'file': imageData }); 
 			this.isCoverUploaded = true;
 			this.uploadCoverPhoto(this.coverPhotoOptions); 
 		  }
@@ -152,18 +159,16 @@ export class GeneralInfoSlidePage {
 		reader.onload = (readerEvent) => {
 		let imageData = (readerEvent.target as any).result;
 		 if(type == 'profile'){
-			 
-			this.profilePhotoOptions.file = imageData	
+			this.profilePhotoOptions.patchValue({ 'file': imageData }); 
 			this.uploadProfilePhoto(this.profilePhotoOptions);
 		 } else {
-			this.coverPhotoOptions.file = imageData; 
+			this.coverPhotoOptions.patchValue({ 'file': imageData });  
 			this.isCoverUploaded = true;
 			this.uploadCoverPhoto(this.coverPhotoOptions); 
 			
 		 }		  
 		};
 		reader.readAsDataURL(event.target.files[0]);
-		
 	}
 	  
 	uploadProfilePhoto(params){
@@ -217,6 +222,12 @@ export class GeneralInfoSlidePage {
 		  toast.present();
 		});
 	}
+	getProfileImageStyle() {
+		return this.profilePhotoOptions.controls['file'].value;
+	}
 	
+	getCoverImageStyle() {
+		return this.coverPhotoOptions.controls['file'].value;
+	}
 	
 }

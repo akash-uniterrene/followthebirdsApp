@@ -7,14 +7,14 @@
 		  <h4>Upload Profile Picture</h4>
 		</ion-col>
 		<ion-col col-2 >
-			<input type="file" #profilePhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'profile')" />
+			<input type="file" #profilePhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'profile')" accept=".png, .jpg, .jpeg" />
 		</ion-col>		
 		<ion-col col-8 >
 			<div padding class="uploader_outer_1" style="background:#820ba3;">
 				<div padding class="uploader_outer_2" style="background:#9227ab;">
 					<div padding class="uploader_outer_3" style="background:#a346b6;">
 						<div class="imgWrap">
-							<img [src]="profilePhotoOptions.file" class="slide-image" />	
+							<img [src]="getProfileImageStyle()" class="slide-image" />	
 						</div>				
 						<button ion-fab class="profile-img" (click)="uploadProfilePicture()">								
 							<ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
@@ -45,7 +45,7 @@
 		
 		<ion-col col-12 >
 			<div class="uploader_cover">
-				<img src="{{coverPhotoOptions.file}}" class="slide-image-cover" />			
+				<img [src]="getCoverImageStyle()" class="slide-image-cover" />			
 				<button *ngIf="!isCoverUploaded" ion-button class="cover-img" (click)="uploadCoverPicture()" right style="font-size:10px">
 					<ion-icon  style="font-size:31px;padding-right: 5px;" color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
 					Upload Picture
@@ -55,7 +55,7 @@
 						Change Picture
 					</button>	
 				<div class="absProfileImg">
-						<img [src]="profilePhotoOptions.file" />
+					<img [src]="getProfileImageStyle()" />
 				</div>						
 			</div>
 		</ion-col>
