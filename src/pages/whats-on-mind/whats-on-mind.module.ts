@@ -8,6 +8,6 @@ import { WhatsOnMindPage } from './whats-on-mind';
   ],
   imports: [
     IonicPageModule.forChild(WhatsOnMindPage),
-  ],
+  ],  
 })
 export class WhatsOnMindPageModule {}
