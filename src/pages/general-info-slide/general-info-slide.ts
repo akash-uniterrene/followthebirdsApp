@@ -19,8 +19,6 @@ import { User } from '../../providers';
 export class GeneralInfoSlidePage {
 	@ViewChild('profilePhoto') profilePhoto;
 	@ViewChild('coverPhoto') coverPhoto;	
-	//profilePic : any = "assets/followthebirdImgs/no-profile-img.jpeg";
-	//coverPic : any = "assets/followthebirdImgs/coverimage.png";
 	fullname: string;
 	isCoverUploaded: boolean = false;
 	isReadyToSave: boolean;
@@ -53,7 +51,7 @@ export class GeneralInfoSlidePage {
 			this.coverPhotoOptions = formBuilder.group({
 				file: "assets/followthebirdImgs/coverimage.png",
 				type: "photos",
-				handle: "picture-user",
+				handle: "cover-user",
 				multiple: false
 			});
 		
@@ -141,8 +139,9 @@ export class GeneralInfoSlidePage {
 			this.isCoverUploaded = true;
 			this.uploadCoverPhoto(this.coverPhotoOptions); 
 		  }
+		  alert(imageData);
 		 }, (err) => {
-		  alert('Unable to take photo');
+			alert('Unable to take photo');
 		 });
 	}
 	
