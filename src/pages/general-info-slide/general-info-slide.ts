@@ -58,7 +58,7 @@ export class GeneralInfoSlidePage {
 			});
 			
 			if(localStorage.getItem("user_cover_id") != 'null'){
-				this.coverPhotoOptions.patchValue({ 'file': imageURL+localStorage.getItem("user_cover") });
+				this.coverPhotoOptions.patchValue({ 'file': this.imageURL+localStorage.getItem("user_cover") });
 			}
 		
 		}
@@ -247,9 +247,8 @@ export class GeneralInfoSlidePage {
 			this.nav.setRoot('HomePage',resp);
 		}, (err) => {
 			loading.dismiss();
-		  // Unable to log in
 		  let toast = this.toastCtrl.create({
-			message: this.loginErrorString,
+			message: "unable to reload. please check your connection",
 			duration: 3000,
 			position: 'top'
 		  });
