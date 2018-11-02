@@ -47,14 +47,16 @@ export class GeneralInfoSlidePage {
 				file: "assets/followthebirdImgs/no-profile-img.jpeg",
 				type: "photos",
 				handle: "picture-user",
-				multiple: false
+				multiple: false,
+				user_id : localStorage.getItem('user_id')
 			});
 		  
 			this.coverPhotoOptions = formBuilder.group({
 				file: "assets/followthebirdImgs/coverimage.png",
 				type: "photos",
 				handle: "cover-user",
-				multiple: false
+				multiple: false,
+				user_id : localStorage.getItem('user_id')
 			});
 			
 			if(localStorage.getItem("user_cover_id") != 'null'){
@@ -130,7 +132,7 @@ export class GeneralInfoSlidePage {
 	takeCameraSnap(type){
 		const options: CameraOptions = {
 		  quality: 100,
-		  destinationType: this.camera.DestinationType.FILE_URI,
+		  destinationType: this.camera.DestinationType.DATA_URL,
 		  encodingType: this.camera.EncodingType.JPEG,
 		  mediaType: this.camera.MediaType.PICTURE
 		};
@@ -138,10 +140,10 @@ export class GeneralInfoSlidePage {
 		this.camera.getPicture(options).then((imageData) => {
 		  // imageData is either a base64 encoded string or a file URI
 		  if(type == 'profile'){			  
-			this.profilePhotoOptions.patchValue({ 'file': imageData }); 
+			this.profilePhotoOptions.patchValue({ 'file': "data:image/jpeg;base64,"+imageData }); 
 			this.uploadProfilePhoto(this.profilePhotoOptions);
 		  } else {
-			this.coverPhotoOptions.patchValue({ 'file': imageData }); 
+			this.coverPhotoOptions.patchValue({ 'file': "data:image/jpeg;base64,"+imageData }); 
 			this.isCoverUploaded = true;
 			this.uploadCoverPhoto(this.coverPhotoOptions); 
 		  }

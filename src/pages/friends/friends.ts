@@ -26,7 +26,7 @@ export class FriendsPage {
   }
 
   loadPeople(){
-    this.user.getfriends({id: 41})
+    this.user.getfriends(parseInt(localStorage.getItem('user_id')))
     .then(data => {
 		this.friendLists = data[0];
     });

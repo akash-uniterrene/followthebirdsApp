@@ -25,9 +25,11 @@ export class HomePage {
   public savedUser : any;
   pages: PageList;
 
-  introduction = 'CardsPage';  
-  settingsPage = 'UserSettingsPage';
+	introduction = 'CardsPage';  
+	settingsPage = 'UserSettingsPage';
 	profilePage = 'ProfilePage';
+	FriendRequestsPage = 'FriendRequestsPage';	
+	profilePageParams = { id: localStorage.getItem('user_id') };
   constructor(
     public navCtrl: NavController, 
 	public user: User,
@@ -40,7 +42,7 @@ export class HomePage {
     ) {
      // localStorage.setItem('user_intro', 'false');
     
-		//this.menu.enable(false); 
+		this.menu.enable(false); 
 		  
 		this.getProfileData(localStorage.getItem('user_id'));
 		this.sliderOpen();

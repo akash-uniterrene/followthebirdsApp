@@ -27,8 +27,8 @@
 <ion-content padding> 
   <ion-tabs selectedIndex="0">
     <ion-tab [root]="introduction"  tabIcon="images"></ion-tab>
-    <ion-tab [root]="introduction"  tabIcon="contacts"></ion-tab>
-    <ion-tab [root]="profilePage"  tabIcon="contact"></ion-tab>
+    <ion-tab [root]="FriendRequestsPage"  tabIcon="contacts"></ion-tab>
+    <ion-tab [root]="profilePage"  tabIcon="contact" [rootParams]="profilePageParams"></ion-tab>
     <ion-tab [root]="introduction"  tabIcon="notifications"></ion-tab>
     <ion-tab [root]="settingsPage"  tabIcon="menu"></ion-tab>
 </ion-tabs>

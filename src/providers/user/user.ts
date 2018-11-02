@@ -56,22 +56,6 @@ export class User {
     return seq;
   }
   
-  getProfile(id:number){
-	  
-	let seq = this.api.get('user/'+id, '').share();
-	seq.subscribe((res: any) => {
-      // If the API returned a successful response, mark the user as logged in
-      if (res.status == 'success') {
-       // this._loggedIn(res);
-      } else {
-      }
-    }, err => {
-      console.error('ERROR', err);
-    });
-
-    return seq;
-  }
-  
   updateProfile(id:number){
 	  
 	let seq = this.api.get('user/'+id, '').share();
@@ -125,15 +109,42 @@ export class User {
    * Send a POST request to our signup endpoint with the data
    * the user entered on the form.
    */
-  getfriends(params?: any) {
+  getfriends(id:number) {
 	let frindlist = [];	
-	let seq = this.api.get('friends/66', '').share();
-
+	let seq = this.api.get('friends/'+id, '').share();
 	// don't have the data yet
 	return new Promise(resolve => {
 		seq.subscribe((res: any) => {
 			frindlist.push(res);
 			resolve(frindlist);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+  getPendingRequest(type:string,id:number) {
+	let frindlist = [];	
+	let seq = this.api.get('people/'+type+'/'+id, '').share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			frindlist.push(res);
+			resolve(frindlist);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+  getProfile(id:number){
+	let user :any;
+	let seq = this.api.get('user/'+id, '').share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			user = res;
+			resolve(user);
 		}, err => {
 			console.error('ERROR', err);
 		});
@@ -172,7 +183,6 @@ export class User {
   }   
   
   photoUploader(params){
-	  console.log(params.value);
 	let seq = this.api.post('upload', params.value).share();
 
 	seq.subscribe((res: any) => {
