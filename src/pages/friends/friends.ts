@@ -31,5 +31,8 @@ export class FriendsPage {
 		this.friendLists = data[0];
     });
   }
-
+  
+  viewProfile(user_name) {
+		this.navCtrl.setRoot('ProfilePage', {user_name: user_name});
+  }
 }

@@ -7,7 +7,7 @@
 <ion-content padding>
 	<ion-list>
 		<ion-item-sliding *ngFor="let friend of friendLists">
-		  <button ion-item>
+		  <button ion-item (click)="viewProfile(friend.user_name)">
 			<ion-avatar item-left>
 				<img src="https://dev.followthebirds.com/content/uploads/{{friend.user_picture}}">
 			</ion-avatar>

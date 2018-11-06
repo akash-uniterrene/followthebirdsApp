@@ -137,9 +137,10 @@ export class User {
 	});
   }
   
-  getProfile(id:number){
+  getProfile(id:number,params: any){
+	console.log("params",params);  
 	let user :any;
-	let seq = this.api.get('user/'+id, '').share();
+	let seq = this.api.get('profile/'+id, params).share();
 	// don't have the data yet
 	return new Promise(resolve => {
 		seq.subscribe((res: any) => {
@@ -196,6 +197,23 @@ export class User {
 	});
 
 		return seq;
+  }
+  
+  /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  connection(params: any) {
+	 console.log(params); 
+    let seq = this.api.post('connect', params).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
   }
   
 }

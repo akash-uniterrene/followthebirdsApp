@@ -20,11 +20,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ProfilePage {
 	@ViewChild('profilePhoto') profilePhoto;
 	@ViewChild('coverPhoto') coverPhoto;	
-	profileId : number;
+	profileName : string;
 	profile : any = [];
 	profilePhotoOptions: FormGroup;
 	coverPhotoOptions: FormGroup;
 	private imageURL = "https://dev.followthebirds.com/content/uploads/";
+	private myId :number = parseInt(localStorage.getItem('user_id'));
 	constructor(
 		public navCtrl: NavController, 
 		public user: User,
@@ -39,9 +40,7 @@ export class ProfilePage {
 		public actionSheetCtrl: ActionSheetController,
 		public loadingCtrl: LoadingController	
     ) {
-		//this.profile = navParams.get('profilePageParams');
-		this.profileId = navParams.get('user_name') || parseInt(localStorage.getItem('user_id'));
-		//alert(navParams.get('user_name'));
+		this.profileName = navParams.get('user_name') || localStorage.getItem('user_name');
 		this.profilePhotoOptions = formBuilder.group({
 			file: "assets/followthebirdImgs/no-profile-img.jpeg",
 			type: "photos",
@@ -60,7 +59,7 @@ export class ProfilePage {
   }
 	
 	ionViewDidLoad(){
-		this.user.getProfile(this.profileId).then(data => {
+		this.user.getProfile(parseInt(localStorage.getItem('user_id')),{'user_name':this.profileName}).then(data => {
 			this.profile = data;
 		});
 	}
@@ -254,11 +253,159 @@ export class ProfilePage {
 	} */
 	
 	getCoverBackgroundStyle() {
-		if(this.profile.user_cover == 'null'){
+		if(!this.profile.user_cover){
 			return 'url(assets/followthebirdImgs/coover_dummy.png)'
 		} else {
 			return 'url(' + this.imageURL+this.profile.user_cover + ')'
 		}
+	}
+	
+	friendsAction() {
+		const actionSheet = this.actionSheetCtrl.create({
+		  title: 'Response to friend',
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
+			  text: 'Confirm',
+			  handler: () => {
+				this.takeCameraSnap('cover')
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
+			  text: 'Delete Request',
+			  handler: () => {
+				this.uploadFromGallery("cover")
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+	}
+	
+	responseAction() {
+		const actionSheet = this.actionSheetCtrl.create({
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
+			  text: 'Confirm',
+			  handler: () => {
+				this.connectAction('friend-accept')
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
+			  text: 'Delete Request',
+			  handler: () => {
+				this.connectAction("friend-decline")
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+	}
+	
+	sentAction() {
+		const actionSheet = this.actionSheetCtrl.create({
+		  title: 'Response to friend',
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
+			  text: 'Confirm',
+			  handler: () => {
+				this.takeCameraSnap('cover')
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
+			  text: 'Delete Request',
+			  handler: () => {
+				this.uploadFromGallery("cover")
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+	}
+	
+	followingAction() {
+		const actionSheet = this.actionSheetCtrl.create({
+		  title: 'Response to friend',
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
+			  text: 'Confirm',
+			  handler: () => {
+				this.takeCameraSnap('cover')
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
+			  text: 'Delete Request',
+			  handler: () => {
+				this.uploadFromGallery("cover")
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+	}
+	
+	followAction() {
+		const actionSheet = this.actionSheetCtrl.create({
+		  title: 'Response to friend',
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
+			  text: 'Confirm',
+			  handler: () => {
+				this.takeCameraSnap('cover')
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
+			  text: 'Delete Request',
+			  handler: () => {
+				this.uploadFromGallery("cover")
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+	}
+	
+	moreAction() {
+		const actionSheet = this.actionSheetCtrl.create({
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
+			  text: 'Confirm',
+			  handler: () => {
+				this.connectAction('friend-accept')
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
+			  text: 'Delete Request',
+			  handler: () => {
+				this.connectAction("friend-decline")
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+	}
+	
+	listFriends(){
+		
+		this.navCtrl.push('FriendsPage');
+	}
+	
+	connectAction(type){
+		let params :any = {
+			'do': type,
+			'id': this.profile.user_id,
+			'my_id' : localStorage.getItem('user_id')
+		};
+		this.user.connection(params).subscribe((resp) => {						
+			
+		}, (err) => {
+		
+		});
 	}
 	
 }

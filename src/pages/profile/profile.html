@@ -1,7 +1,7 @@
 <ion-content>
   <div class="profileAndCover" [style.backgroundImage]="getCoverBackgroundStyle()" >
 	<input type="file" #coverPhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'cover')" />
-    <button ion-button class="editcoverBtn" (click)="uploadCoverPicture()">
+    <button ion-button class="editcoverBtn" (click)="uploadCoverPicture()" *ngIf="profile.user_id == myId">
         <ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
         Edit
     </button>
@@ -10,44 +10,84 @@
   <ion-grid class="profileHeadGrid">
     <ion-row>
       <ion-col col-3 >
+	  
         <div class="profileWrap">
           <div class="profileImgArea">
             <img [src]="imageURL+profile.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">            
           </div>
 			<input type="file" #profilePhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'profile')" />
-			<button ion-fab class="profile-img" (click)="uploadProfilePicture()">					
+			<button ion-fab class="profile-img" (click)="uploadProfilePicture()" *ngIf="profile.user_id == myId">					
 				<ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
 			</button>
         </div>
       </ion-col>
       <ion-col col-9 class="profileText">
         <h5>{{profile.user_firstname}} {{profile.user_lastname}}</h5>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-            Maecenas scelerisque metus et libero sollicitudin suscipit.</p>
-        <button ion-button clear>Edit</button>
+        <p *ngIf="profile.user_biography != ''">{{profile.user_biography}}</p>
+        <button ion-button clear *ngIf="profile.user_id == myId">Edit</button>
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-grid class="editGrid">
+  <ion-grid class="editGrid" *ngIf="profile.user_id == myId">
     <ion-row>
-      <ion-col col-4>
-        <button ion-button clear block full> 
+      <ion-col col-4 >
+        <button ion-button clear block full > 
             <ion-icon ios="ios-create-outline" md="ios-create-outline"></ion-icon>
             Edit Profile 
         </button>
-      </ion-col>
-      <ion-col col-4>
+      </ion-col>	  
+      <ion-col col-4 >
           <button ion-button clear block full>  
             <ion-icon ios="ios-list-outline" md="ios-list-outline"></ion-icon>
             Activity Log
           </button>
-        </ion-col>
-        <ion-col col-4>
-            <button ion-button clear block full> 
-                <ion-icon ios="ios-more-outline" md="ios-more-outline"></ion-icon>
-                More
-            </button>
-          </ion-col>
+	  </ion-col>
+	  <ion-col col-4>
+		<button ion-button clear block full> 
+			<ion-icon ios="ios-more-outline" md="ios-more-outline"></ion-icon>
+			More
+		</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid class="editGrid" *ngIf="profile.user_id != myId"> 
+    <ion-row>
+	  <ion-col col-3>
+        <button ion-button clear block full *ngIf="profile.we_friends" (click)="friendsAction()"> 
+            <ion-icon ios="ios-person-add" md="md-person-add"></ion-icon>
+            Friends
+        </button>
+		<button ion-button clear block full *ngIf="profile.he_request" (click)="responseAction()"> 
+            <ion-icon ios="ios-person-add" md="md-person-add"></ion-icon>
+            Respond
+        </button>
+		<button ion-button clear block full *ngIf="profile.i_request" (click)="sentAction()"> 
+            <ion-icon ios="ios-person-add" md="md-person-add"></ion-icon>
+            Sent
+        </button>
+      </ion-col>	  
+      <ion-col col-3>
+          <button ion-button clear block full *ngIf="profile.i_follow" (click)="followingAction()">  
+            <ion-icon ios="ios-list-outline" md="ios-list-outline"></ion-icon>
+            Following
+          </button>
+		  <button ion-button clear block full *ngIf="!profile.i_follow" (click)="followAction()">  
+            <ion-icon ios="ios-list-outline" md="ios-list-outline"></ion-icon>
+            Follow
+          </button>	  
+	  </ion-col>  
+	  <ion-col col-3>
+          <button ion-button clear block full>  
+            <ion-icon ios="ios-chatbubbles" md="md-chatbubbles"></ion-icon>
+            Message
+          </button>
+	  </ion-col>	
+	  <ion-col col-3>
+		<button ion-button clear block full (click)="moreAction()"> 
+			<ion-icon ios="ios-more-outline" md="ios-more-outline"></ion-icon>
+			More
+		</button>
+      </ion-col>
     </ion-row>
   </ion-grid>
 
@@ -55,33 +95,44 @@
       <ion-row>
         <ion-col col-12>
             <ion-list>
-                <ion-item>
+                <ion-item *ngIf="profile.user_work_place">
                     <ion-icon ios="ios-briefcase-outline" md="ios-briefcase-outline"></ion-icon>
-                    Work at <b>Lorem ipsum dolor sit amet</b>                
+                    {{profile.user_work_title}} at <b>{{profile.user_work_place}}</b>                
                 </ion-item>
-                <ion-item>
+                <ion-item *ngIf="profile.user_edu_major">
                     <ion-icon ios="ios-school-outline" md="ios-school-outline"></ion-icon>
-                    Education <b>Lorem ipsum dolor sit amet</b>                
+                    Studied at <b>{{profile.user_edu_major}}</b>            
                 </ion-item>
-                <ion-item>
+                <ion-item *ngIf="profile.user_edu_school">
+                    <ion-icon ios="ios-school-outline" md="ios-school-outline"></ion-icon>
+                    Went to <b>{{profile.user_edu_school}}</b>            
+                </ion-item>
+                <ion-item *ngIf="profile.user_hometown">
                     <ion-icon ios="ios-home-outline" md="ios-home-outline"></ion-icon>
-                    Hometown <b>Lorem ipsum dolor </b>                
+                    Hometown <b>{{profile.user_hometown}}</b>
                 </ion-item>
-                <ion-item>
+                <ion-item *ngIf="profile.user_current_city">
                     <ion-icon ios="ios-locate-outline" md="ios-locate-outline"></ion-icon>
-                    Current City  <b>Lorem ipsum dolor </b>                
+                    Lives in  <b>{{profile.user_current_city}}</b>
                 </ion-item>
-                <ion-item>
+                <ion-item *ngIf="profile.user_relationship">
                     <ion-icon ios="ios-heart-outline" md="ios-heart-outline"></ion-icon>
-                    Relationship Status               
+                    <b *ngIf="profile.user_relationship == 'relationship'" > In a Relationship</b>             
+                    <b *ngIf="profile.user_relationship == 'complicated'" > It's complicated</b>             
+                    <b *ngIf="profile.user_relationship == 'single'" > Single</b>             
                 </ion-item>
-                <ion-item>
+                <ion-item *ngIf="profile.user_gender">
                     <ion-icon ios="ios-male-outline" md="ios-male-outline"></ion-icon>
-                    Male                
+                    <b>{{profile.user_gender}}</b>
                 </ion-item>
+				<ion-item *ngIf="profile.followers_count">
+                    <ion-icon ios="logo-rss" md="logo-rss"></ion-icon>
+                    Followed by <b>{{profile.followers_count}}</b> people
+                </ion-item>
+				
               </ion-list>
         </ion-col>
-        <button ion-button outline block class="mainEditProfile">
+        <button ion-button outline block class="mainEditProfile" *ngIf="profile.user_id == myId">
           <ion-icon ios="ios-create-outline" md="ios-create-outline" ></ion-icon>
           Edit Details </button>
       </ion-row>
@@ -100,7 +151,7 @@
             </button>
           </ion-col>
           <ion-col col-4>
-              <button ion-button clear block full>                  
+              <button ion-button clear block full (click)="listFriends()">                  
                   Friends
               </button>
             </ion-col>

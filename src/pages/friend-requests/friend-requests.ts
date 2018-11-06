@@ -47,7 +47,7 @@ export class FriendRequestsPage {
 		this.response = 'true';
 	}	
 	
-	viewProfile(id) {
-		this.navCtrl.setRoot('ProfilePage', {user_name: id});
+	viewProfile(user_name) {
+		this.navCtrl.setRoot('ProfilePage', {user_name: user_name});
 	}
 }
