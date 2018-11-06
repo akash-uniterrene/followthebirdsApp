@@ -51,9 +51,9 @@
 					Upload Picture
 				</button>	
 				<button *ngIf="isCoverUploaded" ion-button class="cover-img updated" (click)="uploadCoverPicture()" right style="font-size:10px">
-						<ion-icon  style="font-size:31px;padding-right: 5px;" color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
-						Change Picture
-					</button>	
+					<ion-icon  style="font-size:31px;padding-right: 5px;" color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
+					Change Picture
+				</button>	
 				<div class="absProfileImg">
 					<img [src]="getProfileImageStyle()" />
 				</div>						
@@ -63,14 +63,12 @@
 	</ion-grid>
     <ion-grid >
 	
-		<ion-row>
-			<ion-col col-12 >
-				<button ion-button class="upload_cover_button" (tap)="intro('done')" > Got It </button>
-			</ion-col>
-		</ion-row>
-		<img class="slide_img" src="https://3gp10c1vpy442j63me73gy3s-wpengine.netdna-ssl.com/wp-content/themes/datarobot3/assets/built/images/swipe.gif" alt="">
+	<ion-row>
+		<ion-col col-12 >
+			<button ion-button class="upload_cover_button" (tap)="intro('done')" > Got It </button>
+		</ion-col>
+	</ion-row>
+	<img class="slide_img" src="https://3gp10c1vpy442j63me73gy3s-wpengine.netdna-ssl.com/wp-content/themes/datarobot3/assets/built/images/swipe.gif" alt="">
 	</ion-grid>
   </ion-slide>
-  
-
 </ion-slides>

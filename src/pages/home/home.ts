@@ -29,6 +29,7 @@ export class HomePage {
 	settingsPage = 'UserSettingsPage';
 	profilePage = 'ProfilePage';
 	FriendRequestsPage = 'FriendRequestsPage';	
+	NotificationsPage = 'NotificationsPage';	
 	profilePageParams = { id: localStorage.getItem('user_id') };
   constructor(
     public navCtrl: NavController, 

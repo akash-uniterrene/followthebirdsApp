@@ -1,6 +1,7 @@
 <ion-content>
-  <div class="profileAndCover" style="background:url(../../assets/followthebirdImgs/coover_dummy.png)">
-    <button ion-button class="editcoverBtn">
+  <div class="profileAndCover" [style.backgroundImage]="getCoverBackgroundStyle()" >
+	<input type="file" #coverPhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'cover')" />
+    <button ion-button class="editcoverBtn" (click)="uploadCoverPicture()">
         <ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
         Edit
     </button>
@@ -11,15 +12,16 @@
       <ion-col col-3 >
         <div class="profileWrap">
           <div class="profileImgArea">
-            <img src="../../assets/followthebirdImgs/no-profile-img.jpeg" alt="">            
+            <img [src]="imageURL+profile.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">            
           </div>
-          <button ion-fab class="profile-img" (click)="uploadProfilePicture()">								
-							<ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
-						</button>
+			<input type="file" #profilePhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'profile')" />
+			<button ion-fab class="profile-img" (click)="uploadProfilePicture()">					
+				<ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
+			</button>
         </div>
       </ion-col>
       <ion-col col-9 class="profileText">
-        <h5>Ranit Majumder</h5>
+        <h5>{{profile.user_firstname}} {{profile.user_lastname}}</h5>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
             Maecenas scelerisque metus et libero sollicitudin suscipit.</p>
         <button ion-button clear>Edit</button>

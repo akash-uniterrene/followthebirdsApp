@@ -8,9 +8,13 @@
 	<ion-list >
       <ion-item *ngFor="let friend of pendindFriendLists">
         <ion-thumbnail item-start>
-          <img [src]="imageURL+friend.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
+          <img [src]="imageURL+friend.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewProfile(friend.user_id)">
         </ion-thumbnail>
-        <h2>{{friend.user_firstname}} {{friend.user_lastname}}</h2>
+        <h2 (click)="viewProfile(friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
+		<div *ngIf="this.response == 'false'" >
+		<button ion-button padding (click)="confrimRequest()">Confirm</button>
+		<button ion-button outline padding margin-left (click)="deleteRequest()">Delete</button>
+		</div>
       </ion-item>
     </ion-list>
 </ion-content>

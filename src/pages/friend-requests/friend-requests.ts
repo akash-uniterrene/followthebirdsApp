@@ -18,6 +18,10 @@ import { User } from '../../providers';
 export class FriendRequestsPage {
 	pendindFriendLists: any;
 	private imageURL = "https://dev.followthebirds.com/content/uploads/";
+	
+	isAccept : boolean;
+	isDelete : boolean;
+	response = 'false';
   constructor(
 	public navCtrl: NavController,
 	public navParams: NavParams,
@@ -31,5 +35,19 @@ export class FriendRequestsPage {
 		.then(data => {
 			this.pendindFriendLists = data[0];
 		});
+	}
+		
+	confrimRequest() {
+		this.isAccept = true;
+		this.response = 'true';
+	}
+
+	deleteRequest() {
+		this.isDelete = true;
+		this.response = 'true';
 	}	
+	
+	viewProfile(id) {
+		this.navCtrl.setRoot('ProfilePage', {user_name: id});
+	}
 }

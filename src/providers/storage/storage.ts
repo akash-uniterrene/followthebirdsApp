@@ -106,7 +106,6 @@ export class StorageProvider {
 	
 	
 	setUser(user : any){
-		console.log(user);
 		for (var key in user) {
 		  if (user.hasOwnProperty(key)) {          
 			  localStorage.setItem(key,user[key])
