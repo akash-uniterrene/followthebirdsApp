@@ -1,0 +1,38 @@
+<ion-content padding>
+	<!-- <whats-on-mind></whats-on-mind> -->
+	
+  <ion-card *ngFor="let feeds of postFeeds">
+
+    <ion-item>
+      <ion-avatar item-start>
+        <img [src]="mediapath+feeds.post_author_picture" />
+      </ion-avatar>
+      <span style="font-weight:bold;"> {{feeds.post_author_name}}</span> 
+		{{post_type[feeds.post_type]}}
+      <p>{{feeds.time}}</p>
+    </ion-item>
+    <img *ngFor="let photo of feeds.photos" [src]="mediapath+photo.source" >
+    <ion-card-content>
+      <p>{{feeds.text}}</p>
+    </ion-card-content>
+
+    <ion-row>
+      <ion-col>
+        <button ion-button color="primary" clear small icon-start>
+            <ion-icon name='text'></ion-icon>
+            Comments
+        </button>
+      </ion-col>
+      <ion-col>
+        <button ion-button color="primary" clear small icon-start>
+            <ion-icon name='text'></ion-icon>
+            Share
+        </button>
+      </ion-col>
+      
+    </ion-row>
+  </ion-card>
+ <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+   <ion-infinite-scroll-content></ion-infinite-scroll-content>
+ </ion-infinite-scroll>
+</ion-content>

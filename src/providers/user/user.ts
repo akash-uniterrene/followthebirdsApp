@@ -123,6 +123,20 @@ export class User {
 	});
   }
   
+  queryUsers(id:number,params?: any) {
+    let frindlist = [];	
+	let seq = this.api.get('search/'+id, params).share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			frindlist.push(res);
+			resolve(frindlist);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
   getPendingRequest(type:string,id:number) {
 	let frindlist = [];	
 	let seq = this.api.get('people/'+type+'/'+id, '').share();

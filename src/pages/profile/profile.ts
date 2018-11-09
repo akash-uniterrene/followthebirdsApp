@@ -26,6 +26,7 @@ export class ProfilePage {
 	coverPhotoOptions: FormGroup;
 	private imageURL = "https://dev.followthebirds.com/content/uploads/";
 	private myId :number = parseInt(localStorage.getItem('user_id'));
+	headerActive = false;
 	constructor(
 		public navCtrl: NavController, 
 		public user: User,
@@ -41,6 +42,9 @@ export class ProfilePage {
 		public loadingCtrl: LoadingController	
     ) {
 		this.profileName = navParams.get('user_name') || localStorage.getItem('user_name');
+		if(this.profileName != localStorage.getItem('user_name')){
+			this.headerActive = true;
+		}
 		this.profilePhotoOptions = formBuilder.group({
 			file: "assets/followthebirdImgs/no-profile-img.jpeg",
 			type: "photos",
@@ -266,15 +270,16 @@ export class ProfilePage {
 		  buttons: [
 			{
 			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
-			  text: 'Confirm',
+			  text: 'Remove Friend',
 			  handler: () => {
-				this.takeCameraSnap('cover')
+				this.connectAction("friend-remove")
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
-			  text: 'Delete Request',
+			  text: 'Unfollow',
 			  handler: () => {
-				this.uploadFromGallery("cover")
+				this.connectAction("unfollow");
+				this.profile.i_follow = false;
 			  }
 			}
 		  ]
@@ -289,7 +294,8 @@ export class ProfilePage {
 			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
 			  text: 'Confirm',
 			  handler: () => {
-				this.connectAction('friend-accept')
+				this.connectAction('friend-accept');
+				this.profile.we_friends = true;
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
@@ -309,15 +315,15 @@ export class ProfilePage {
 		  buttons: [
 			{
 			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
-			  text: 'Confirm',
+			  text: 'Cancel Request',
 			  handler: () => {
-				this.takeCameraSnap('cover')
+				this.cancelRequestAction()
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
-			  text: 'Delete Request',
+			  text: 'Unfollow',
 			  handler: () => {
-				this.uploadFromGallery("cover")
+				this.unfollowAction()
 			  }
 			}
 		  ]
@@ -325,48 +331,25 @@ export class ProfilePage {
 		actionSheet.present();
 	}
 	
-	followingAction() {
-		const actionSheet = this.actionSheetCtrl.create({
-		  title: 'Response to friend',
-		  buttons: [
-			{
-			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
-			  text: 'Confirm',
-			  handler: () => {
-				this.takeCameraSnap('cover')
-			  }
-			},{
-			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
-			  text: 'Delete Request',
-			  handler: () => {
-				this.uploadFromGallery("cover")
-			  }
-			}
-		  ]
-		});
-		actionSheet.present();
+	addAction() {
+		this.connectAction("friend-add");
+		this.profile.i_request = true;
+		this.profile.i_follow = true;
+	}
+	
+	cancelRequestAction() {
+		this.connectAction("friend-cancel");
+		this.profile.i_request = false;
+	}
+	
+	unfollowAction() {
+		this.connectAction("unfollow");
+		this.profile.i_follow = false;
 	}
 	
 	followAction() {
-		const actionSheet = this.actionSheetCtrl.create({
-		  title: 'Response to friend',
-		  buttons: [
-			{
-			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
-			  text: 'Confirm',
-			  handler: () => {
-				this.takeCameraSnap('cover')
-			  }
-			},{
-			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
-			  text: 'Delete Request',
-			  handler: () => {
-				this.uploadFromGallery("cover")
-			  }
-			}
-		  ]
-		});
-		actionSheet.present();
+		this.connectAction("follow");
+		this.profile.i_follow = true;
 	}
 	
 	moreAction() {
@@ -374,13 +357,13 @@ export class ProfilePage {
 		  buttons: [
 			{
 			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
-			  text: 'Confirm',
+			  text: 'Report',
 			  handler: () => {
 				this.connectAction('friend-accept')
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
-			  text: 'Delete Request',
+			  text: 'Block',
 			  handler: () => {
 				this.connectAction("friend-decline")
 			  }
@@ -391,8 +374,7 @@ export class ProfilePage {
 	}
 	
 	listFriends(){
-		
-		this.navCtrl.push('FriendsPage');
+		this.nav.setRoot('FriendsPage',{'user_id':this.profile.user_id});
 	}
 	
 	connectAction(type){
@@ -406,6 +388,14 @@ export class ProfilePage {
 		}, (err) => {
 		
 		});
+	}
+	
+	goBack(){
+	  this.navCtrl.setRoot("HomePage");
+	}
+	
+	openSearch(){
+	  this.navCtrl.setRoot("SearchPage");
 	}
 	
 }

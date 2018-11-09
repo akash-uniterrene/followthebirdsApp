@@ -14,6 +14,7 @@ import { Items } from '../mocks/providers/items';
 import { Settings, User, Api } from '../providers';
 import { MyApp } from './app.component';
 import { StorageProvider } from '../providers/storage/storage';
+import { Post } from '../providers/post/post';
 import { EventsProvider } from '../providers/events/events';
 import { ForgetPasswordProvider } from '../providers/forget-password/forget-password';
 
@@ -86,6 +87,7 @@ export function provideSettings(storage: Storage) {
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     StorageProvider,
+	Post,
 	EventsProvider,
     ForgetPasswordProvider,
 	FileTransfer,

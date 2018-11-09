@@ -1,3 +1,14 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-buttons left>
+      <button ion-button icon-only (click)="goBack()"> <ion-icon ios="ios-arrow-back" md="md-arrow-back"></ion-icon></button>
+    </ion-buttons>
+    <ion-title>Akash Dutta</ion-title>
+	<ion-buttons right>
+      <button ion-button icon-only><ion-icon ios="ios-search" md="md-search"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
 <!--
   Generated template for the FriendsPage page.
 
@@ -9,7 +20,7 @@
 		<ion-item-sliding *ngFor="let friend of friendLists">
 		  <button ion-item (click)="viewProfile(friend.user_name)">
 			<ion-avatar item-left>
-				<img src="https://dev.followthebirds.com/content/uploads/{{friend.user_picture}}">
+				<img src="https://dev.followthebirds.com/content/uploads/{{friend.user_picture}}" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
 			</ion-avatar>
 			<h2>{{friend.user_firstname}} {{friend.user_lastname}}</h2>
 		  </button>

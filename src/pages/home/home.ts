@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, Nav, NavParams,  ToastController, MenuController } from 'ionic-angular';
 import { FirstRunPage} from '../';
+import { Post } from '../../providers/post/post';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
@@ -24,8 +25,7 @@ type PageList = PageItem[]
 export class HomePage {
   public savedUser : any;
   pages: PageList;
-
-	introduction = 'CardsPage';  
+	introduction = 'PostPage';  
 	settingsPage = 'UserSettingsPage';
 	profilePage = 'ProfilePage';
 	FriendRequestsPage = 'FriendRequestsPage';	
@@ -34,6 +34,7 @@ export class HomePage {
   constructor(
     public navCtrl: NavController, 
 	public user: User,
+	public post: Post,  
 	public storage: StorageProvider,
 	public toastCtrl: ToastController,
     public navParams: NavParams,  
@@ -86,8 +87,9 @@ export class HomePage {
     console.log('ionViewDidLoad HomePage');
   }
   
-  getItems() {
-	  
+  getItems(ev) {
+	  console.log(ev.target.value);
+	  this.navCtrl.setRoot("SearchPage",{'event':ev.target.value});
   }
   
   
@@ -103,5 +105,6 @@ export class HomePage {
 	  toast.present();
 	});	
   }
+  
 
 }

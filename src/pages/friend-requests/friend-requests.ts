@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, Nav, NavParams, NavController} from 'ionic-angular';
+import { FirstRunPage} from '../';
 import { User } from '../../providers';
 
 /**
@@ -25,7 +25,8 @@ export class FriendRequestsPage {
   constructor(
 	public navCtrl: NavController,
 	public navParams: NavParams,
-	public user: User
+	public user: User,
+	public nav:Nav
   ) { 
   
   
@@ -37,17 +38,33 @@ export class FriendRequestsPage {
 		});
 	}
 		
-	confrimRequest() {
+	confrimRequest(item) {
 		this.isAccept = true;
 		this.response = 'true';
+		this.connectAction(item,'friend-accept');
 	}
 
-	deleteRequest() {
+	deleteRequest(item) {
 		this.isDelete = true;
 		this.response = 'true';
+		this.connectAction(item,'friend-decline');
 	}	
 	
 	viewProfile(user_name) {
-		this.navCtrl.setRoot('ProfilePage', {user_name: user_name});
+		this.nav.setRoot('ProfilePage', {user_name: user_name});
+	}
+	
+	connectAction(item,type){
+		console.log(item);
+		let params :any = {
+			'do': type,
+			'id': item.user_id,
+			'my_id' : localStorage.getItem('user_id')
+		};
+		this.user.connection(params).subscribe((resp) => {						
+			
+		}, (err) => {
+		
+		});
 	}
 }

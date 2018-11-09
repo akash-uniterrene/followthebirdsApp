@@ -12,8 +12,8 @@
         </ion-thumbnail>
         <h2 (click)="viewProfile(friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
 		<div *ngIf="this.response == 'false'" >
-		<button ion-button padding (click)="confrimRequest(friend.user_id)">Confirm</button>
-		<button ion-button outline padding margin-left (click)="deleteRequest(friend.user_id)">Delete</button>
+		<button ion-button padding (click)="confrimRequest(friend)">Confirm</button>
+		<button ion-button outline padding margin-left (click)="deleteRequest(friend)">Delete</button>
 		</div>
       </ion-item>
     </ion-list>

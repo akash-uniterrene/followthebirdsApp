@@ -1,22 +1,42 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ 'SEARCH_TITLE' | translate }}</ion-title>
+    <ion-searchbar [(ngModel)]="event" (ionInput)="getItems($event)" placeholder="{{ 'SEARCH_PLACEHOLDER' | translate }}"></ion-searchbar>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
-  <ion-searchbar (ionInput)="getItems($event)" placeholder="{{ 'SEARCH_PLACEHOLDER' | translate }}"></ion-searchbar>
+  
   <ion-list>
-    <button ion-item (click)="openItem(item)" *ngFor="let item of currentItems">
-      <ion-avatar item-start>
-        <img [src]="item.profilePic" />
-      </ion-avatar>
-      <h2>{{item.name}}</h2>
-      <p>{{item.about}}</p>
-      <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
-    </button>
+	<ion-item-sliding *ngFor="let item of currentItems">
+		<ion-buttons ion-item *ngIf="item.type == 'user'">
+		  <ion-avatar item-start>
+			<img [src]="imageURL+item.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewProfile(item.user_name)">
+		  </ion-avatar>
+		  <h2 (click)="viewProfile(item.user_name)">{{item.user_firstname}} {{item.user_lastname}}</h2>
+		  <p>{{item.user_gender}}</p>
+		</ion-buttons>
+		<ion-buttons ion-item *ngIf="item.type == 'page'">
+		  <ion-avatar item-start>
+			<img [src]="imageURL+item.page_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewProfile(item.page_name)">
+		  </ion-avatar>
+		  <h2 (click)="viewProfile(item.user_name)">{{item.page_title}}</h2>
+		  <p>{{item.user_gender}}</p>
+		</ion-buttons>
+		<ion-buttons ion-item *ngIf="item.type == 'group'">
+		  <ion-avatar item-start>
+			<img [src]="imageURL+item.group_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewGroup(item.group_name)">
+		  </ion-avatar>
+		  <h2 (click)="viewGroup(item.group_name)">{{item.group_title}}</h2>
+		</ion-buttons>
+		<ion-buttons ion-item *ngIf="item.type == 'event'">
+		  <ion-avatar item-start>
+			<img [src]="imageURL+item.event_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewEvent(item.user_name)">
+		  </ion-avatar>
+		  <h2 (click)="viewEvent(item.event_id)">{{item.event_title}}</h2>
+		</ion-buttons>	
+	</ion-item-sliding>
   </ion-list>
 </ion-content>

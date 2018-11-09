@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, Nav, NavController, NavParams } from 'ionic-angular';
 
 import { User } from '../../providers';
 /**
@@ -15,24 +15,24 @@ import { User } from '../../providers';
   templateUrl: 'friends.html',
 })
 export class FriendsPage {
-
+	private profile_id : number;
 	friendLists: any;
-	constructor(public navCtrl: NavController, public user: User, public navParams: NavParams) {
-	  this.loadPeople();
+	constructor(public navCtrl: NavController, public user: User, public navParams: NavParams, nav:Nav ) {
+	  this.profile_id = navParams.get('user_id') || localStorage.getItem('user_id');
 	}
 
   ionViewDidLoad() {
-	console.log();
+	this.user.getfriends(this.profile_id)
+	.then(data => {
+		this.friendLists = data[0];
+	});
   }
 
-  loadPeople(){
-    this.user.getfriends(parseInt(localStorage.getItem('user_id')))
-    .then(data => {
-		this.friendLists = data[0];
-    });
+  viewProfile(user_name) {
+	this.navCtrl.setRoot('ProfilePage', {user_name: user_name});
   }
   
-  viewProfile(user_name) {
-		this.navCtrl.setRoot('ProfilePage', {user_name: user_name});
+  goBack(){
+	  this.navCtrl.setRoot("HomePage");
   }
 }

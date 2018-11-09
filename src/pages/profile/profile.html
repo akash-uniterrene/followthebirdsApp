@@ -1,3 +1,15 @@
+<ion-header *ngIf="headerActive">
+  <ion-navbar color="primary">
+    <ion-buttons left>
+      <button ion-button icon-only (click)="goBack()"> <ion-icon ios="ios-arrow-back" md="md-arrow-back"></ion-icon></button>
+    </ion-buttons>
+    <ion-title>{{profile.user_firstname}} {{profile.user_lastname}}</ion-title>
+	<ion-buttons right>
+      <button ion-button icon-only (click)="openSearch()"><ion-icon ios="ios-search" md="md-search"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
 <ion-content>
   <div class="profileAndCover" [style.backgroundImage]="getCoverBackgroundStyle()" >
 	<input type="file" #coverPhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'cover')" />
@@ -54,7 +66,7 @@
     <ion-row>
 	  <ion-col col-3>
         <button ion-button clear block full *ngIf="profile.we_friends" (click)="friendsAction()"> 
-            <ion-icon ios="ios-person-add" md="md-person-add"></ion-icon>
+            <ion-icon ios="ios-person-add" md="md-person"></ion-icon>
             Friends
         </button>
 		<button ion-button clear block full *ngIf="profile.he_request" (click)="responseAction()"> 
@@ -65,9 +77,13 @@
             <ion-icon ios="ios-person-add" md="md-person-add"></ion-icon>
             Sent
         </button>
+		<button ion-button clear block full *ngIf="!profile.i_request && !profile.he_request && !profile.we_friends" (click)="addAction()"> 
+            <ion-icon ios="ios-person-add" md="md-person-add"></ion-icon>
+            Add Friend
+        </button>
       </ion-col>	  
       <ion-col col-3>
-          <button ion-button clear block full *ngIf="profile.i_follow" (click)="followingAction()">  
+          <button ion-button clear block full *ngIf="profile.i_follow" (click)="unfollowAction()">  
             <ion-icon ios="ios-list-outline" md="ios-list-outline"></ion-icon>
             Following
           </button>
