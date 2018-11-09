@@ -42,7 +42,8 @@ export class ProfilePage {
 		public loadingCtrl: LoadingController	
     ) {
 		this.profileName = navParams.get('user_name') || localStorage.getItem('user_name');
-		if(this.profileName != localStorage.getItem('user_name')){
+		//console.log('here',navParams.get('user_name'));
+		if(navParams.get('user_name')){
 			this.headerActive = true;
 		}
 		this.profilePhotoOptions = formBuilder.group({

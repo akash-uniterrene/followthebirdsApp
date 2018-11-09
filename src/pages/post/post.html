@@ -4,10 +4,10 @@
   <ion-card *ngFor="let feeds of postFeeds">
 
     <ion-item>
-      <ion-avatar item-start>
+      <ion-avatar item-start (click)="viewProfile(feeds.user_name)">
         <img [src]="mediapath+feeds.post_author_picture" />
       </ion-avatar>
-      <span style="font-weight:bold;"> {{feeds.post_author_name}}</span> 
+      <span style="font-weight:bold;" (click)="viewProfile(feeds.user_name)"> {{feeds.post_author_name}}</span> 
 		{{post_type[feeds.post_type]}}
       <p>{{feeds.time}}</p>
     </ion-item>

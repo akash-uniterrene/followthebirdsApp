@@ -152,7 +152,6 @@ export class User {
   }
   
   getProfile(id:number,params: any){
-	console.log("params",params);  
 	let user :any;
 	let seq = this.api.get('profile/'+id, params).share();
 	// don't have the data yet

@@ -62,13 +62,10 @@ export class PostPage {
 		for (var key in item) {
 		  this.postFeeds.push(item[key]);
 		}
-		console.log(this.postFeeds);
     });
   }
   
   doInfinite(infiniteScroll) {
-    console.log('Begin async operation');
-
     setTimeout(() => {
       this.post.getfeeds('newsfeed',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{'page': this.pageCount})
 		.then(data => {
@@ -79,10 +76,12 @@ export class PostPage {
 		});
 	  this.pageCount = this.pageCount + 1;
 	  this.arrayPosition = this.arrayPosition + 1;
-      console.log('Async operation has ended');
       infiniteScroll.complete();
     }, 500);
   }
  
+  viewProfile(user_name) {
+		this.nav.setRoot('ProfilePage', {user_name: user_name});
+	} 
 
 }
