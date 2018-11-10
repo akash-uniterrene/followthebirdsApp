@@ -194,15 +194,79 @@
             <ion-col col-4>
                 <div class="ImgWrapSmall" style="background:url(../../assets/followthebirdImgs/small_img_1.png)">                               
                 </div>
-              </ion-col>
-              <ion-col col-4>
+            </ion-col>
+            <ion-col col-4>
                 <div class="ImgWrapSmall" style="background:url(../../assets/followthebirdImgs/small_img_2.png)">                               
                 </div>
-              </ion-col>
-              <ion-col col-4>
+            </ion-col>
+            <ion-col col-4>
                 <div class="ImgWrapSmall" style="background:url(../../assets/followthebirdImgs/small_img_3.png)">                               
                 </div>
             </ion-col>
         </ion-row>
     </ion-grid>
+	
+	<ion-grid class="friendsGrid" margin-top>
+        <ion-row>
+            <ion-col col-12 class="sectionHead">
+                <button ion-fab class="profile-img" >								
+                    <ion-icon ios="ios-image" md="ios-contacts"></ion-icon>
+                </button>
+                <p>Friends</p>
+            </ion-col>
+            <ion-col col-4 *ngFor="let friend of friendLists | slice:0:6; let i=index">
+				
+                <div class="ImgWrapSmall" [style.backgroundImage]="getBackgroundStyle(friend)" (click)="viewProfile(friend.user_name)" >                               
+                </div>
+				<p (click)="viewProfile(friend.user_name)"><strong>{{friend.user_firstname}} {{friend.user_lastname}}</strong></p>
+            </ion-col>         
+        </ion-row>
+    </ion-grid>
+	<ion-grid class="friendsGrid" margin-top>
+        <ion-row>
+            <ion-col col-12 class="sectionHead">
+                <button ion-fab class="profile-img" >								
+                    <ion-icon ios="ios-image" md="ios-contacts"></ion-icon>
+                </button>
+                <p>Posts</p>
+            </ion-col>
+            <ion-col col-12>
+				<ion-card *ngFor="let feeds of postFeeds" full>
+					<ion-item>
+					  <ion-avatar item-start (click)="viewProfile(feeds.user_name)">
+						<img [src]="imageURL+feeds.post_author_picture" />
+					  </ion-avatar>
+					  <span style="font-weight:bold;" (click)="viewProfile(feeds.user_name)"> {{feeds.post_author_name}}</span> 
+						{{post_type[feeds.post_type]}}
+					  <p>{{feeds.time}}</p>
+					</ion-item>
+					<img *ngFor="let photo of feeds.photos" [src]="imageURL+photo.source" >
+					<ion-card-content>
+					  <p>{{feeds.text}}</p>
+					</ion-card-content>
+
+					<ion-row>
+					  <ion-col>
+						<button ion-button color="primary" clear small icon-start>
+							<ion-icon name='text'></ion-icon>
+							Comments
+						</button>
+					  </ion-col>
+					  <ion-col>
+						<button ion-button color="primary" clear small icon-start>
+							<ion-icon name='text'></ion-icon>
+							Share
+						</button>
+					  </ion-col>
+					  
+					</ion-row>
+				</ion-card>
+				<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+				   <ion-infinite-scroll-content></ion-infinite-scroll-content>
+				</ion-infinite-scroll>
+            </ion-col>         
+        </ion-row>
+    </ion-grid>
+	
+	
 </ion-content>

@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, Nav, NavParams, ActionSheetController, ToastController, Platform, MenuController, LoadingController, } from 'ionic-angular';
 import { FirstRunPage} from '../';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Post } from '../../providers/post/post';
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -22,14 +23,39 @@ export class ProfilePage {
 	@ViewChild('coverPhoto') coverPhoto;	
 	profileName : string;
 	profile : any = [];
+	friendLists: any;
 	profilePhotoOptions: FormGroup;
 	coverPhotoOptions: FormGroup;
 	private imageURL = "https://dev.followthebirds.com/content/uploads/";
 	private myId :number = parseInt(localStorage.getItem('user_id'));
 	headerActive = false;
+	private pageCount = 2;
+	private arrayPosition = 0;
+	postFeeds: any = [];
+	post_type: any = {
+		shared: 'shared',
+		link: 'shared a link',
+		poll: 'created a poll',
+		product: 'added new product for sell',
+		article: 'added new article',
+		video : 'added a video',
+		audio: 'added an audio',
+		file: 'added a file',
+		photos: 'added a photo',
+		profile_picture: 'updated his profile picture',
+		profile_cover: 'updated his cover photo',
+		page_picture: 'updated page picture',
+		page_cover: 'updated cover photo',
+		group_picture: 'updated group picture',
+		group_cover: 'updated group cover',
+		event_cover: 'updated event cover'
+	};
+  
+  
 	constructor(
 		public navCtrl: NavController, 
 		public user: User,
+		public post: Post,
 		public storage: StorageProvider,
 		public toastCtrl: ToastController,
 		public navParams: NavParams, 
@@ -61,12 +87,34 @@ export class ProfilePage {
 			multiple: false,
 			user_id : localStorage.getItem('user_id')
 		});
+		
+		this.post.getfeeds('posts_profile',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{'filter':'all'})
+		.then(data => {
+			let item = data[0];
+			for (var key in item) {
+			  this.postFeeds.push(item[key]);
+			}
+		});
   }
 	
 	ionViewDidLoad(){
 		this.user.getProfile(parseInt(localStorage.getItem('user_id')),{'user_name':this.profileName}).then(data => {
 			this.profile = data;
 		});
+		
+		
+		console.log("here",localStorage.getItem('user_id'));
+		
+		this.user.getfriends(parseInt(localStorage.getItem('user_id')))
+		.then(data => {
+			this.friendLists = data[0];
+		});
+		
+		
+	}
+	
+	viewProfile(user_name) {
+		this.nav.setRoot('ProfilePage', {user_name: user_name});
 	}
 	
 
@@ -257,6 +305,14 @@ export class ProfilePage {
 		});
 	} */
 	
+	getBackgroundStyle(item) {
+		if(!item.user_picture){
+			return 'url(assets/followthebirdImgs/no-profile-img.jpeg)'
+		} else {
+			return 'url(' + this.imageURL+item.user_picture + ')'
+		}
+	}
+	
 	getCoverBackgroundStyle() {
 		if(!this.profile.user_cover){
 			return 'url(assets/followthebirdImgs/coover_dummy.png)'
@@ -399,4 +455,19 @@ export class ProfilePage {
 	  this.navCtrl.setRoot("SearchPage");
 	}
 	
+	
+	doInfinite(infiniteScroll) {
+		setTimeout(() => {
+		  this.post.getfeeds('newsfeed',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{'page': this.pageCount})
+			.then(data => {
+				let item = data[this.arrayPosition];
+				for (var key in item) {
+				  this.postFeeds.push(item[key]);
+				}
+			});
+		  this.pageCount = this.pageCount + 1;
+		  this.arrayPosition = this.arrayPosition + 1;
+		  infiniteScroll.complete();
+		}, 500);
+	}
 }
