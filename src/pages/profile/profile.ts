@@ -117,6 +117,18 @@ export class ProfilePage {
 		this.nav.setRoot('ProfilePage', {user_name: user_name});
 	}
 	
+	viewPhotos(user_name){
+		this.nav.setRoot('PhotosPage', {user_name: user_name});
+	}
+	
+	editProfile(){
+		this.nav.setRoot('EditProfilePage', {'user_id': parseInt(localStorage.getItem('user_id'))});
+	}
+	
+	editDetails(){
+		this.nav.setRoot('EditDetailsPage', {'user_id': parseInt(localStorage.getItem('user_id'))});
+	}
+	
 
 	uploadProfilePicture() {
 		const actionSheet = this.actionSheetCtrl.create({
@@ -458,7 +470,7 @@ export class ProfilePage {
 	
 	doInfinite(infiniteScroll) {
 		setTimeout(() => {
-		  this.post.getfeeds('newsfeed',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{'page': this.pageCount})
+		  this.post.getfeeds('posts_profile',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{'page': this.pageCount})
 			.then(data => {
 				let item = data[this.arrayPosition];
 				for (var key in item) {

@@ -43,7 +43,7 @@
   <ion-grid class="editGrid" *ngIf="profile.user_id == myId">
     <ion-row>
       <ion-col col-4 >
-        <button ion-button clear block full > 
+        <button ion-button clear block full (click)="editProfile()"> 
             <ion-icon ios="ios-create-outline" md="ios-create-outline"></ion-icon>
             Edit Profile 
         </button>
@@ -148,7 +148,7 @@
 				
               </ion-list>
         </ion-col>
-        <button ion-button outline block class="mainEditProfile" *ngIf="profile.user_id == myId">
+        <button ion-button outline block class="mainEditProfile" *ngIf="profile.user_id == myId" (click)="editDetails()" >
           <ion-icon ios="ios-create-outline" md="ios-create-outline" ></ion-icon>
           Edit Details </button>
       </ion-row>
@@ -162,7 +162,7 @@
           </button>
         </ion-col>
         <ion-col col-4>
-            <button ion-button clear block full>               
+            <button ion-button clear block full (click)="viewPhotos(profile.user_name)">               
               Photos
             </button>
           </ion-col>
