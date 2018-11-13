@@ -10,7 +10,7 @@
         <ion-thumbnail item-start>
           <img [src]="imageURL+friend.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewProfile(friend.user_name)">
         </ion-thumbnail>
-        <h2 (click)="viewProfile(friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
+        <h2 (click)="viewProfile(friend.user_name,friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
 		<div *ngIf="this.response == 'false'" >
 		<button ion-button padding (click)="confrimRequest(friend)">Confirm</button>
 		<button ion-button outline padding margin-left (click)="deleteRequest(friend)">Delete</button>

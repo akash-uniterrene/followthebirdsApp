@@ -48,6 +48,19 @@ export class Post {
 	});
   }
 
+ 
+  publishPost(publisherInfo: any) {
+    let seq = this.api.post('post', publisherInfo).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+      
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
   
   
 }

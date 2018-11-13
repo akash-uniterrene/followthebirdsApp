@@ -39,9 +39,10 @@ export class SearchPage {
   /**
    * Navigate to the detail page for this item.
    */
-  viewProfile(user_name) {
-	this.navCtrl.setRoot('ProfilePage', {user_name: user_name});
-  }
+
+	viewProfile(user_name,user_id) {
+		this.navCtrl.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
+	} 
   
 	/* addAction(item) {
 		this.connectAction(item,"friend-add");

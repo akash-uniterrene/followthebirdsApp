@@ -5,6 +5,7 @@ import { Post } from '../../providers/post/post';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
+import { PhotoViewer,PhotoViewerOptions } from '@ionic-native/photo-viewer';
 
 /**
  * Generated class for the PostPage page.
@@ -44,13 +45,14 @@ export class PostPage {
    private mediapath = "https://dev.followthebirds.com/content/uploads/";
    constructor(
     public navCtrl: NavController, 
-	public user: User,
-	public post: Post,  
-	public storage: StorageProvider,
-	public toastCtrl: ToastController,
+    public user: User,
+    public post: Post,  
+    public storage: StorageProvider,
+    public toastCtrl: ToastController,
     public navParams: NavParams,  
     private camera: Camera,
     public menu: MenuController,
+	private photoViewer: PhotoViewer,
     public nav: Nav 
   ) {
   }
@@ -80,8 +82,15 @@ export class PostPage {
     }, 500);
   }
  
-  viewProfile(user_name) {
-		this.nav.setRoot('ProfilePage', {user_name: user_name});
+  viewImage(url){
+	const option : PhotoViewerOptions = {
+		  share: true
+		};
+	this.photoViewer.show(this.mediapath+url,"Image Preview",option);
+  }
+  
+  viewProfile(user_name,user_id) {
+		this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
 	} 
 
 }

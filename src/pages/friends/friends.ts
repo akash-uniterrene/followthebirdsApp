@@ -28,9 +28,9 @@ export class FriendsPage {
 	});
   }
 
-  viewProfile(user_name) {
-	this.navCtrl.setRoot('ProfilePage', {user_name: user_name});
-  }
+  viewProfile(user_name,user_id) {
+		this.navCtrl.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
+  } 
   
   goBack(){
 	  this.navCtrl.setRoot("HomePage");

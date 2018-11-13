@@ -20,27 +20,35 @@
                   <img src="{{userPic}}">
                 </ion-avatar>
                 <h5 style="text-transform:capitalize;">{{userName}}</h5>                    
-              </ion-item>       
+              </ion-item>
+              <ion-col> 
+                <ion-select style="width:100% !important;max-width:100%;">
+                    <ion-option selected value="public">Public</ion-option>
+                    <ion-option value="friends">Friends</ion-option>
+                    <ion-option value="only_me">Only Me</ion-option>
+                </ion-select>             
+              </ion-col>       
             </ion-list>
       </ion-card-header>
       <ion-card-content>
-          <ion-textarea placeholder="Whats on your mind" class="main_textarea_field"></ion-textarea>
+          <ion-textarea [(ngModel)]="publisherInfo.message" placeholder="Whats on your mind" class="main_textarea_field"></ion-textarea>
       </ion-card-content>
       <ion-row>
           <ion-col>
-			
+              <ion-buttons left>
+                  <button ion-button icon-only (tap)="postPicture()" class="activity_icons">          
+                    <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+                  </button>
+                  <button ion-button icon-only (tap)="postAlbum()" class="activity_icons">          
+                      <ion-icon ios="ios-happy" md="md-happy"></ion-icon>
+                  </button>  
+              </ion-buttons>
           </ion-col>
-          <ion-col> 
-            <ion-select style="width:100% !important;max-width:100%;">
-                <ion-option selected value="public">Public</ion-option>
-                <ion-option value="friends">Friends</ion-option>
-                <ion-option value="only_me">Only Me</ion-option>
-            </ion-select>             
-          </ion-col>
+          
           <ion-col center text-center style="padding-right: 16px !important">
-			<button ion-button color="primary"  block icon-start>
-                  Post
-			</button>
+            <button ion-button color="primary"  block icon-start (tap)="publishPost()" >
+               Post
+            </button>
           </ion-col>
         </ion-row>
     </ion-card>

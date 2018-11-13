@@ -6,6 +6,7 @@ import { Post } from '../../providers/post/post';
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PhotoViewer,PhotoViewerOptions } from '@ionic-native/photo-viewer';
 /**
  * Generated class for the ProfilePage page.
  *
@@ -23,7 +24,8 @@ export class ProfilePage {
 	@ViewChild('coverPhoto') coverPhoto;	
 	profileName : string;
 	profile : any = [];
-	friendLists: any;
+	friendLists : any = [];
+	photos : any = [];
 	profilePhotoOptions: FormGroup;
 	coverPhotoOptions: FormGroup;
 	private imageURL = "https://dev.followthebirds.com/content/uploads/";
@@ -31,6 +33,7 @@ export class ProfilePage {
 	headerActive = false;
 	private pageCount = 2;
 	private arrayPosition = 0;
+	private profile_id;
 	postFeeds: any = [];
 	post_type: any = {
 		shared: 'shared',
@@ -65,9 +68,11 @@ export class ProfilePage {
 		public menu: MenuController,
 		public nav: Nav,
 		public actionSheetCtrl: ActionSheetController,
+		private photoViewer: PhotoViewer,
 		public loadingCtrl: LoadingController	
     ) {
 		this.profileName = navParams.get('user_name') || localStorage.getItem('user_name');
+		this.profile_id = navParams.get('user_id') || localStorage.getItem('user_id');
 		//console.log('here',navParams.get('user_name'));
 		if(navParams.get('user_name')){
 			this.headerActive = true;
@@ -102,23 +107,41 @@ export class ProfilePage {
 			this.profile = data;
 		});
 		
+		this.photos = [];
+		this.friendLists = [];
 		
-		console.log("here",localStorage.getItem('user_id'));
-		
-		this.user.getfriends(parseInt(localStorage.getItem('user_id')))
+		this.user.getphotos(parseInt(localStorage.getItem('user_id')),{'type':'user','id':this.profile_id})
 		.then(data => {
-			this.friendLists = data[0];
+			let item = data[0];
+			for (var key in item) {
+			  this.photos.push(item[key]);
+			}
+			console.log(this.photos);
+		});
+		
+		this.user.getfriends(parseInt(this.profile_id))
+		.then(data => {
+			let item = data[0];
+			for (var key in item) {
+			  this.friendLists.push(item[key]);
+			}
 		});
 		
 		
 	}
-	
+	viewImage(url){
+		const option : PhotoViewerOptions = {
+			  share: true
+			};
+		this.photoViewer.show(this.imageURL+url,"Image Preview",option);
+	}
+  
 	viewProfile(user_name) {
 		this.nav.setRoot('ProfilePage', {user_name: user_name});
 	}
 	
-	viewPhotos(user_name){
-		this.nav.setRoot('PhotosPage', {user_name: user_name});
+	viewPhotos(user_id){
+		this.nav.setRoot('PhotosPage', {user_id: user_id});
 	}
 	
 	editProfile(){
@@ -317,11 +340,11 @@ export class ProfilePage {
 		});
 	} */
 	
-	getBackgroundStyle(item) {
-		if(!item.user_picture){
+	getBackgroundStyle(url) {
+		if(!url){
 			return 'url(assets/followthebirdImgs/no-profile-img.jpeg)'
 		} else {
-			return 'url(' + this.imageURL+item.user_picture + ')'
+			return 'url(' + this.imageURL+url + ')'
 		}
 	}
 	

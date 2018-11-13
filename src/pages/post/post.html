@@ -1,5 +1,5 @@
 <ion-content>
-	<!-- <whats-on-mind></whats-on-mind> -->
+	<whats-on-mind></whats-on-mind>
 	
   <ion-card *ngFor="let feeds of postFeeds">
 
@@ -7,11 +7,11 @@
       <ion-avatar item-start (click)="viewProfile(feeds.user_name)">
         <img [src]="mediapath+feeds.post_author_picture" />
       </ion-avatar>
-      <span style="font-weight:bold;" (click)="viewProfile(feeds.user_name)"> {{feeds.post_author_name}}</span> 
+      <span style="font-weight:bold;" (click)="viewProfile(feeds.user_name,feeds.user_id)"> {{feeds.post_author_name}}</span> 
 		{{post_type[feeds.post_type]}}
       <p>{{feeds.time}}</p>
     </ion-item>
-    <img *ngFor="let photo of feeds.photos" [src]="mediapath+photo.source" >
+    <img *ngFor="let photo of feeds.photos" [src]="mediapath+photo.source" (click)="viewImage(photo.source)">
     <ion-card-content>
       <p>{{feeds.text}}</p>
     </ion-card-content>
@@ -19,13 +19,13 @@
     <ion-row>
       <ion-col>
         <button ion-button color="primary" clear small icon-start>
-            <ion-icon name='text'></ion-icon>
+            <ion-icon ios="ios-text" md="md-text"></ion-icon>
             Comments
         </button>
       </ion-col>
       <ion-col>
         <button ion-button color="primary" clear small icon-start>
-            <ion-icon name='text'></ion-icon>
+            <ion-icon ios="ios-share" md="md-share"></ion-icon>
             Share
         </button>
       </ion-col>

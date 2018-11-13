@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content>
-  <div class="profileAndCover" [style.backgroundImage]="getCoverBackgroundStyle()" >
+  <div class="profileAndCover" [style.backgroundImage]="getCoverBackgroundStyle()"  (click)="viewImage(profile.user_cover)">
 	<input type="file" #coverPhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'cover')" />
     <button ion-button class="editcoverBtn" (click)="uploadCoverPicture()" *ngIf="profile.user_id == myId">
         <ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
@@ -25,7 +25,7 @@
 	  
         <div class="profileWrap">
           <div class="profileImgArea">
-            <img [src]="imageURL+profile.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">            
+            <img [src]="imageURL+profile.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewImage(profile.user_picture)">            
           </div>
 			<input type="file" #profilePhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'profile')" />
 			<button ion-fab class="profile-img" (click)="uploadProfilePicture()" *ngIf="profile.user_id == myId">					
@@ -162,7 +162,7 @@
           </button>
         </ion-col>
         <ion-col col-4>
-            <button ion-button clear block full (click)="viewPhotos(profile.user_name)">               
+            <button ion-button clear block full (click)="viewPhotos(profile.user_id)">               
               Photos
             </button>
           </ion-col>
@@ -183,25 +183,9 @@
                 </button>
                 <p>Photos</p>
             </ion-col>
-            <ion-col col-6>
-              <div class="ImgWrapBig" style="background:url(../../assets/followthebirdImgs/big1.png)">                
+            <ion-col *ngFor="let photo of photos | slice:0:6; let i=index" [id]="i" col-4>		
+              <div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(photo.source)" >                
               </div>
-            </ion-col>
-            <ion-col col-6>
-                <div class="ImgWrapBig" style="background:url(../../assets/followthebirdImgs/big2.png)">                
-                </div>
-            </ion-col>
-            <ion-col col-4>
-                <div class="ImgWrapSmall" style="background:url(../../assets/followthebirdImgs/small_img_1.png)">                               
-                </div>
-            </ion-col>
-            <ion-col col-4>
-                <div class="ImgWrapSmall" style="background:url(../../assets/followthebirdImgs/small_img_2.png)">                               
-                </div>
-            </ion-col>
-            <ion-col col-4>
-                <div class="ImgWrapSmall" style="background:url(../../assets/followthebirdImgs/small_img_3.png)">                               
-                </div>
             </ion-col>
         </ion-row>
     </ion-grid>
@@ -216,7 +200,7 @@
             </ion-col>
             <ion-col col-4 *ngFor="let friend of friendLists | slice:0:6; let i=index">
 				
-                <div class="ImgWrapSmall" [style.backgroundImage]="getBackgroundStyle(friend)" (click)="viewProfile(friend.user_name)" >                               
+                <div class="ImgWrapSmall" [style.backgroundImage]="getBackgroundStyle(friend.user_picture)" (click)="viewProfile(friend.user_name)" >                               
                 </div>
 				<p (click)="viewProfile(friend.user_name)"><strong>{{friend.user_firstname}} {{friend.user_lastname}}</strong></p>
             </ion-col>         
@@ -240,7 +224,7 @@
 						{{post_type[feeds.post_type]}}
 					  <p>{{feeds.time}}</p>
 					</ion-item>
-					<img *ngFor="let photo of feeds.photos" [src]="imageURL+photo.source" >
+					<img *ngFor="let photo of feeds.photos" [src]="imageURL+photo.source" (click)="viewImage(photo.source)">
 					<ion-card-content>
 					  <p>{{feeds.text}}</p>
 					</ion-card-content>
@@ -254,7 +238,7 @@
 					  </ion-col>
 					  <ion-col>
 						<button ion-button color="primary" clear small icon-start>
-							<ion-icon name='text'></ion-icon>
+                                <ion-icon ios="ios-share" md="md-share"></ion-icon>
 							Share
 						</button>
 					  </ion-col>

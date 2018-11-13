@@ -8,26 +8,54 @@
       <button ion-button icon-only><ion-icon ios="ios-search" md="md-search"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
-  <ion-segment color="dark" [(ngModel)]="page">
-    <ion-segment-button value="0" (click)="selectedTab(0)"> 
-      Uploads
-    </ion-segment-button>
-    <ion-segment-button value="1" (click)="selectedTab(1)">
-      Albums
-    </ion-segment-button>
-  </ion-segment>
+  <ion-segment color="dark" [(ngModel)]="photoalbum">
+	  <ion-segment-button value="uploads">
+		Uploads
+	  </ion-segment-button>
+	  <ion-segment-button value="albums">
+		Albums
+	  </ion-segment-button>
+	</ion-segment>
 </ion-header>
 
 
-<ion-content padding>
-	<ion-slides #slider (ionSlideWillChange)="moveButton($event)">
-
-	  <ion-slide>
-		<h1>First Slide</h1>
-	  </ion-slide>
-
-	  <ion-slide>
-		<h1>Second Slide</h1>
-	  </ion-slide>
-	</ion-slides>
+<ion-content>
+	<div [ngSwitch]="photoalbum">
+			<ion-list *ngSwitchCase="'uploads'">
+				<ion-grid class="photosGrid">
+						<ion-row>
+								<ion-col *ngFor="let photo of photos" [id]="i" col-4>		
+									<div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(photo.source)" (click)="viewImage(photo.source)">                
+									</div>
+								</ion-col>
+								<ion-infinite-scroll (ionInfinite)="doInfinitePhotos($event)">
+								   <ion-infinite-scroll-content></ion-infinite-scroll-content>
+								</ion-infinite-scroll>
+						</ion-row>
+				</ion-grid>
+			</ion-list>
+			<ion-list *ngSwitchCase="'albums'">
+				<ion-grid class="photosGrid">
+					<ion-row>
+						<ion-col *ngFor="let album of albums" col-4 >		
+							<div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(album.cover)" (click)="getAlbum(album.album_id)" >                
+							</div>
+							<div class="album-details" (click)="getAlbum(album.album_id)" > 
+								<span style="padding-top:0px;"> {{album.title}} </span>
+							<div>
+								{{album.photos_count}} Photos
+								<div class="">
+									
+								</div>
+							</div> 
+							</div>
+						</ion-col>
+						<ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+						   <ion-infinite-scroll-content></ion-infinite-scroll-content>
+						</ion-infinite-scroll>
+						
+					</ion-row>
+				</ion-grid>
+			</ion-list>
+	</div>
 </ion-content>

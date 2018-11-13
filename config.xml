@@ -90,6 +90,7 @@
     <plugin name="cordova-plugin-file" spec="6.0.1" />
     <plugin name="uk.co.workingedge.cordova.plugin.sqliteporter" spec="1.0.5" />
     <plugin name="cordova-sqlite-storage" spec="2.5.0" />
+    <plugin name="com-sarriaroman-photoviewer" spec="^1.1.18" />
     <engine name="ios" spec="4.5.5" />
     <engine name="windows" spec="5.0.0" />
     <engine name="android" spec="7.1.1" />

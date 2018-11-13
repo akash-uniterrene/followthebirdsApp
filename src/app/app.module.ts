@@ -23,7 +23,8 @@ import { SQLite } from '@ionic-native/sqlite';
 
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
-
+import { AlbumProvider } from '../providers/album/album';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function createTranslateLoader(http: HttpClient) {
@@ -94,7 +95,9 @@ export function provideSettings(storage: Storage) {
 	FileTransferObject,
 	File,
 	SQLitePorter,
-    SQLite	
+    SQLite,
+    AlbumProvider,
+    PhotoViewer	
   ]
 })
 export class AppModule { }

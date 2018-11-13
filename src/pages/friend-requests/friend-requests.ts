@@ -50,10 +50,9 @@ export class FriendRequestsPage {
 		this.connectAction(item,'friend-decline');
 	}	
 	
-	viewProfile(user_name) {
-		this.nav.setRoot('ProfilePage', {user_name: user_name});
-	}
-	
+	viewProfile(user_name,user_id) {
+		this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
+	} 
 	connectAction(item,type){
 		console.log(item);
 		let params :any = {

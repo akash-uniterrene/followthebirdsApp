@@ -105,6 +105,45 @@ export class User {
     this._user = resp.user;
   }
   
+  
+   /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  getphotos(user_id:number,params?: any) {
+    let photos = [];
+	let seq = this.api.get('photos/'+user_id, params).share();
+
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			photos.push(res);
+			resolve(photos);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+   /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  getalbums(user_id:number,params?: any) {
+	let albums = [];	
+	let seq = this.api.get('albums/'+user_id, params).share();
+
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			albums.push(res);
+			resolve(albums);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
   /**
    * Send a POST request to our signup endpoint with the data
    * the user entered on the form.
@@ -197,19 +236,19 @@ export class User {
   }   
   
   photoUploader(params){
-	let seq = this.api.post('upload', params.value).share();
+    let seq = this.api.post('upload', params.value).share();
 
-	seq.subscribe((res: any) => {
-		  // If the API returned a successful response, mark the user as logged in
-		/* if (res.status == 'success') {
-			//this._loggedIn(res);
-		} else {
-		} */
-	}, err => {
-		console.error('ERROR', err);
-	});
+    seq.subscribe((res: any) => {
+        // If the API returned a successful response, mark the user as logged in
+      /* if (res.status == 'success') {
+        //this._loggedIn(res);
+      } else {
+      } */
+    }, err => {
+      console.error('ERROR', err);
+    });
 
-		return seq;
+      return seq;
   }
   
   /**
