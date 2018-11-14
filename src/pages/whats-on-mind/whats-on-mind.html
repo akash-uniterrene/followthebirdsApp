@@ -6,50 +6,86 @@
           </button>
       </ion-buttons>
       <h4 style="color:#fff; margin:0; padding-left: 6px;" >Create post</h4>
-      <!-- <ion-buttons right>
-        <button ion-button icon-only style="text-transform:none;">Share</button>
-      </ion-buttons> -->
+
     </ion-navbar>
   </ion-header>
   <ion-content>
-    <ion-card>
-      <ion-card-header>
+    <form>
+      <ion-card class="publisher-card">
+          <ion-grid>
+              <ion-row>
+                <ion-col>
+                  <ion-item style="padding-left:0" text-wrap>
+                      <ion-avatar item-start>      
+                        <img src="{{userPic}}">
+                      </ion-avatar>
+                      <span style="text-transform:capitalize;"> {{userName}}</span>
+					  <span style="text-transform:capitalize;" *ngIf="publisherInfo.feeling_action != ''" > - <ion-icon [name]="icon"></ion-icon> {{publisherInfo.feeling_action}} </span>	
+					  <span style="text-transform:capitalize; font-weight: bold;" *ngIf="publisherInfo.feeling_value != ''"> {{publisherInfo.feeling_value}}</span>	
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Privacy</ion-label>
+                    <ion-select [(ngModel)]="publisherInfo.privacy" name="privacy">
+                      <ion-option selected value="public">Public</ion-option>
+                              <ion-option value="friends">Friends</ion-option>
+                              <ion-option value="only_me">Only Me</ion-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+          </ion-grid> 
           <ion-list>
-              <ion-item style="padding-left:0">
-                <ion-avatar item-start>      
-                  <img src="{{userPic}}">
-                </ion-avatar>
-                <h5 style="text-transform:capitalize;">{{userName}}</h5>                    
-              </ion-item>
-              <ion-col> 
-                <ion-select style="width:100% !important;max-width:100%;">
-                    <ion-option selected value="public">Public</ion-option>
-                    <ion-option value="friends">Friends</ion-option>
-                    <ion-option value="only_me">Only Me</ion-option>
-                </ion-select>             
-              </ion-col>       
-            </ion-list>
-      </ion-card-header>
-      <ion-card-content>
-          <ion-textarea [(ngModel)]="publisherInfo.message" placeholder="Whats on your mind" class="main_textarea_field"></ion-textarea>
-      </ion-card-content>
-      <ion-row>
-          <ion-col>
-              <ion-buttons left>
-                  <button ion-button icon-only (tap)="postPicture()" class="activity_icons">          
-                    <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
-                  </button>
-                  <button ion-button icon-only (tap)="postAlbum()" class="activity_icons">          
-                      <ion-icon ios="ios-happy" md="md-happy"></ion-icon>
-                  </button>  
-              </ion-buttons>
-          </ion-col>
-          
-          <ion-col center text-center style="padding-right: 16px !important">
-            <button ion-button color="primary"  block icon-start (tap)="publishPost()" >
-               Post
-            </button>
-          </ion-col>
-        </ion-row>
-    </ion-card>
+            
+          </ion-list>
+          <ion-card-content>
+            <ion-textarea [(ngModel)]="publisherInfo.message" placeholder="Whats on your mind" class="main_textarea_field" name="message"></ion-textarea>
+		  </ion-card-content>
+		  <ion-grid>
+              <ion-row >
+                <ion-col >
+                  
+                </ion-col>
+				<ion-col >
+                 
+                </ion-col>				
+              </ion-row>
+          </ion-grid>
+        <ion-row>
+            <ion-col>
+                <ion-buttons left>
+                    <button ion-button icon-only (tap)="uploadPicture()" class="activity_icons">          
+                      <ion-icon ios="ios-camera" md="md-camera"></ion-icon>
+                    </button>
+                    <button ion-button icon-only (tap)="getFeelings()" class="activity_icons">          
+                        <ion-icon ios="ios-happy" md="md-happy"></ion-icon>
+                    </button>  
+                </ion-buttons>
+            </ion-col>
+            
+            <ion-col center text-center style="padding-right: 16px !important">
+              <button ion-button color="primary"  block icon-start (tap)="publishPost()" >
+                Post
+              </button>
+            </ion-col>
+          </ion-row>
+      </ion-card>
+	  <ion-scroll style="height: 200px" scrollY="true">
+		  <ion-list no-border padding-left padding-right>
+			<ion-item *ngFor="let feeling of feelings; let i=index" (click)="setFeeling(feeling,i)">
+			 <ion-icon [name]="feeling.icon" item-start></ion-icon>
+			 {{feeling.text}}			  
+			</ion-item>
+		  </ion-list>
+	  </ion-scroll>
+	  
+	  <ion-scroll style="height: 200px" scrollY="true">
+		  <ion-list no-border padding-left padding-right>
+			<ion-item *ngFor="let type of feeling_type" (click)="setFeelingType(type.action)">
+			 <ion-icon [name]="type.icon" item-start></ion-icon>
+			 {{type.text}}			  
+			</ion-item>
+		  </ion-list>
+	  </ion-scroll>
+	  
+	</form>
   </ion-content>

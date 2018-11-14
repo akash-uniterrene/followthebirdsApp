@@ -3,12 +3,13 @@
 	
   <ion-card *ngFor="let feeds of postFeeds">
 
-    <ion-item>
+    <ion-item text-wrap>
       <ion-avatar item-start (click)="viewProfile(feeds.user_name)">
         <img [src]="mediapath+feeds.post_author_picture" />
       </ion-avatar>
       <span style="font-weight:bold;" (click)="viewProfile(feeds.user_name,feeds.user_id)"> {{feeds.post_author_name}}</span> 
-		{{post_type[feeds.post_type]}}
+	  <span *ngIf="feeds.feeling_action != ''" >is {{feeds.feeling_action}} {{feeds.feeling_value}}</span>
+	  <span>{{post_type[feeds.post_type]}}</span>
       <p>{{feeds.time}}</p>
     </ion-item>
     <img *ngFor="let photo of feeds.photos" [src]="mediapath+photo.source" (click)="viewImage(photo.source)">

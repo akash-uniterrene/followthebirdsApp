@@ -30,7 +30,7 @@ export class WhatsOnMindComponent {
     
   }
   updateStatus(){
-    const modal = this.modal.create('WhatsOnMindPage');
+    const modal = this.modal.create('WhatsOnMindPage',{'handle':'me'});
     modal.present();
   }
   
