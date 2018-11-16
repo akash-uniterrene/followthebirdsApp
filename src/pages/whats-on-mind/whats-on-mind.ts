@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController,Platform,  ViewController,ToastController,LoadingController } from 'ionic-angular';
 import { User } from '../../providers';
 import { Post } from '../../providers/post/post';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 /**
  * Generated class for the WhatsOnMindPage page.
  *
@@ -16,10 +17,11 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
   templateUrl: 'whats-on-mind.html',
 })
 export class WhatsOnMindPage {
-
+  @ViewChild('postPhoto') postPhoto;
   public userName: string;
   public userPic: string;
   public loading;
+  postPhotoOptions: FormGroup;
   private publisherInfo : any = {
 	handle: '',
 	id: '',
@@ -35,17 +37,20 @@ export class WhatsOnMindPage {
     video:'',
     audio:'',
     file:'',
-    photos:[],
+    photos: [],
 	my_id: localStorage.getItem('user_id')
   };
   
+  public publishPhotos : any = [];
   private feelings : any = []; 
   private feeling_type : any = []; 
   private icon;
+  private imageURL = "https://dev.followthebirds.com/content/uploads/";
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     public user: User,
+	formBuilder: FormBuilder,	
     public post: Post,  
     public toastCtrl: ToastController,
     public loadingCtrl: LoadingController,
@@ -55,29 +60,43 @@ export class WhatsOnMindPage {
     private camera: Camera,
     public modal: ViewController
     ) {
+		
       this.loading = this.loadingCtrl.create({
         content: 'Publishing Post...',
         dismissOnPageChange: true
       });
+	  
       if(localStorage.getItem('user_id')){
         this.setUser();        
       }else{
         this.nav.setRoot('LoginPage');
       }
       
+	  this.postPhotoOptions = formBuilder.group({
+		file: [],
+		type: "photos",
+		handle: "publisher",
+		multiple: true,
+		user_id : localStorage.getItem('user_id')
+	  });
+		
       this.publisherInfo.handle = navParams.get('handle');
-      
+      this.publisherInfo.id = navParams.get('id');
+	  console.log(navParams.get('handle'));
+	  
   }
-
+  
+ 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad WhatsOnMindPage');
+    
   }
 
   closeModal(){
     this.modal.dismiss();
   }
+  
   setUser(){    
-    this.userName = (localStorage.getItem('user_name'))+' '+(localStorage.getItem('user_lastname')); 
+    this.userName = (localStorage.getItem('user_fastname'))+' '+(localStorage.getItem('user_lastname')); 
 	this.userPic = this.user.getProfilePic();
   }
   
@@ -90,7 +109,7 @@ export class WhatsOnMindPage {
 	  this.feeling_type = this.post.get_feeling_type(index);
 	  console.log(this.feeling_type);
   }
-  publishPost(){
+  publishPost(){	
     this.loading.present();
       //Attempt to login in through our User service
       this.post.publishPost(this.publisherInfo).subscribe((resp) => {
@@ -123,7 +142,7 @@ export class WhatsOnMindPage {
 			  icon: !this.platform.is('ios') ? 'ios-images' : null,		
 			  text: 'Upload from gallery',
 			  handler: () => {
-				
+				this.uploadFromGallery();
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'close' : null,
@@ -147,11 +166,47 @@ export class WhatsOnMindPage {
 		
 		this.camera.getPicture(options).then((imageData) => {
 		  // imageData is either a base64 encoded string or a file URI
-		  /* this.profilePhotoOptions.patchValue({ 'file': "data:image/jpeg;base64,"+imageData }); 
-			this.uploadProfilePhoto(this.profilePhotoOptions); */
+		   this.postPhotoOptions.patchValue({ 'file': "data:image/jpeg;base64,"+imageData }); 
+		   this.postPhotoOptions.patchValue({ 'multiple': false });
+		   this.uploadPhoto(this.postPhotoOptions);
 		 }, (err) => {
 			alert('Unable to take photo');
 		 });
+	}
+	
+	uploadFromGallery(){
+		this.postPhoto.nativeElement.click();
+	}
+	
+	processWebImage(event) {
+		let reader = new FileReader();
+		reader.onload = (readerEvent) => {
+		 let imageData = (readerEvent.target as any).result;
+		 this.postPhotoOptions.patchValue({ 'file': imageData });
+         this.postPhotoOptions.patchValue({ 'multiple': false });
+		 this.uploadPhoto(this.postPhotoOptions);	  
+		};
+		reader.readAsDataURL(event.target.files[0]);
+	}
+	
+	uploadPhoto(params){
+		let loading = this.loadingCtrl.create({
+			content: 'Uploading...'
+		});
+		loading.present();
+		 this.user.photoUploader(params).subscribe((resp) => {
+			loading.dismiss();	
+			this.publishPhotos.push(resp);
+			this.publisherInfo.photos = JSON.stringify(this.publishPhotos);
+		}, (err) => {
+			loading.dismiss();		
+		  let toast = this.toastCtrl.create({
+			message: "image uploading failed",
+			duration: 3000,
+			position: 'top'
+		  });
+		  toast.present();
+		});
 	}
 	
 	setFeeling(feeling,index){
@@ -164,5 +219,14 @@ export class WhatsOnMindPage {
 	
 	setFeelingType(type){
 		this.publisherInfo.feeling_value = type;
+		console.log(this.publisherInfo);
+	}
+	
+	getBackgroundStyle(url) {
+		if(!url){
+			return 'url(assets/followthebirdImgs/no-profile-img.jpeg)'
+		} else {
+			return 'url(' + this.imageURL+url + ')'
+		}
 	}
 }

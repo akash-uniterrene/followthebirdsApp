@@ -122,7 +122,7 @@ export class SignupPage {
 
   doSignup() {    
     
-    if(!this.checkValidationsStep2()){     
+    if(this.checkValidationsStep2()){     
       
       this.loading.present();
       //Attempt to login in through our User service
@@ -166,9 +166,7 @@ export class SignupPage {
     var tab2 = document.getElementById('tab2');
     var step1 = document.getElementById('step1');
     var step2 = document.getElementById('step2');
-
-    if(!this.checkValidations()){
-
+    if(this.checkValidations()){
       if(step == 2){
 
         let toast = this.toastCtrl.create({

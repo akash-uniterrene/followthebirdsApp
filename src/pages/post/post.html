@@ -1,11 +1,15 @@
 <ion-content>
-	<whats-on-mind></whats-on-mind>
+	<ion-refresher (ionRefresh)="doRefresh($event)">
+     <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+	<whats-on-mind [handle]="postElement"></whats-on-mind>
 	
   <ion-card *ngFor="let feeds of postFeeds">
 
     <ion-item text-wrap>
       <ion-avatar item-start (click)="viewProfile(feeds.user_name)">
-        <img [src]="mediapath+feeds.post_author_picture" />
+        <img [src]="mediapath+feeds.post_author_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" />
       </ion-avatar>
       <span style="font-weight:bold;" (click)="viewProfile(feeds.user_name,feeds.user_id)"> {{feeds.post_author_name}}</span> 
 	  <span *ngIf="feeds.feeling_action != ''" >is {{feeds.feeling_action}} {{feeds.feeling_value}}</span>
@@ -24,10 +28,12 @@
             Comments
         </button>
       </ion-col>
+	  <ion-col>
+	  </ion-col>
       <ion-col>
-        <button ion-button color="primary" clear small icon-start>
-            <ion-icon ios="ios-share" md="md-share"></ion-icon>
+        <button ion-button color="primary" clear small icon-end right>
             Share
+			<ion-icon ios="ios-share-alt" md="md-share-alt"></ion-icon>           
         </button>
       </ion-col>
       

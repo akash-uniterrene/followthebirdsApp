@@ -14,7 +14,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
   templateUrl: 'user-settings.html',
 })
 export class UserSettingsPage {
-
+  private imageURL = "https://dev.followthebirds.com/content/uploads/";
+  private profile : any = [];
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -22,33 +23,30 @@ export class UserSettingsPage {
     public loadingCtrl: LoadingController,
     private camera: Camera,
     public nav: Nav) {
+		for (var i = 0; i < localStorage.length; i++){
+			this.profile[localStorage.key(i)] = localStorage.getItem(localStorage.key(i));
+			// do something with localStorage.getItem(localStorage.key(i));
+		}
   }
-  
 
-  getPicture(){
-    const options: CameraOptions = {
-      quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    };
-    
-    this.camera.getPicture(options).then((imageData) => {
-      // imageData is either a base64 encoded string or a file URI
-      // If it's base64 (DATA_URL):
-      let base64Image = 'data:image/jpeg;base64,' + imageData;
-     }, (err) => {
-      // Handle error
-     });
-  }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad UserSettingsPage');
+   
   }
+  
+  viewProfile(){
+	this.nav.setRoot('ProfilePage', {user_name: this.profile.user_name,user_id:this.profile.user_id});  
+  }
+  
+  listFriends(){
+	this.nav.setRoot('FriendsPage',{'user_id':this.profile.user_id});
+  }
+  
   logouta(){
     localStorage.clear();
     this.nav.setRoot('LoginPage')
   }
+  
   presentLoading() {
     const loader = this.loadingCtrl.create({
       content: "Logging out...",

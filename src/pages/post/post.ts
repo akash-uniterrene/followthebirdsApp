@@ -39,7 +39,7 @@ export class PostPage {
 	group_cover: 'updated group cover',
 	event_cover: 'updated event cover'
   };
-  
+   public postElement = [];
    private pageCount = 2;
    private arrayPosition = 0;
    private mediapath = "https://dev.followthebirds.com/content/uploads/";
@@ -58,8 +58,11 @@ export class PostPage {
   }
 
   ionViewDidLoad() {
+	this.postElement['handle'] = "me";
+	this.postElement['id'] = '';  
     this.post.getfeeds('newsfeed',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{})
     .then(data => {
+		this.postFeeds = [];
 		let item = data[0];
 		for (var key in item) {
 		  this.postFeeds.push(item[key]);
@@ -70,16 +73,24 @@ export class PostPage {
   doInfinite(infiniteScroll) {
     setTimeout(() => {
       this.post.getfeeds('newsfeed',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{'page': this.pageCount})
-		.then(data => {
-			let item = data[this.arrayPosition];
-			for (var key in item) {
-			  this.postFeeds.push(item[key]);
+		.then(data => {			
+			if(data[0].length > 0) {
+				let item = data[0];
+				for (var key in item) {
+				  this.postFeeds.push(item[key]);
+				}
 			}
 		});
 	  this.pageCount = this.pageCount + 1;
-	  this.arrayPosition = this.arrayPosition + 1;
       infiniteScroll.complete();
     }, 500);
+  }
+  
+  doRefresh(refresher) {
+	this.ionViewDidLoad();
+    setTimeout(() => {
+      refresher.complete();
+    }, 2000);
   }
  
   viewImage(url){
@@ -88,6 +99,7 @@ export class PostPage {
 		};
 	this.photoViewer.show(this.mediapath+url,"Image Preview",option);
   }
+  
   
   viewProfile(user_name,user_id) {
 		this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});

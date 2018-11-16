@@ -256,8 +256,19 @@ export class User {
    * the user entered on the form.
    */
   connection(params: any) {
-	 console.log(params); 
     let seq = this.api.post('connect', params).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
+  
+  photoRemover(params: any) {
+	let seq = this.api.post('remove-photo', params).share();
 
     seq.subscribe((res: any) => {
       // If the API returned a successful response, mark the user as logged in

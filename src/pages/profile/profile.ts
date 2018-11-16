@@ -34,6 +34,7 @@ export class ProfilePage {
 	private pageCount = 2;
 	private arrayPosition = 0;
 	private profile_id;
+	public postElement = [];
 	postFeeds: any = [];
 	post_type: any = {
 		shared: 'shared',
@@ -105,6 +106,8 @@ export class ProfilePage {
 	ionViewDidLoad(){
 		this.user.getProfile(parseInt(localStorage.getItem('user_id')),{'user_name':this.profileName}).then(data => {
 			this.profile = data;
+			this.postElement['handle'] = "user";
+			this.postElement['id'] = this.profile_id;
 		});
 		
 		this.photos = [];
@@ -170,6 +173,12 @@ export class ProfilePage {
 				this.uploadFromGallery("profile")
 			  }
 			},{
+			  icon: !this.platform.is('ios') ? 'trash' : null,
+			  text: 'Remove profile photo',
+			  handler: () => {
+				  this.removePhoto({"my_id":localStorage.getItem('user_id'),"handle":"picture-user","id":this.profile_id})
+			  }
+			},{
 			  icon: !this.platform.is('ios') ? 'close' : null,
 			  text: 'Cancel',
 			  role: 'cancel',
@@ -196,6 +205,12 @@ export class ProfilePage {
 			  text: 'Upload from gallery',
 			  handler: () => {
 				this.uploadFromGallery("cover")
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'trash' : null,
+			  text: 'Remove cover photo',
+			  handler: () => {
+				  this.removePhoto({"my_id":localStorage.getItem('user_id'),"handle":"cover-user","id":this.profile_id})
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'close' : null,
@@ -316,6 +331,32 @@ export class ProfilePage {
 	
 	getCoverImageStyle() {
 		return this.coverPhotoOptions.controls['file'].value;
+	}
+	
+	removePhoto(params) {
+		let loading = this.loadingCtrl.create({
+			content: 'Removing...'
+		});
+		loading.present();
+		 this.user.photoRemover(params).subscribe((resp) => {
+			loading.dismiss();	
+			this.profile.user_picture = resp;	
+			let toast = this.toastCtrl.create({
+				message: "Profile photo removed!",
+				duration: 3000,
+				position: 'top'
+			});
+			toast.present();
+
+		}, (err) => {
+		  loading.dismiss();		
+		  let toast = this.toastCtrl.create({
+			message: "image uploading failed",
+			duration: 3000,
+			position: 'top'
+		  });
+		  toast.present();
+		});
 	}
 	
 	// Attempt to login in through our User service
@@ -495,9 +536,11 @@ export class ProfilePage {
 		setTimeout(() => {
 		  this.post.getfeeds('posts_profile',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{'page': this.pageCount})
 			.then(data => {
-				let item = data[this.arrayPosition];
-				for (var key in item) {
-				  this.postFeeds.push(item[key]);
+				if(data[0].length > 0) {
+					let item = data[0];
+					for (var key in item) {
+					  this.postFeeds.push(item[key]);
+					}
 				}
 			});
 		  this.pageCount = this.pageCount + 1;

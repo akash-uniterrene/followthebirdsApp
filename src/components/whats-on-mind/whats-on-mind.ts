@@ -14,7 +14,7 @@ import { User } from '../../providers';
 })
 export class WhatsOnMindComponent {
 
- 
+  @Input('handle') handle;
   text: string;
   userName: string ;
   userPic: string;
@@ -29,8 +29,10 @@ export class WhatsOnMindComponent {
     this.userPic = this.user.getProfilePic();
     
   }
+  
   updateStatus(){
-    const modal = this.modal.create('WhatsOnMindPage',{'handle':'me'});
+	  console.log(this.handle);
+    const modal = this.modal.create('WhatsOnMindPage',this.handle);
     modal.present();
   }
   

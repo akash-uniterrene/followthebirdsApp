@@ -25,7 +25,7 @@
 				<ion-grid class="photosGrid">
 						<ion-row>
 								<ion-col *ngFor="let photo of photos" [id]="i" col-4>		
-									<div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(photo.source)" (click)="viewImage(photo.source)">                
+									<div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(photo.source)" (click)="viewImage(photo.source)">
 									</div>
 								</ion-col>
 								<ion-infinite-scroll (ionInfinite)="doInfinitePhotos($event)">
