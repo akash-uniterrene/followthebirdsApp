@@ -16,7 +16,7 @@ import { User } from '../../providers';
   templateUrl: 'friend-requests.html',
 })
 export class FriendRequestsPage {
-	pendindFriendLists: any;
+	pendindFriendLists: any = [];
 	private imageURL = "https://dev.followthebirds.com/content/uploads/";
 	
 	isAccept : boolean;
@@ -36,6 +36,7 @@ export class FriendRequestsPage {
 		.then(data => {
 			this.pendindFriendLists = data[0];
 		});
+		console.log(this.pendindFriendLists.length);
 	}
 		
 	confrimRequest(item) {

@@ -176,6 +176,20 @@ export class User {
 	});
   }
   
+  getSuggestedUser(type:string,id:number) {
+	let frindlist = [];	
+	let seq = this.api.get('people/'+type+'/'+id, '').share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			frindlist.push(res);
+			resolve(frindlist);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
   getPendingRequest(type:string,id:number) {
 	let frindlist = [];	
 	let seq = this.api.get('people/'+type+'/'+id, '').share();

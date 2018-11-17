@@ -41,6 +41,7 @@
             <ion-textarea [(ngModel)]="publisherInfo.message" rows="1" placeholder="Whats on your mind" class="main_textarea_field" name="message"></ion-textarea>
 		  </ion-card-content>
 		  <input type="file" #postPhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" multiple/>
+		  <input type="file" #postVideo style="visibility: hidden; height: 0px" name="files[]" (change)="processWebVideo($event)"/>
         <ion-row>
             <ion-col *ngFor="let photo of publishPhotos" col-4 class="publisher-photos">		
 				<div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(photo)" (click)="viewImage(photo)">
@@ -70,11 +71,11 @@
 			<ion-icon name="camera" item-start></ion-icon>
 			  Add Photos
 		  </ion-item>
-		  <ion-item>
+		  <ion-item (tap)="uploadAudio()">
 			<ion-icon name="musical-notes" item-start></ion-icon>
 			  Add Audios
 		  </ion-item>
-		  <ion-item>
+		  <ion-item (tap)="uploadVideo()">
 			<ion-icon name="videocam" item-start></ion-icon>
 			  Add Videos
 		  </ion-item>
@@ -83,24 +84,5 @@
 			  Add Files
 		  </ion-item>		  
 	  </ion-list>
-	  
-	  <ion-scroll style="height: 200px" scrollY="true">
-		  <ion-list no-border>
-			<ion-item *ngFor="let feeling of feelings; let i=index" (click)="setFeeling(feeling,i)">
-			 <ion-icon [name]="feeling.icon" item-start></ion-icon>
-			 {{feeling.text}}			  
-			</ion-item>
-		  </ion-list>
-	  </ion-scroll>
-	  
-	  <ion-scroll style="height: 200px" scrollY="true">
-		  <ion-list no-border>
-			<ion-item *ngFor="let type of feeling_type" (click)="setFeelingType(type.action)">
-			 <ion-icon [name]="type.icon" item-start></ion-icon>
-			 {{type.text}}			  
-			</ion-item>
-		  </ion-list>
-	  </ion-scroll>
-	  
 	</form>
   </ion-content>

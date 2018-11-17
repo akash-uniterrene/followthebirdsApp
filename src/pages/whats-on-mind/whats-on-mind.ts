@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ActionSheetController,Platform,  ViewController,ToastController,LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController,Platform,  ViewController,ToastController,LoadingController,ModalController } from 'ionic-angular';
 import { User } from '../../providers';
 import { Post } from '../../providers/post/post';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
  * Ionic pages and navigation.
  */
 
+ 
 @IonicPage()
 @Component({
   selector: 'page-whats-on-mind',
@@ -18,6 +19,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class WhatsOnMindPage {
   @ViewChild('postPhoto') postPhoto;
+  @ViewChild('postVideo') postVideo;
   public userName: string;
   public userPic: string;
   public loading;
@@ -40,11 +42,9 @@ export class WhatsOnMindPage {
     photos: [],
 	my_id: localStorage.getItem('user_id')
   };
-  
+  params: Object;
+  pushPage: any;
   public publishPhotos : any = [];
-  private feelings : any = []; 
-  private feeling_type : any = []; 
-  private icon;
   private imageURL = "https://dev.followthebirds.com/content/uploads/";
   constructor(
     public navCtrl: NavController, 
@@ -58,6 +58,7 @@ export class WhatsOnMindPage {
     public actionSheetCtrl: ActionSheetController,
     public platform: Platform, 
     private camera: Camera,
+	public modalCtrl: ModalController,
     public modal: ViewController
     ) {
 		
@@ -79,10 +80,17 @@ export class WhatsOnMindPage {
 		multiple: true,
 		user_id : localStorage.getItem('user_id')
 	  });
+	  this.postVideoOptions = formBuilder.group({
+		file: [],
+		type: "video",
+		handle: "publisher",
+		multiple: true,
+		user_id : localStorage.getItem('user_id')
+	  });
 		
+	  
       this.publisherInfo.handle = navParams.get('handle');
       this.publisherInfo.id = navParams.get('id');
-	  console.log(navParams.get('handle'));
 	  
   }
   
@@ -96,19 +104,23 @@ export class WhatsOnMindPage {
   }
   
   setUser(){    
-    this.userName = (localStorage.getItem('user_fastname'))+' '+(localStorage.getItem('user_lastname')); 
+    this.userName = (localStorage.getItem('user_firstname'))+' '+(localStorage.getItem('user_lastname')); 
 	this.userPic = this.user.getProfilePic();
   }
   
   getFeelings(){
-	  this.feelings = this.post.get_feelings();
-	  console.log(this.feelings);
+	   let profileModal = this.modalCtrl.create('FeelingActivityPage');
+	   profileModal.onDidDismiss(data => {
+		 this.publisherInfo.feeling_action = data.feeling_action;
+		 this.publisherInfo.feeling_value = data.feeling_value;
+		 this.icon = data.icon;
+	   });
+	   profileModal.present();
+	  /*this.nav.push('FeelingActivityPage');
+	   this.feelings = this.post.get_feelings();
+	  console.log(this.feelings); */
   }
   
-  getFeelingType(index){
-	  this.feeling_type = this.post.get_feeling_type(index);
-	  console.log(this.feeling_type);
-  }
   publishPost(){	
     this.loading.present();
       //Attempt to login in through our User service
@@ -142,7 +154,7 @@ export class WhatsOnMindPage {
 			  icon: !this.platform.is('ios') ? 'ios-images' : null,		
 			  text: 'Upload from gallery',
 			  handler: () => {
-				this.uploadFromGallery();
+				this.uploadFromGallery('photo');
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'close' : null,
@@ -155,6 +167,52 @@ export class WhatsOnMindPage {
 		});
 		actionSheet.present();
   }
+  
+  
+  uploadAudio() {
+		const actionSheet = this.actionSheetCtrl.create({
+		  title: 'Upload Music ',
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-music-notes' : null,		
+			  text: 'Upload from gallery',
+			  handler: () => {
+				this.uploadFromGallery('audio');
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'close' : null,
+			  text: 'Cancel',
+			  role: 'cancel',
+			  handler: () => {
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+  }
+  
+  uploadVideo() {
+		const actionSheet = this.actionSheetCtrl.create({
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-videocam' : null,		
+			  text: 'Upload videos',
+			  handler: () => {
+				this.uploadFromGallery('video');
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'close' : null,
+			  text: 'Cancel',
+			  role: 'cancel',
+			  handler: () => {
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+  }
+  
+  
   
 	takeCameraSnap(){
 		const options: CameraOptions = {
@@ -174,8 +232,12 @@ export class WhatsOnMindPage {
 		 });
 	}
 	
-	uploadFromGallery(){
-		this.postPhoto.nativeElement.click();
+	uploadFromGallery(type){
+		if(type == 'photo'){
+			this.postPhoto.nativeElement.click();
+		} else {
+			this.postVideo.nativeElement.click();
+		}
 	}
 	
 	processWebImage(event) {
@@ -185,6 +247,17 @@ export class WhatsOnMindPage {
 		 this.postPhotoOptions.patchValue({ 'file': imageData });
          this.postPhotoOptions.patchValue({ 'multiple': false });
 		 this.uploadPhoto(this.postPhotoOptions);	  
+		};
+		reader.readAsDataURL(event.target.files[0]);
+	}
+	
+	processWebVideo(event) {
+		let reader = new FileReader();
+		reader.onload = (readerEvent) => {
+		 let imageData = (readerEvent.target as any).result;
+		 this.postVideoOptions.patchValue({ 'file': imageData });
+         this.postVideoOptions.patchValue({ 'multiple': false });
+		 this.uploadVideo(this.postVideoOptions);	  
 		};
 		reader.readAsDataURL(event.target.files[0]);
 	}
@@ -209,17 +282,23 @@ export class WhatsOnMindPage {
 		});
 	}
 	
-	setFeeling(feeling,index){
-		console.log(index);
-		this.feeling_type = [];
-		this.publisherInfo.feeling_action = feeling.action;
-		this.icon = feeling.icon;
-		this.getFeelingType(index);
-	}
-	
-	setFeelingType(type){
-		this.publisherInfo.feeling_value = type;
-		console.log(this.publisherInfo);
+	uploadVideo(params){
+		let loading = this.loadingCtrl.create({
+			content: 'Uploading...'
+		});
+		loading.present();
+		 this.user.photoUploader(params).subscribe((resp) => {
+			loading.dismiss();	
+			this.publisherInfo.video = resp;
+		}, (err) => {
+			loading.dismiss();		
+		  let toast = this.toastCtrl.create({
+			message: "image uploading failed",
+			duration: 3000,
+			position: 'top'
+		  });
+		  toast.present();
+		});
 	}
 	
 	getBackgroundStyle(url) {

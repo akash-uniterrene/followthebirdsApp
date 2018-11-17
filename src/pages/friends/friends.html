@@ -8,6 +8,17 @@
       <button ion-button icon-only><ion-icon ios="ios-search" md="md-search"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
+  <ion-segment [(ngModel)]="friendzone">
+      <ion-segment-button value="suggested">
+        Suggested
+      </ion-segment-button>
+      <ion-segment-button value="request">
+        Request
+      </ion-segment-button>
+      <ion-segment-button value="friends">
+        Friends
+      </ion-segment-button>
+    </ion-segment>
 </ion-header>
 <!--
   Generated template for the FriendsPage page.
@@ -15,17 +26,59 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-content padding>
-	<ion-list>
-		<ion-item-sliding *ngFor="let friend of friendLists">
-		  <button ion-item (click)="viewProfile(friend.user_name,friend.user_id)">
-			<ion-avatar item-left>
+<ion-content>
+	<div [ngSwitch]="friendzone">
+	  <ion-list *ngSwitchCase="'suggested'">
+		<ion-item *ngFor="let friend of getSuggestedUsers" (click)="viewProfile(friend.user_name,friend.user_id)">
+			<ion-thumbnail item-start>
 				<img src="https://dev.followthebirds.com/content/uploads/{{friend.user_picture}}" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
-			</ion-avatar>
+				
+			</ion-thumbnail>
 			<h2>{{friend.user_firstname}} {{friend.user_lastname}}</h2>
-		  </button>
-
-		  
-		</ion-item-sliding>
-	</ion-list>
+			<p>	34 Mutual Friends <p>		
+		    <button ion-button padding>
+				Add Friend
+		    </button>
+			<button ion-button color="primary" outline padding>
+				Remove
+		    </button>			
+		</ion-item>
+	   </ion-list>
+	   <ion-list *ngSwitchCase="'request'">
+	    <ion-item-divider color="light" *ngIf="pendindFriendLists.length <= 0">
+			No Friend Requests
+		</ion-item-divider> 
+		<ion-item *ngFor="let friend of pendindFriendLists" >
+			<ion-thumbnail item-start (click)="viewProfile(friend.user_name,friend.user_id)">
+				<img src="https://dev.followthebirds.com/content/uploads/{{friend.user_picture}}" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
+				
+			</ion-thumbnail>
+			<h2 (click)="viewProfile(friend.user_name,friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
+			<p>	34 Mutual Friends <p>		
+		    <button ion-button padding>
+				Add Friend
+		    </button>
+			<button ion-button color="primary" outline padding>
+				Remove
+		    </button>			
+		</ion-item>
+	   </ion-list>
+	   <ion-list *ngSwitchCase="'friends'">
+	    <ion-item-divider color="light">
+			Active : 300
+		</ion-item-divider>
+		<ion-item *ngFor="let friend of friendLists">
+			<ion-thumbnail item-start (click)="viewProfile(friend.user_name,friend.user_id)">
+			  <img src="https://dev.followthebirds.com/content/uploads/{{friend.user_picture}}" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
+			</ion-thumbnail>
+			<h2 (click)="viewProfile(friend.user_name,friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
+			<button ion-button item-end icon-start>
+			  <ion-icon name="home"></ion-icon>
+			  Message
+			</button>
+		</ion-item>
+	   </ion-list>
+	   
+	</div>
+	
 </ion-content>
