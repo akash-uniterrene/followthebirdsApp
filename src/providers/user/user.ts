@@ -3,7 +3,7 @@ import 'rxjs/add/operator/toPromise';
 import { Injectable } from '@angular/core';
 
 import { Api } from '../api/api';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 /**
  * Most apps have the concept of a User. This is a simple provider
@@ -249,7 +249,23 @@ export class User {
     
   }   
   
+  getNotifications(params?: any){
+	let notificationsList = [];	
+	let seq = this.api.get('notifications/'+localStorage.getItem('user_id'), params).share();
+
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			notificationsList.push(res);
+			resolve(notificationsList);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
   photoUploader(params){
+	console.log(params.value);
     let seq = this.api.post('upload', params.value).share();
 
     seq.subscribe((res: any) => {
@@ -293,4 +309,44 @@ export class User {
     return seq;
   }
   
+  test1(data){
+	var options = {
+	};
+	let body = new FormData();
+	body.append('image', data);
+	body.append('desc', "testing");
+	this.api.post('file_upload', body, options).subscribe(res => {
+	console.log(res);
+	});
+	;
+ }
+ 
+ 
+ fileUploader(data,params){
+	var options = {
+	};
+	let body = new FormData();
+	body.append('file', data);
+	for (var key in params) {
+	  body.append(key,params[key]);
+	}
+	
+	
+	let seq = this.api.post('file_upload', body, options).share();
+
+    seq.subscribe((res: any) => {
+        // If the API returned a successful response, mark the user as logged in
+      /* if (res.status == 'success') {
+        //this._loggedIn(res);
+      } else {
+      } */
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+ }
+ 
+ 
+ 
 }

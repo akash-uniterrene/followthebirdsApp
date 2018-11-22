@@ -5,7 +5,7 @@
     </ion-buttons>
     <ion-title>Akash Dutta</ion-title>
 	<ion-buttons right>
-      <button ion-button icon-only><ion-icon ios="ios-search" md="md-search"></ion-icon></button>
+      <button ion-button icon-only> <ion-icon ios="ios-search" md="md-search"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
   <ion-segment [(ngModel)]="friendzone">
@@ -72,8 +72,8 @@
 			  <img src="https://dev.followthebirds.com/content/uploads/{{friend.user_picture}}" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
 			</ion-thumbnail>
 			<h2 (click)="viewProfile(friend.user_name,friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
-			<button ion-button item-end icon-start>
-			  <ion-icon name="home"></ion-icon>
+			<button ion-button item-end icon-start padding>
+			  <ion-icon name="chatbubbles"></ion-icon>
 			  Message
 			</button>
 		</ion-item>

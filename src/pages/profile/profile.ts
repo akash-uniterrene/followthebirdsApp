@@ -7,6 +7,8 @@ import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PhotoViewer,PhotoViewerOptions } from '@ionic-native/photo-viewer';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 /**
  * Generated class for the ProfilePage page.
  *
@@ -70,7 +72,9 @@ export class ProfilePage {
 		public nav: Nav,
 		public actionSheetCtrl: ActionSheetController,
 		private photoViewer: PhotoViewer,
-		public loadingCtrl: LoadingController	
+		public loadingCtrl: LoadingController,
+		private transfer: FileTransfer,
+		private file: File		
     ) {
 		this.profileName = navParams.get('user_name') || localStorage.getItem('user_name');
 		this.profile_id = navParams.get('user_id') || localStorage.getItem('user_id');
@@ -94,7 +98,7 @@ export class ProfilePage {
 			user_id : localStorage.getItem('user_id')
 		});
 		
-		this.post.getfeeds('posts_profile',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{'filter':'all'})
+		this.post.getfeeds('posts_profile',this.profile_id,localStorage.getItem('user_id'),{'filter':'all'})
 		.then(data => {
 			let item = data[0];
 			for (var key in item) {
@@ -132,6 +136,14 @@ export class ProfilePage {
 		
 		
 	}
+	
+	doRefresh(refresher) {
+		this.ionViewDidLoad();
+		setTimeout(() => {
+		  refresher.complete();
+		}, 2000);
+	}
+	  
 	viewImage(url){
 		const option : PhotoViewerOptions = {
 			  share: true
@@ -380,7 +392,25 @@ export class ProfilePage {
 		  toast.present();
 		});
 	} */
-	
+	downloadAttachment(filePath){
+	  let arr = filePath.split('/');
+	  var filename = arr.pop();
+	  let url = encodeURI(filePath);  
+	  const fileTransfer: FileTransferObject = this.transfer.create();
+	  fileTransfer.download(this.imageURL+filePath, this.file.dataDirectory + filename).then((entry) => {
+		 let toast = this.toastCtrl.create({
+			message: "Attachment bas been download",
+			duration: 3000,
+			position: 'top'
+		});
+	  }, (error) => {
+		let toast = this.toastCtrl.create({
+			message: "Attachment bas been download",
+			duration: 3000,
+			position: 'top'
+		});
+	 });
+    }
 	getBackgroundStyle(url) {
 		if(!url){
 			return 'url(assets/followthebirdImgs/no-profile-img.jpeg)'
@@ -534,7 +564,7 @@ export class ProfilePage {
 	
 	doInfinite(infiniteScroll) {
 		setTimeout(() => {
-		  this.post.getfeeds('posts_profile',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{'page': this.pageCount})
+		  this.post.getfeeds('posts_profile',this.profile_id,localStorage.getItem('user_id'),{'page': this.pageCount})
 			.then(data => {
 				if(data[0].length > 0) {
 					let item = data[0];

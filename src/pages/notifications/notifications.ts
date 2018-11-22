@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
+import { IonicPage, NavController, Nav, NavParams, ActionSheetController, ToastController, Platform, MenuController, LoadingController, } from 'ionic-angular';
+import { FirstRunPage} from '../';
+import { User } from '../../providers';
 /**
  * Generated class for the NotificationsPage page.
  *
@@ -14,12 +15,52 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'notifications.html',
 })
 export class NotificationsPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public notifications : any = [];
+  private imageURL = "https://dev.followthebirds.com/content/uploads/";
+  private pageCount = 1;
+  constructor(
+		public navCtrl: NavController, 
+		public user: User,
+		public toastCtrl: ToastController,
+		public navParams: NavParams, 
+		public platform: Platform, 
+		public menu: MenuController,
+		public nav: Nav,
+		public actionSheetCtrl: ActionSheetController,
+		public loadingCtrl: LoadingController
+	) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationsPage');
+    this.user.getNotifications().then(data => {
+		let item = data[0];
+		for (var key in item) {
+		  this.notifications.push(item[key]);
+		}		
+	});
+  }
+  doRefresh(refresher) {
+	this.ionViewDidLoad();
+    setTimeout(() => {
+      refresher.complete();
+    }, 2000);
+  }
+  
+  viewProfile(user_name,user_id) {
+	this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
+  }
+  
+  doInfinite(infiniteScroll) {
+	setTimeout(() => {
+	  this.user.getNotifications({'page': this.pageCount}).then(data => {
+		let item = data[0];
+		for (var key in item) {
+		  this.notifications.push(item[key]);
+		}		
+	});	
+	  this.pageCount = this.pageCount + 1;
+	  infiniteScroll.complete();
+	}, 500);
   }
 
 }

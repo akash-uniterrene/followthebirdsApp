@@ -42,6 +42,11 @@ export class UserSettingsPage {
 	this.nav.setRoot('FriendsPage',{'user_id':this.profile.user_id});
   }
   
+  listEvents(){
+	this.nav.setRoot('EventsPage',{'user_id':this.profile.user_id});
+  }
+  
+  
   logouta(){
     localStorage.clear();
     this.nav.setRoot('LoginPage')

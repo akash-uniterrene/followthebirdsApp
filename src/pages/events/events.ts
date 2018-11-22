@@ -15,20 +15,42 @@ import { EventsProvider } from '../../providers/events/events';
   templateUrl: 'events.html',
 })
 export class EventsPage {
-
-	eventLists: any;
+    eventzone: string = "suggested";
+	eventLists: any = [];
+	eventCategories: any = [];
+	private imageURL = "https://dev.followthebirds.com/content/uploads/";
   constructor(public navCtrl: NavController, public events: EventsProvider, public navParams: NavParams) {
-	  this.loadEvent();
+	  this.loadEvent('suggested');
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EventsPage');
+      this.loadEvent('going');
+      this.loadEvent('interested');
+      this.loadEvent('invited');
+      this.loadEvent('manage');
+      this.loadEventsCategories();
+	  console.log(this.eventLists);
   }
 
-  loadEvent(){
-    this.events.getevents({suggested: true})
+  loadEvent(type){
+    this.events.getevents({type: type,id:parseInt(localStorage.getItem('user_id'))})
     .then(data => {
-		this.eventLists = data[0];
+		this.eventLists[type] = data[0];
     });
+  }
+  
+  loadEventsCategories(){
+    this.events.geteventCategories()
+    .then(data => {
+		this.eventCategories = data[0];
+    });
+  }
+  
+  viewEvent(eventProfile){
+	this.navCtrl.push("EventProfilePage",{eventProfile:eventProfile});
+  }
+  
+  goBack(){
+	  this.navCtrl.setRoot("HomePage");
   }
 }

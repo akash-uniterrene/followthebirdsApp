@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, Nav, NavParams,  ToastController, MenuController } from 'ionic-angular';
 import { FirstRunPage} from '../';
 import { Post } from '../../providers/post/post';
@@ -6,7 +6,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
 import { PhotoViewer,PhotoViewerOptions } from '@ionic-native/photo-viewer';
-
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 /**
  * Generated class for the PostPage page.
  *
@@ -20,6 +21,7 @@ import { PhotoViewer,PhotoViewerOptions } from '@ionic-native/photo-viewer';
   templateUrl: 'post.html',
 })
 export class PostPage {
+  @ViewChild('videoPlayer') mVideoPlayer: any;	
   postFeeds: any = [];
   post_type: any = {
 	shared: 'shared',
@@ -53,10 +55,12 @@ export class PostPage {
     private camera: Camera,
     public menu: MenuController,
 	private photoViewer: PhotoViewer,
-    public nav: Nav 
+    public nav: Nav,
+	private transfer: FileTransfer,
+	private file: File	
   ) {
   }
-
+ 
   ionViewDidLoad() {
 	this.postElement['handle'] = "me";
 	this.postElement['id'] = '';  
@@ -103,6 +107,26 @@ export class PostPage {
   
   viewProfile(user_name,user_id) {
 		this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
-	} 
+  } 
 
+  downloadAttachment(filePath){
+	  let arr = filePath.split('/');
+	  var filename = arr.pop();
+	  let url = encodeURI(filePath);  
+	  const fileTransfer: FileTransferObject = this.transfer.create();
+	  fileTransfer.download(this.mediapath+filePath, this.file.dataDirectory + filename).then((entry) => {
+		let toast = this.toastCtrl.create({
+			message: "Attachment bas been download",
+			duration: 3000,
+			position: 'top'
+		});
+	  }, (error) => {
+		// handle error
+		 let toast = this.toastCtrl.create({
+			message: "Downloading failure! retry.",
+			duration: 3000,
+			position: 'top'
+		});
+	 });
+  }
 }

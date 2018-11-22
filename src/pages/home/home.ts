@@ -31,6 +31,7 @@ export class HomePage {
 	FriendRequestsPage = 'FriendRequestsPage';	
 	NotificationsPage = 'NotificationsPage';	
 	profilePageParams = { id: localStorage.getItem('user_id') };
+	countCarItem = 99;
   constructor(
     public navCtrl: NavController, 
 	public user: User,
@@ -80,6 +81,10 @@ export class HomePage {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot('TabsPage');
+  }
+  
+  getcountCarItem(){
+	  this.countCarItem = 99;
   }
 
   ionViewDidLoad() {

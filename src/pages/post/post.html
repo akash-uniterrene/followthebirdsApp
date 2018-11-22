@@ -17,6 +17,29 @@
       <p>{{feeds.time}}</p>
     </ion-item>
     <img *ngFor="let photo of feeds.photos" [src]="mediapath+photo.source" (click)="viewImage(photo.source)">
+	<div *ngIf="feeds.post_type == 'video'">
+		<video *ngFor="let vid of feeds.video" style="width:100%" controls preload="metadata" webkit-playsinline="webkit-playsinline" class="videoPlayer">
+			<source [src]="mediapath+vid.source" type="video/mp4"/>
+		</video>
+	</div>
+	<div *ngIf="feeds.post_type == 'audio'">
+		<audio controls *ngFor="let aud of feeds.audio">
+		  <source [src]="mediapath+aud.source" type="audio/mpeg">
+		  Your browser does not support the audio element.
+		</audio>
+	</div>	
+	<div *ngIf="feeds.post_type == 'file'">
+		<ion-item *ngFor="let attch of feeds.file" >
+		  <ion-thumbnail item-start>
+			<img src="assets/followthebirdImgs/text-file-icon.png">
+		  </ion-thumbnail>
+		  <h2>Attachment.zip</h2>
+		  <button ion-button padding (click)="downloadAttachment(attch.source)">
+			Download
+		  </button>
+		</ion-item>
+	</div>	
+	
     <ion-card-content>
       <p>{{feeds.text}}</p>
     </ion-card-content>

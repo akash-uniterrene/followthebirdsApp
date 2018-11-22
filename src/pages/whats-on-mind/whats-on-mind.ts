@@ -1,5 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ActionSheetController,Platform,  ViewController,ToastController,LoadingController,ModalController } from 'ionic-angular';
+import { FileTransfer, FileTransferObject, FileUploadOptions } from '@ionic-native/file-transfer';
+import { File } from '@ionic-native/file';
 import { User } from '../../providers';
 import { Post } from '../../providers/post/post';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -20,10 +22,15 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class WhatsOnMindPage {
   @ViewChild('postPhoto') postPhoto;
   @ViewChild('postVideo') postVideo;
+  @ViewChild('postAudio') postAudio;
+  @ViewChild('postFile') postFile;
   public userName: string;
   public userPic: string;
   public loading;
   postPhotoOptions: FormGroup;
+  postVideoOptions: FormGroup;
+  postAudioOptions: FormGroup;
+  postFileOptions: FormGroup;
   private publisherInfo : any = {
 	handle: '',
 	id: '',
@@ -45,6 +52,7 @@ export class WhatsOnMindPage {
   params: Object;
   pushPage: any;
   public publishPhotos : any = [];
+  public icon;
   private imageURL = "https://dev.followthebirds.com/content/uploads/";
   constructor(
     public navCtrl: NavController, 
@@ -59,7 +67,9 @@ export class WhatsOnMindPage {
     public platform: Platform, 
     private camera: Camera,
 	public modalCtrl: ModalController,
-    public modal: ViewController
+    public modal: ViewController,
+	private transfer: FileTransfer,
+	private file: File
     ) {
 		
       this.loading = this.loadingCtrl.create({
@@ -80,9 +90,23 @@ export class WhatsOnMindPage {
 		multiple: true,
 		user_id : localStorage.getItem('user_id')
 	  });
+	  
 	  this.postVideoOptions = formBuilder.group({
-		file: [],
 		type: "video",
+		handle: "publisher",
+		multiple: true,
+		user_id : localStorage.getItem('user_id')
+	  });
+	  
+	  this.postAudioOptions = formBuilder.group({
+		type: "audio",
+		handle: "publisher",
+		multiple: true,
+		user_id : localStorage.getItem('user_id')
+	  });
+	  
+	  this.postFileOptions = formBuilder.group({
+		type: "file",
 		handle: "publisher",
 		multiple: true,
 		user_id : localStorage.getItem('user_id')
@@ -93,7 +117,7 @@ export class WhatsOnMindPage {
       this.publisherInfo.id = navParams.get('id');
 	  
   }
-  
+  fileTransfer: FileTransferObject = this.transfer.create();
  
   ionViewDidLoad() {
     
@@ -174,8 +198,8 @@ export class WhatsOnMindPage {
 		  title: 'Upload Music ',
 		  buttons: [
 			{
-			  icon: !this.platform.is('ios') ? 'ios-music-notes' : null,		
-			  text: 'Upload from gallery',
+			  icon: !this.platform.is('ios') ? 'ios-volume-up' : null,		
+			  text: 'Upload Audio',
 			  handler: () => {
 				this.uploadFromGallery('audio');
 			  }
@@ -212,6 +236,27 @@ export class WhatsOnMindPage {
 		actionSheet.present();
   }
   
+  uploadFile() {
+	const actionSheet = this.actionSheetCtrl.create({
+	  buttons: [
+		{
+		  icon: !this.platform.is('ios') ? 'ios-attach' : null,		
+		  text: 'Upload Attachment',
+		  handler: () => {
+			this.uploadFromGallery('file');
+		  }
+		},{
+		  icon: !this.platform.is('ios') ? 'close' : null,
+		  text: 'Cancel',
+		  role: 'cancel',
+		  handler: () => {
+		  }
+		}
+	  ]
+	});
+	actionSheet.present();
+  }
+  
   
   
 	takeCameraSnap(){
@@ -235,8 +280,12 @@ export class WhatsOnMindPage {
 	uploadFromGallery(type){
 		if(type == 'photo'){
 			this.postPhoto.nativeElement.click();
-		} else {
+		} else if(type == 'video') {
 			this.postVideo.nativeElement.click();
+		}else if(type == 'audio') {
+			this.postAudio.nativeElement.click();
+		}else{
+			this.postFile.nativeElement.click();
 		}
 	}
 	
@@ -252,14 +301,18 @@ export class WhatsOnMindPage {
 	}
 	
 	processWebVideo(event) {
-		let reader = new FileReader();
-		reader.onload = (readerEvent) => {
-		 let imageData = (readerEvent.target as any).result;
-		 this.postVideoOptions.patchValue({ 'file': imageData });
-         this.postVideoOptions.patchValue({ 'multiple': false });
-		 this.uploadVideo(this.postVideoOptions);	  
-		};
-		reader.readAsDataURL(event.target.files[0]);
+		this.postVideoOptions.patchValue({ 'multiple': false });
+		this.uploadMedia(event.target.files[0],'video');
+	}
+	
+	processWebAudio(event) {
+		this.postAudioOptions.patchValue({ 'multiple': false });
+		this.uploadMedia(event.target.files[0],'audio');
+	}
+	
+	processWebFile(event) {
+		this.postFileOptions.patchValue({ 'multiple': false });
+		this.uploadMedia(event.target.files[0],'file');
 	}
 	
 	uploadPhoto(params){
@@ -282,17 +335,34 @@ export class WhatsOnMindPage {
 		});
 	}
 	
-	uploadVideo(params){
+	uploadMedia(file,type){
 		let loading = this.loadingCtrl.create({
 			content: 'Uploading...'
 		});
+		let mediaOptions;
+		if(type == 'video'){
+			mediaOptions = this.postVideoOptions.value;
+		} else if(type == 'audio'){
+			mediaOptions = this.postAudioOptions.value;
+		}else {
+			mediaOptions = this.postFileOptions.value;
+		}
+		
 		loading.present();
-		 this.user.photoUploader(params).subscribe((resp) => {
+		 this.user.fileUploader(file,mediaOptions).subscribe((resp) => {
 			loading.dismiss();	
-			this.publisherInfo.video = resp;
+			var obj = {source: resp};
+			var myJSON = JSON.stringify(obj);
+			if(type == 'video'){
+				this.publisherInfo.video = myJSON;
+			} else if(type == 'audio'){
+				this.publisherInfo.audio = myJSON;
+			} else {
+				this.publisherInfo.file = myJSON;
+			}
 		}, (err) => {
-			loading.dismiss();		
-		  let toast = this.toastCtrl.create({
+		 loading.dismiss();		
+		 let toast = this.toastCtrl.create({
 			message: "image uploading failed",
 			duration: 3000,
 			position: 'top'
@@ -308,4 +378,30 @@ export class WhatsOnMindPage {
 			return 'url(' + this.imageURL+url + ')'
 		}
 	}
+	
+	/* uploadFile(file) {
+	  let loader = this.loadingCtrl.create({
+		content: "Uploading..."
+	  });
+	  loader.present();
+	  const fileTransfer: FileTransferObject = this.transfer.create();
+
+	  let options: FileUploadOptions = {
+		fileKey: 'ionicfile',
+		fileName: 'ionicfile',
+		chunkedMode: false,
+		mimeType: "video/mp4",
+		headers: {}
+	  }
+
+	  fileTransfer.upload(file, 'http://localhost/ftb-api/index.php', options)
+		 .then((data) => {
+			alert(data);
+			loader.dismiss();
+		  }, (err) => {
+			console.log(err);
+			loader.dismiss();
+		  });
+	} */
+
 }

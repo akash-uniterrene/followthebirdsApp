@@ -42,6 +42,8 @@
 		  </ion-card-content>
 		  <input type="file" #postPhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" multiple/>
 		  <input type="file" #postVideo style="visibility: hidden; height: 0px" name="files[]" (change)="processWebVideo($event)"/>
+		  <input type="file" #postAudio style="visibility: hidden; height: 0px" name="files[]" (change)="processWebAudio($event)"/>
+		  <input type="file" #postFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebFile($event)"/>
         <ion-row>
             <ion-col *ngFor="let photo of publishPhotos" col-4 class="publisher-photos">		
 				<div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(photo)" (click)="viewImage(photo)">
@@ -73,15 +75,15 @@
 		  </ion-item>
 		  <ion-item (tap)="uploadAudio()">
 			<ion-icon name="musical-notes" item-start></ion-icon>
-			  Add Audios
+			  Add Audio
 		  </ion-item>
 		  <ion-item (tap)="uploadVideo()">
 			<ion-icon name="videocam" item-start></ion-icon>
-			  Add Videos
+			  Add Video
 		  </ion-item>
-		  <ion-item>
+		  <ion-item (tap)="uploadFile()">
 			<ion-icon name="attach" item-start></ion-icon>
-			  Add Files
+			  Add File
 		  </ion-item>		  
 	  </ion-list>
 	</form>

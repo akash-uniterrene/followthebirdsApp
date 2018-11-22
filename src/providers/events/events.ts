@@ -19,18 +19,38 @@ export class EventsProvider {
    * the user entered on the form.
    */
   getevents(params?: any) {
-	let frindlist = [];	
+	let eventlist = [];	
 	let seq = this.api.get('events', params).share();
 
 	// don't have the data yet
 	return new Promise(resolve => {
 		seq.subscribe((res: any) => {
-			frindlist.push(res);
-			resolve(frindlist);
+			eventlist.push(res);
+			resolve(eventlist);
 		}, err => {
 			console.error('ERROR', err);
 		});
 	});
   }
+  
+  /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  geteventCategories(params?: any) {
+	let categories = [];	
+	let seq = this.api.get('events_categories', params).share();
 
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			categories.push(res);
+			resolve(categories);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+  
 }
