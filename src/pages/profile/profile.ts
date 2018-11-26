@@ -352,7 +352,6 @@ export class ProfilePage {
 		loading.present();
 		 this.user.photoRemover(params).subscribe((resp) => {
 			loading.dismiss();	
-			this.profile.user_picture = resp;	
 			let toast = this.toastCtrl.create({
 				message: "Profile photo removed!",
 				duration: 3000,

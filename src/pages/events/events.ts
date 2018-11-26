@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { EventsProvider } from '../../providers/events/events';
+import { User } from '../../providers';
+
 /**
  * Generated class for the EventsPage page.
  *
@@ -19,7 +21,7 @@ export class EventsPage {
 	eventLists: any = [];
 	eventCategories: any = [];
 	private imageURL = "https://dev.followthebirds.com/content/uploads/";
-  constructor(public navCtrl: NavController, public events: EventsProvider, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public events: EventsProvider, public navParams: NavParams, public user: User) {
 	  this.loadEvent('suggested');
   }
 
@@ -47,10 +49,33 @@ export class EventsPage {
   }
   
   viewEvent(eventProfile){
-	this.navCtrl.push("EventProfilePage",{eventProfile:eventProfile});
+	this.navCtrl.push("EventProfilePage",{eventProfile:eventProfile.event_id});
   }
   
   goBack(){
 	  this.navCtrl.setRoot("HomePage");
+  }
+  
+  eventInterestAction(type,event_id){
+	this.connectAction(type,event_id);
+  }
+
+  eventUninterestAction(type,event_id){
+	this.connectAction(type,event_id);
+  }
+  
+  
+  connectAction(type,event_id,uid?: any){
+	let params :any = {
+		'do': type,
+		'id': event_id,
+		'uid': uid,
+		'my_id' : localStorage.getItem('user_id')
+	};
+	this.user.connection(params).subscribe((resp) => {						
+		
+	}, (err) => {
+	
+	});
   }
 }

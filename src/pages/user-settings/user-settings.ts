@@ -46,6 +46,22 @@ export class UserSettingsPage {
 	this.nav.setRoot('EventsPage',{'user_id':this.profile.user_id});
   }
   
+  accoutSettings(){
+	this.nav.setRoot('AccountSettingsPage');
+  }
+  
+  privacySettings(){
+	this.nav.setRoot('PrivacySettingsPage');
+  }
+  
+  securitySettings(){
+	this.nav.setRoot('SecuritySettingsPage');
+  }
+  
+  blockSettings(){
+	this.nav.setRoot('BlockSettingsPage');
+  }
+  
   
   logouta(){
     localStorage.clear();

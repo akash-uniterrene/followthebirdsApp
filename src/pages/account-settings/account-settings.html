@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title> Account Settings</ion-title>
+  </ion-navbar>
+  <ion-segment [(ngModel)]="settingszone">
+      <ion-segment-button value="username">
+        Username
+      </ion-segment-button>
+      <ion-segment-button value="email">
+        Email
+      </ion-segment-button>
+      <ion-segment-button value="password">
+        Password
+      </ion-segment-button>
+  </ion-segment>  
+</ion-header>
+
+
+<ion-content>
+	<div [ngSwitch]="settingszone">
+		<ion-list *ngSwitchCase="'username'">
+			Hi
+		</ion-list>
+		<ion-list *ngSwitchCase="'email'">
+			 <ion-item>
+				<ion-label color="primary" floating>Update Email Address</ion-label>
+				<ion-input [(ngModel)]="emailForm.email" name="email"></ion-input>
+			 </ion-item>
+			 <ion-item>
+				<button ion-button icon-start outline padding>
+				  <ion-icon name="tick"></ion-icon>
+				  Save Changes
+				</button>
+			 </ion-item>			 
+		</ion-list>
+		<ion-list *ngSwitchCase="'password'">
+			How R U
+		</ion-list>
+		
+	</div>
+</ion-content>

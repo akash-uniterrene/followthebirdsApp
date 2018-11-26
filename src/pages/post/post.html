@@ -13,7 +13,8 @@
       </ion-avatar>
       <span style="font-weight:bold;" (click)="viewProfile(feeds.user_name,feeds.user_id)"> {{feeds.post_author_name}}</span> 
 	  <span *ngIf="feeds.feeling_action != ''" >is {{feeds.feeling_action}} {{feeds.feeling_value}}</span>
-	  <span>{{post_type[feeds.post_type]}}</span>
+	  <span *ngIf="feeds.in_event == '1'"> {{post_type[feeds.post_type]}} <ion-icon name='calendar' style="color:#b5af0b;padding: 0;margin: 0;" item-start></ion-icon>  {{feeds.event_title}}</span>
+	  
       <p>{{feeds.time}}</p>
     </ion-item>
     <img *ngFor="let photo of feeds.photos" [src]="mediapath+photo.source" (click)="viewImage(photo.source)">
