@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, Nav, NavParams, ActionSheetController, ToastController, Platform, MenuController, LoadingController, } from 'ionic-angular';
+import { IonicPage, NavController, Nav, NavParams, ActionSheetController, ModalController, AlertController, ToastController, Platform, MenuController, LoadingController, } from 'ionic-angular';
 import { FirstRunPage} from '../';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Post } from '../../providers/post/post';
@@ -71,8 +71,10 @@ export class EventProfilePage {
 	private photoViewer: PhotoViewer,
 	public loadingCtrl: LoadingController,
 	public events: EventsProvider,
+	public modalCtrl: ModalController,
 	private transfer: FileTransfer,
-	private file: File		
+	private file: File,
+	private alertCtrl: AlertController			
   ) {
 	  this.eventProfileId = navParams.get('eventProfile') || 3;
 	  this.events.getEventProfile(parseInt(this.eventProfileId),{'user_id':localStorage.getItem('user_id'),'filter':'all'}).then(data => {
@@ -261,19 +263,75 @@ export class EventProfilePage {
 			return 'url(' + this.imageURL+url + ')'
 		}
 	}
-  
-  connectAction(type,uid?: any){
-	let params :any = {
-		'do': type,
-		'id': this.eventProfile.event_id,
-		'uid': uid,
-		'my_id' : localStorage.getItem('user_id')
-	};
-	this.user.connection(params).subscribe((resp) => {						
-		
-	}, (err) => {
 	
-	});
- }
+	viewComments(comments,post_id,){
+		const commentsModal = this.modalCtrl.create('CommentsPage',{comments,'post_id':post_id,'handle':'post'});
+		commentsModal.present();
+	}
+	
+	sharePostCtrl(post_id): void
+	{
+		let prompt = this.alertCtrl.create({
+		title: 'Share this post',	
+		inputs : [
+		{
+			type:'radio',
+			label:'Share post now ',
+			value:post_id
+		},
+		{
+			type:'radio',
+			label:'Write Post',
+			value:post_id
+		}],
+		buttons : [
+		{
+			text: "Cancel",
+			handler: data => {
+			console.log("cancel clicked");
+			}
+		},
+		{
+			text: "Share",
+			handler: data => {
+				this.sharePost('share',post_id);
+			}
+		}]});
+		prompt.present();
+	}
+	
+	sharePost(type,id){
+		this.post.sharePost({'do':type,id:id,my_id:localStorage.getItem('user_id')}).subscribe((resp) => {
+		  let toast = this.toastCtrl.create({
+			message: "Post has been shared successfully",
+			duration: 3000,
+			position: 'top',
+			dismissOnPageChange: true
+		  });
+        toast.present();	
+		}, (err) => {
+        let toast = this.toastCtrl.create({
+          message: "Unable to post. Retry",
+          duration: 3000,
+          position: 'top',
+          dismissOnPageChange: true
+        });
+        toast.present();
+      });
+	}
+	
+	connectAction(type,uid?: any){
+		let params :any = {
+			'do': type,
+			'id': this.eventProfile.event_id,
+			'uid': uid,
+			'my_id' : localStorage.getItem('user_id')
+		};
+		this.user.connection(params).subscribe((resp) => {						
+			
+		}, (err) => {
+		
+		});
+	}
 
 }

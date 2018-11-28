@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, Nav, NavParams,  ToastController, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, Nav, NavParams,  ToastController, MenuController, ModalController, AlertController } from 'ionic-angular';
 import { FirstRunPage} from '../';
 import { Post } from '../../providers/post/post';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -42,6 +42,7 @@ export class PostPage {
 	event_cover: 'updated event cover'
   };
    public postElement = [];
+   public sharedInfo = [];
    private pageCount = 2;
    private arrayPosition = 0;
    private mediapath = "https://dev.followthebirds.com/content/uploads/";
@@ -56,8 +57,10 @@ export class PostPage {
     public menu: MenuController,
 	private photoViewer: PhotoViewer,
     public nav: Nav,
+	public modalCtrl: ModalController,
 	private transfer: FileTransfer,
-	private file: File	
+	private file: File,
+	private alertCtrl: AlertController	
   ) {
   }
  
@@ -129,4 +132,61 @@ export class PostPage {
 		});
 	 });
   }
+  
+  viewComments(comments,post_id){
+	const commentsModal = this.modalCtrl.create('CommentsPage',{comments,'post_id':post_id,'handle':'post'});
+	commentsModal.present();
+  }
+  
+    sharePostCtrl(post_id): void
+	{
+		let prompt = this.alertCtrl.create({
+		title: 'Share this post',	
+		inputs : [
+		{
+			type:'radio',
+			label:'Share post now ',
+			value:post_id
+		},
+		{
+			type:'radio',
+			label:'Write Post',
+			value:post_id
+		}],
+		buttons : [
+		{
+			text: "Cancel",
+			handler: data => {
+			console.log("cancel clicked");
+			}
+		},
+		{
+			text: "Share",
+			handler: data => {
+				this.sharePost('share',post_id);
+			}
+		}]});
+		prompt.present();
+	}
+	
+	sharePost(type,id){
+		this.post.sharePost({'do':type,id:id,my_id:localStorage.getItem('user_id')}).subscribe((resp) => {
+		  let toast = this.toastCtrl.create({
+			message: "Post has been shared successfully",
+			duration: 3000,
+			position: 'top',
+			dismissOnPageChange: true
+		  });
+        toast.present();	
+		}, (err) => {
+        let toast = this.toastCtrl.create({
+          message: "Unable to post. Retry",
+          duration: 3000,
+          position: 'top',
+          dismissOnPageChange: true
+        });
+        toast.present();
+      });
+	}
+  
 }

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, Nav, NavParams, ActionSheetController, ToastController, Platform, MenuController, LoadingController, } from 'ionic-angular';
+import { IonicPage, NavController, Nav, NavParams, ActionSheetController, AlertController, ToastController, Platform, MenuController, LoadingController,ModalController } from 'ionic-angular';
 import { FirstRunPage} from '../';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Post } from '../../providers/post/post';
@@ -73,8 +73,10 @@ export class ProfilePage {
 		public actionSheetCtrl: ActionSheetController,
 		private photoViewer: PhotoViewer,
 		public loadingCtrl: LoadingController,
+		public modalCtrl: ModalController,
 		private transfer: FileTransfer,
-		private file: File		
+		private file: File,
+		private alertCtrl: AlertController			
     ) {
 		this.profileName = navParams.get('user_name') || localStorage.getItem('user_name');
 		this.profile_id = navParams.get('user_id') || localStorage.getItem('user_id');
@@ -146,8 +148,8 @@ export class ProfilePage {
 	  
 	viewImage(url){
 		const option : PhotoViewerOptions = {
-			  share: true
-			};
+		  share: true
+		};
 		this.photoViewer.show(this.imageURL+url,"Image Preview",option);
 	}
   
@@ -514,6 +516,62 @@ export class ProfilePage {
 		this.profile.i_follow = true;
 	}
 	
+	viewComments(comments,post_id,){
+		const commentsModal = this.modalCtrl.create('CommentsPage',{comments,'post_id':post_id,'handle':'post'});
+		commentsModal.present();
+	}
+	
+	sharePostCtrl(post_id): void
+	{
+		let prompt = this.alertCtrl.create({
+		title: 'Share this post',	
+		inputs : [
+		{
+			type:'radio',
+			label:'Share post now ',
+			value:post_id
+		},
+		{
+			type:'radio',
+			label:'Write Post',
+			value:post_id
+		}],
+		buttons : [
+		{
+			text: "Cancel",
+			handler: data => {
+			console.log("cancel clicked");
+			}
+		},
+		{
+			text: "Share",
+			handler: data => {
+				this.sharePost('share',post_id);
+			}
+		}]});
+		prompt.present();
+	}
+	
+	sharePost(type,id){
+		this.post.sharePost({'do':type,id:id,my_id:localStorage.getItem('user_id')}).subscribe((resp) => {
+		  let toast = this.toastCtrl.create({
+			message: "Post has been shared successfully",
+			duration: 3000,
+			position: 'top',
+			dismissOnPageChange: true
+		  });
+        toast.present();	
+		}, (err) => {
+        let toast = this.toastCtrl.create({
+          message: "Unable to post. Retry",
+          duration: 3000,
+          position: 'top',
+          dismissOnPageChange: true
+        });
+        toast.present();
+      });
+	}
+  
 	moreAction() {
 		const actionSheet = this.actionSheetCtrl.create({
 		  buttons: [

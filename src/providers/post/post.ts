@@ -65,6 +65,34 @@ export class Post {
     return seq;
   }
   
+  postComment(commentInfo: any) {
+    let seq = this.api.post('post-comment', commentInfo).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+      return res;
+    }, err => {
+      //console.error('ERROR', err);
+    });
+
+    return seq;
+  }
+  
+  sharePost(sharedInfo: any){
+	let seq = this.api.post('reaction', sharedInfo).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+      return res;
+    }, err => {
+      //console.error('ERROR', err);
+    });
+
+    return seq;
+  }
+  
+  
+  
   get_feelings(){
 	  return this.feeling;
   }
