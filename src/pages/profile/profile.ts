@@ -153,8 +153,8 @@ export class ProfilePage {
 		this.photoViewer.show(this.imageURL+url,"Image Preview",option);
 	}
   
-	viewProfile(user_name) {
-		this.nav.setRoot('ProfilePage', {user_name: user_name});
+	viewProfile(user_name,user_id) {
+		this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
 	}
 	
 	viewPhotos(user_id){

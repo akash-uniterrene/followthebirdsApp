@@ -203,7 +203,7 @@
             </ion-col>
             <ion-col col-4 *ngFor="let friend of friendLists | slice:0:6; let i=index">
 				
-                <div class="ImgWrapSmall" [style.backgroundImage]="getBackgroundStyle(friend.user_picture)" (click)="viewProfile(friend.user_name)" >                               
+                <div class="ImgWrapSmall" [style.backgroundImage]="getBackgroundStyle(friend.user_picture)" (click)="viewProfile(friend.user_name,friend.user_id)" >                               
                 </div>
 				<p (click)="viewProfile(friend.user_name)"><strong>{{friend.user_firstname}} {{friend.user_lastname}}</strong></p>
             </ion-col>         
