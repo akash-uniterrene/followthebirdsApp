@@ -62,6 +62,9 @@ export class UserSettingsPage {
 	this.nav.setRoot('BlockSettingsPage');
   }
   
+  goVaults(){
+	this.nav.push('VaultsPage');
+  }
   
   logouta(){
     localStorage.clear();

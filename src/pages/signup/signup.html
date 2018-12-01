@@ -46,7 +46,7 @@
           </ion-item>      
 
           <ion-item>
-              <ion-label fixed><ion-icon ios="ios-unlock-outline" md="md-unlock"></ion-icon></ion-label>
+            <ion-label fixed><ion-icon ios="ios-unlock-outline" md="md-unlock"></ion-icon></ion-label>
             <ion-input type="password" [(ngModel)]="account.user_password" placeholder="Password"  name="user_password"></ion-input>
           </ion-item>
 
@@ -59,15 +59,29 @@
             <ion-item>
                 <ion-label fixed><ion-icon ios="ios-transgender" md="md-transgender"></ion-icon></ion-label>
               <!-- <ion-input type="text" [(ngModel)]="account.user_firstname" placeholder="First Name" name="user_firstname"></ion-input> -->
-              <ion-select [(ngModel)]="account.user_gender" [ngModelOptions]="{standalone:true}" class="fullSelect">
+				<ion-select [(ngModel)]="account.user_gender" [ngModelOptions]="{standalone:true}" class="fullSelect">
                   <ion-option value="" selected="true">Select Sex</ion-option>
                   <ion-option value="male">Male</ion-option>
                   <ion-option value="female">Female</ion-option>
                   <ion-option value="other">Other</ion-option>                  
                 </ion-select>
             </ion-item>
-
-            <div class="listBox">    
+			<ion-item>
+			  <ion-label>Date of Birth</ion-label>
+			  <ion-datetime  style="color:white" displayFormat="MM/DD/YYYY" [(ngModel)]="account.user_DOB_date" name="user_DOB_date" [ngModelOptions]="{standalone:true}"></ion-datetime>
+			</ion-item>
+             <!--<div class="listBox"> 
+			  <ion-item>
+				<ion-datetime displayFormat="DD" placeholder="Date" [(ngModel)]="account.user_DOB_date" [ngModelOptions]="{standalone:true}" class="fullSelect"></ion-datetime>
+			  </ion-item>
+			  
+			  <ion-item>
+				<ion-datetime displayFormat="MM" placeholder="Month" [(ngModel)]="account.user_DOB_month" [ngModelOptions]="{standalone:true}" class="fullSelect"></ion-datetime>
+			  </ion-item>
+			  
+              <ion-item>
+				<ion-datetime displayFormat="YYYY" placeholder="Year" [(ngModel)]="account.user_DOB_year" [ngModelOptions]="{standalone:true}" class="fullSelect"></ion-datetime>
+			  </ion-item>
               <ion-item>
                   <ion-select [(ngModel)]="account.user_DOB_date" [ngModelOptions]="{standalone:true}" class="fullSelect">
                       <ion-option value="" selected="true">Day</ion-option>
@@ -90,8 +104,8 @@
                       <ion-option value="2017">2017</ion-option>
                       <ion-option value="2016">2016</ion-option>                  
                   </ion-select>
-              </ion-item>   
-            </div>    
+              </ion-item>
+            </div>     -->   
              
 
             <button class="login_btn" *ngIf="checkValidationsStep2()" ion-button color="light" block outline ion-button (click)="doSignup()">SIGN UP</button>

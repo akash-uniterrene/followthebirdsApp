@@ -1,0 +1,31 @@
+<ion-header>
+
+  <ion-toolbar color="primary">
+    <ion-buttons left (tap)="goBack()" >
+      <button ion-button icon-only color="royal">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title> Vaults </ion-title>
+    <ion-buttons right (tap)="createVault()" >
+      <button ion-button icon-only color="royal">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+   </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content>
+	<ion-grid class="editGrid" margin-top>
+		<ion-row>
+		  <ion-col col-4 *ngFor="let vault of vaults" margin-bottom>
+			<button ion-button clear block full (click)="viewVault(vault)"> 
+				<ion-icon name="images" margin-bottom></ion-icon>
+				{{vault.title}}
+			</button>
+		  </ion-col>	  
+		</ion-row>
+  </ion-grid>
+</ion-content>

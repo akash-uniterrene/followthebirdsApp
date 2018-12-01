@@ -29,9 +29,7 @@ export class SignupPage {
       user_email: string, 
       user_password: string,
       user_gender : string, 
-      user_DOB_date: string,  
-      user_DOB_month: string, 
-      user_DOB_year: string 
+      user_DOB_date: string
      } = {
 		user_firstname: '',
 		user_lastname: '',
@@ -39,9 +37,7 @@ export class SignupPage {
 		user_email: '',
     user_password: '',
     user_gender : '',
-    user_DOB_date: '',
-    user_DOB_month: '',
-    user_DOB_year: ''
+    user_DOB_date: ''
   };
 
     
@@ -105,11 +101,7 @@ export class SignupPage {
 
   checkValidationsStep2(){   
     
-    if(this.account.user_gender && 
-      this.account.user_DOB_date && 
-      this.account.user_DOB_month && 
-      this.account.user_DOB_year
-      ){       
+    if(this.account.user_gender &&  this.account.user_DOB_date){       
       return true;
     }else{
       return false;

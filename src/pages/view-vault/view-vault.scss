@@ -1,0 +1,17 @@
+page-view-vault {
+	.ImgWrapBig{
+        height: 160px;
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+        background-position: center center !important; 
+    }
+    .ImgWrapSmall{
+        height: 100px;
+        background-size: cover !important;
+        background-repeat: no-repeat !important;
+        background-position: center center !important;
+    }
+    .photosGrid ion-col{
+        padding: 1px;
+    }
+}
