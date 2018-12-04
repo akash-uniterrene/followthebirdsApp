@@ -388,6 +388,45 @@ export class User {
     return seq;
  }
  
+ vaultUploader(data,params){
+	var options = {
+	};
+	
+	let body = new FormData();
+	for (var i = 0; i<=data.length; i++) {
+	  body.append('file[]',data[i]);
+	}
+	
+	//body.append('file[]', data);
+	console.log(data);
+	
+	for (var key in params) {
+	  body.append(key,params[key]);
+	}
+	console.log(body);
+	
+	let seq = this.api.post('vault_upload', body, options).share();
+
+    seq.subscribe((res: any) => {
+        
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+ }
+ 
+ removeVaultFiles(params: any) {
+    let seq = this.api.post('remove_vault_files', params).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
  
  
 }

@@ -5,34 +5,81 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar color="primary">
-    <ion-title> {{ vault.title }} </ion-title>
-  </ion-navbar>
-
+  <ion-toolbar color="primary">
+    <ion-buttons left (tap)="goBack()" *ngIf="!activeAdd">
+      <button ion-button icon-only color="royal">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+	
+	<ion-buttons left (tap)="selectCancel()" *ngIf="activeAdd">
+      <button ion-button icon-only color="royal">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+	
+    <ion-title> {{ vault.title }} <span *ngIf="delete_file != ''">({{fileCount.length}}) Selected</span></ion-title>
+    <ion-buttons right *ngIf="delete_file == ''">
+      <button ion-button icon-only color="royal" (tap)="uploadPicture()" *ngIf="type == 'image'">
+        <ion-icon name="add"></ion-icon>
+      </button>
+	  <button ion-button icon-only color="royal" (tap)="uploadVideo()" *ngIf="type == 'mp4'">
+        <ion-icon name="add"></ion-icon>
+      </button>
+	  <button ion-button icon-only color="royal" (tap)="uploadAudio()" *ngIf="type == 'mp3'">
+        <ion-icon name="add"></ion-icon>
+      </button>
+	  <button ion-button icon-only color="royal" (tap)="uploadFile()" *ngIf="type == 'files'">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+	<ion-buttons right *ngIf="delete_file != ''">
+	  <button ion-button icon-only color="royal" (tap)="deleteConfirm()" >
+        <ion-icon name="trash"></ion-icon>
+      </button>
+	</ion-buttons>
+   </ion-toolbar>	
 </ion-header>
 
 
 <ion-content>
-	<ion-grid class="photosGrid">
+	<ion-grid class="photosGrid" class="photosGrid" *ngIf="type == 'image'">
 		<ion-row>
-			<ion-col *ngFor="let file of files" col-6>		
-				<div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(file)" *ngIf="type == 'image'"></div>
-				
-				<div *ngIf="type == 'mp4'">
-					<video style="width:100%" controls preload="metadata" webkit-playsinline="webkit-playsinline" class="videoPlayer">
-						<source [src]="imageURL+file" type="video/mp4"/>
-					</video>
-				</div>
-				
-				<div *ngIf="type == 'mp3'">
-					<audio controls style="width:100%">
-						  <source [src]="imageURL+file" type="audio/mpeg">
-						  Your browser does not support the audio element.
-					</audio>
-				</div>
-				
+			<ion-col *ngFor="let file of files; let i=index" col-4 (press)="pressEvent($event)">		
+				<div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(file)" >
+				<ion-checkbox *ngIf="activeAdd" (ionChange)="onChange(file, $event, i)" value="file" ></ion-checkbox>
+				<div class="item_select hide"></div>
+				</div>				
 			</ion-col>
+			<input type="file" #vaultPhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebFile($event)" multiple accept="image/*" />
+		</ion-row>		
+	</ion-grid>
+	
+	<ion-grid class="photosGrid" class="photosGrid" *ngIf="type == 'mp4'">
+		<ion-row>
+			<ion-col class="selected_files" *ngFor="let file of files; let i=index" col-6 (press)="pressEvent($event)">		
+				<video style="width:100%" controls preload="metadata" webkit-playsinline="webkit-playsinline" class="videoPlayer">
+					<source [src]="imageURL+file" type="video/mp4"/>
+				</video>
+				<ion-checkbox *ngIf="activeAdd" (ionChange)="onChange(file, $event, i)" value="file" ></ion-checkbox>
+				<div class="item_select hide"></div>
+			</ion-col>
+			<input type="file" #vaultVideo style="visibility: hidden; height: 0px" name="files[]" (change)="processWebFile($event)" accept="video/*" />
+		</ion-row>		
+	</ion-grid>
+	<ion-grid class="photosGrid" *ngIf="type == 'mp3'">
+		<ion-row>
+			<ion-col class="selected_files" *ngFor="let file of files; let i=index" col-12 (press)="pressEvent($event)">		
+				<audio controls style="width:100%">
+					  <source [src]="imageURL+file" type="audio/mpeg">
+					  Your browser does not support the audio element.
+				</audio>
+				<ion-checkbox *ngIf="activeAdd" (ionChange)="onChange(file, $event, i)" value="file" ></ion-checkbox>
+				<div class="item_select hide"></div>	
+			</ion-col>
+			<input type="file" #vaultAudio style="visibility: hidden; height: 0px" name="files[]" (change)="processWebFile($event)" accept=".mp3,audio/*" />
 		</ion-row>
 	</ion-grid>
+	
+	
 </ion-content>
