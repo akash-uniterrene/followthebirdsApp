@@ -37,9 +37,9 @@
 			<img src="assets/followthebirdImgs/text-file-icon.png">
 		  </ion-thumbnail>
 		  <h2>Attachment.zip</h2>
-		  <button ion-button padding (click)="downloadAttachment(attch.source)">
+		  <a ion-button padding href="{{imageURL+attch.source}}" download>
 			Download
-		  </button>
+		  </a>
 		</ion-item>
 	</div>
 	<div *ngIf="feeds.post_type == 'shared'">

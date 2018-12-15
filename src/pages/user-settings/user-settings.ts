@@ -39,27 +39,31 @@ export class UserSettingsPage {
   }
   
   listFriends(){
-	this.nav.setRoot('FriendsPage',{'user_id':this.profile.user_id});
+	this.nav.push('FriendsPage',{'user_id':this.profile.user_id});
+  }
+  
+  listGroups(){
+	this.nav.push('GroupsPage',{'user_id':this.profile.user_id});
   }
   
   listEvents(){
-	this.nav.setRoot('EventsPage',{'user_id':this.profile.user_id});
+	this.nav.push('EventsPage',{'user_id':this.profile.user_id});
   }
   
   accoutSettings(){
-	this.nav.setRoot('AccountSettingsPage');
+	this.nav.push('AccountSettingsPage');
   }
   
   privacySettings(){
-	this.nav.setRoot('PrivacySettingsPage');
+	this.nav.push('PrivacySettingsPage');
   }
   
   securitySettings(){
-	this.nav.setRoot('SecuritySettingsPage');
+	this.nav.push('SecuritySettingsPage');
   }
   
   blockSettings(){
-	this.nav.setRoot('BlockSettingsPage');
+	this.nav.push('BlockSettingsPage');
   }
   
   goVaults(){

@@ -52,8 +52,8 @@ export class EventsPage {
 	this.navCtrl.push("EventProfilePage",{eventProfile:eventProfile.event_id});
   }
   
-  goBack(){
-	  this.navCtrl.setRoot("HomePage");
+  createPage(){
+	this.navCtrl.push("EventCreatePage");
   }
   
   eventInterestAction(type,event_id){

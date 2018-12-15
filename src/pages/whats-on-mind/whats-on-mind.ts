@@ -112,15 +112,37 @@ export class WhatsOnMindPage {
 		user_id : localStorage.getItem('user_id')
 	  });
 		
+	  if(navParams.get('id') == localStorage.getItem('user_id')){
+		  this.publisherInfo.handle = "me";
+	  } else {
+		this.publisherInfo.handle = navParams.get('handle');
+		this.publisherInfo.id = navParams.get('id');
+	  }
+      
 	  
-      this.publisherInfo.handle = navParams.get('handle');
-      this.publisherInfo.id = navParams.get('id');
+	  
+	  if(navParams.get('files') && navParams.get('vault_type') == 'image'){
+		this.publishPhotos = navParams.get('files');
+		this.publisherInfo.photos = JSON.stringify(navParams.get('files'));
+	  } if(navParams.get('files') && navParams.get('vault_type') == 'mp4'){
+		var obj = {source: navParams.get('files')[0]};
+		var myJSON = JSON.stringify(obj);
+		this.publisherInfo.video = myJSON;
+	  } else if(navParams.get('files') && navParams.get('vault_type') == 'mp3'){
+		var obj = {source: navParams.get('files')[0]};
+		var myJSON = JSON.stringify(obj);
+		this.publisherInfo.audio = myJSON;  
+	  } else if(navParams.get('files') && navParams.get('vault_type') == 'files'){
+		var obj = {source: navParams.get('files')[0]};
+		var myJSON = JSON.stringify(obj);
+		this.publisherInfo.file = myJSON;    
+	  }
 	  
   }
   fileTransfer: FileTransferObject = this.transfer.create();
  
   ionViewDidLoad() {
-    
+    console.log(this.publisherInfo);
   }
 
   closeModal(){
@@ -150,7 +172,7 @@ export class WhatsOnMindPage {
       //Attempt to login in through our User service
       this.post.publishPost(this.publisherInfo).subscribe((resp) => {
         this.loading.dismiss();
-        this.closeModal();
+        this.navCtrl.setRoot("HomePage");
       }, (err) => {
         this.loading.dismiss();
         let toast = this.toastCtrl.create({
@@ -165,77 +187,100 @@ export class WhatsOnMindPage {
   }
 
   uploadPicture() {
-		const actionSheet = this.actionSheetCtrl.create({
-		  title: 'Upload Photos',
-		  buttons: [
-			{
-			  icon: !this.platform.is('ios') ? 'ios-camera' : null,	
-			  text: 'Take a Picture',
-			  handler: () => {
-				this.takeCameraSnap()
-			  }
-			},{
-			  icon: !this.platform.is('ios') ? 'ios-images' : null,		
-			  text: 'Upload from gallery',
-			  handler: () => {
-				this.uploadFromGallery('photo');
-			  }
-			},{
-			  icon: !this.platform.is('ios') ? 'close' : null,
-			  text: 'Cancel',
-			  role: 'cancel',
-			  handler: () => {
-			  }
-			}
-		  ]
-		});
-		actionSheet.present();
+	const actionSheet = this.actionSheetCtrl.create({
+	  title: 'Upload Photos',
+	  buttons: [
+		{
+		  icon: !this.platform.is('ios') ? 'ios-camera' : null,	
+		  text: 'Take a Picture',
+		  handler: () => {
+			this.takeCameraSnap()
+		  }
+		},{
+		  icon: !this.platform.is('ios') ? 'ios-images' : null,		
+		  text: 'Upload from gallery',
+		  handler: () => {
+			this.uploadFromGallery('photo');
+		  }
+		},{
+		  icon: !this.platform.is('ios') ? 'ios-folder' : null,		
+		  text: 'Upload from vault',
+		  handler: () => {
+			this.uploadFromVault('image');
+		  }
+		},{
+		  icon: !this.platform.is('ios') ? 'close' : null,
+		  text: 'Cancel',
+		  role: 'cancel',
+		  handler: () => {
+		  }
+		}
+	  ]
+	});
+	actionSheet.present();
   }
   
   
   uploadAudio() {
-		const actionSheet = this.actionSheetCtrl.create({
-		  title: 'Upload Music ',
-		  buttons: [
-			{
-			  icon: !this.platform.is('ios') ? 'ios-volume-up' : null,		
-			  text: 'Upload Audio',
-			  handler: () => {
-				this.uploadFromGallery('audio');
-			  }
-			},{
-			  icon: !this.platform.is('ios') ? 'close' : null,
-			  text: 'Cancel',
-			  role: 'cancel',
-			  handler: () => {
-			  }
-			}
-		  ]
-		});
-		actionSheet.present();
+	const actionSheet = this.actionSheetCtrl.create({
+	  title: 'Upload Music ',
+	  buttons: [
+		{
+		  icon: !this.platform.is('ios') ? 'ios-volume-up' : null,		
+		  text: 'Upload Audio',
+		  handler: () => {
+			this.uploadFromGallery('audio');
+		  }
+		},{
+		  icon: !this.platform.is('ios') ? 'ios-folder' : null,		
+		  text: 'Upload from vault',
+		  handler: () => {
+			this.uploadFromVault('mp3');
+		  }
+		},{
+		  icon: !this.platform.is('ios') ? 'close' : null,
+		  text: 'Cancel',
+		  role: 'cancel',
+		  handler: () => {
+		  }
+		}
+	  ]
+	});
+	actionSheet.present();
   }
   
   uploadVideo() {
-		const actionSheet = this.actionSheetCtrl.create({
-		  buttons: [
-			{
-			  icon: !this.platform.is('ios') ? 'ios-videocam' : null,		
-			  text: 'Upload videos',
-			  handler: () => {
-				this.uploadFromGallery('video');
-			  }
-			},{
-			  icon: !this.platform.is('ios') ? 'close' : null,
-			  text: 'Cancel',
-			  role: 'cancel',
-			  handler: () => {
-			  }
-			}
-		  ]
-		});
-		actionSheet.present();
+	const actionSheet = this.actionSheetCtrl.create({
+	  buttons: [
+		{
+		  icon: !this.platform.is('ios') ? 'ios-videocam' : null,		
+		  text: 'Upload videos',
+		  handler: () => {
+			this.uploadFromGallery('video');
+		  }
+		},{
+		  icon: !this.platform.is('ios') ? 'ios-folder' : null,		
+		  text: 'Upload from vault',
+		  handler: () => {
+			this.uploadFromVault('mp4');
+		  }
+		},{
+		  icon: !this.platform.is('ios') ? 'close' : null,
+		  text: 'Cancel',
+		  role: 'cancel',
+		  handler: () => {
+		  }
+		}
+	  ]
+	});
+	actionSheet.present();
   }
   
+  uploadFromVault(filter){
+	  console.log(this.publisherInfo.handle+this.publisherInfo.id);
+	this.navCtrl.setRoot("VaultsPage",{'filter':filter,handle:this.publisherInfo.handle,handle_id:this.publisherInfo.id});
+  }
+
   uploadFile() {
 	const actionSheet = this.actionSheetCtrl.create({
 	  buttons: [
@@ -244,6 +289,12 @@ export class WhatsOnMindPage {
 		  text: 'Upload Attachment',
 		  handler: () => {
 			this.uploadFromGallery('file');
+		  }
+		},{
+		  icon: !this.platform.is('ios') ? 'ios-folder' : null,		
+		  text: 'Upload from vault',
+		  handler: () => {
+			this.uploadFromVault('files');
 		  }
 		},{
 		  icon: !this.platform.is('ios') ? 'close' : null,
@@ -360,6 +411,8 @@ export class WhatsOnMindPage {
 			} else {
 				this.publisherInfo.file = myJSON;
 			}
+			
+			console.log(this.publisherInfo);
 		}, (err) => {
 		 loading.dismiss();		
 		 let toast = this.toastCtrl.create({
@@ -378,30 +431,4 @@ export class WhatsOnMindPage {
 			return 'url(' + this.imageURL+url + ')'
 		}
 	}
-	
-	/* uploadFile(file) {
-	  let loader = this.loadingCtrl.create({
-		content: "Uploading..."
-	  });
-	  loader.present();
-	  const fileTransfer: FileTransferObject = this.transfer.create();
-
-	  let options: FileUploadOptions = {
-		fileKey: 'ionicfile',
-		fileName: 'ionicfile',
-		chunkedMode: false,
-		mimeType: "video/mp4",
-		headers: {}
-	  }
-
-	  fileTransfer.upload(file, 'http://localhost/ftb-api/index.php', options)
-		 .then((data) => {
-			alert(data);
-			loader.dismiss();
-		  }, (err) => {
-			console.log(err);
-			loader.dismiss();
-		  });
-	} */
-
 }

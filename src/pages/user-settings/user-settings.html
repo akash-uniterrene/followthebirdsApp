@@ -14,7 +14,7 @@
       Friends
       <ion-icon name='people' style="color:#0b3bb5" item-start></ion-icon>
     </ion-item>
-    <ion-item>
+    <ion-item (tap)="listGroups()">
       Groups
       <ion-icon name='contacts' style="color:#b0176a"  item-start></ion-icon>
     </ion-item>
@@ -52,10 +52,10 @@
       <ion-icon name='lock' style="color:#902d8d"  item-start></ion-icon>
 	  Privacy Settings
     </ion-item>
-	<ion-item (tap)="securitySettings()">
+	<!--<ion-item (tap)="securitySettings()">
       <ion-icon name='settings' style="color:#0b3bb5"  item-start></ion-icon>
 	  Security Settings
-    </ion-item>
+    </ion-item> -->
 	<ion-item (tap)="blockSettings()">
 	  <ion-icon name="remove-circle" style="color:#de1818"  item-start></ion-icon>
 	  Block Settings

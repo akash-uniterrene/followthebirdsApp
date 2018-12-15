@@ -5,14 +5,44 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Groups</ion-title>
-  </ion-navbar>
-
+	<ion-navbar color="primary">
+		<ion-title> Groups </ion-title>
+		<ion-buttons right>
+		  <button ion-button icon-only ><ion-icon name="add-circle"></ion-icon></button>
+		</ion-buttons>
+	</ion-navbar>
+	<ion-segment [(ngModel)]="groupzone">
+	  <ion-segment-button value="discover">
+		Discover 
+	  </ion-segment-button>
+	  <ion-segment-button value="joined">
+		Joined
+	  </ion-segment-button>
+	  <ion-segment-button value="manage">
+		My groups
+	  </ion-segment-button>	  
+  </ion-segment>
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content>
+<div [ngSwitch]="groupzone">
+	<ion-grid *ngSwitchCase="'discover'">
+	  <ion-row>
+		<ion-col col-4> TEst </ion-col>
+		<ion-col col-4> TEst </ion-col>
+		<ion-col col-4> TEst </ion-col>
+		<ion-col col-4> TEst </ion-col>
+		<ion-col col-4> TEst </ion-col>
+		<ion-col col-4> TEst </ion-col>
+	  </ion-row>
+	</ion-grid>
+	<ion-list *ngSwitchCase="'joined'">
+		hello
+	</ion-list>
+	<ion-list *ngSwitchCase="'manage'">
+		how r u
+	</ion-list>
+	
+</div>
 </ion-content>

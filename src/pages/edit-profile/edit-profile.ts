@@ -14,15 +14,24 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'edit-profile.html',
 })
 export class EditProfilePage {
-
+  profile : any = {
+	'user_firstname':'',
+	'user_lastname':'',
+	'user_gender':'',
+	'user_birthdate':'',
+	'user_relationship':'',
+	'user_website':'',
+  };
+  
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+	  this.profile = navParams.get('profile');
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad EditProfilePage');
+    console.log(this.profile);
   }
-
+  
   goBack(){
-	  this.navCtrl.setRoot("HomePage");
+	this.navCtrl.setRoot("HomePage");
   } 
 }

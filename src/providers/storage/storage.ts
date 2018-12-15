@@ -150,6 +150,7 @@ export class StorageProvider {
 					this.file.createDir(this.file.externalRootDirectory, 'FollowTheBirds', false).then(response => {
 						this.file.createDir(this.file.externalRootDirectory, 'FollowTheBirds/ProfilePic', false);
 						this.file.createDir(this.file.externalRootDirectory, 'FollowTheBirds/CoverPic', false);
+						this.file.createDir(this.file.externalRootDirectory, 'FollowTheBirds/Vault', false);
 					}).catch(err => {
 					
 					}); 
@@ -163,10 +164,12 @@ export class StorageProvider {
 	  var pic_name = arr[arr.length - 1];
 	  const absurl = this.imageURL+url;
 	  this.fileTransfer.download(absurl, this.file.externalRootDirectory + 'FollowTheBirds/'+folder+'/'+pic_name).then((entry) => {
+		  return true;
 	  }, (error) => {
 		// handle error
 	  });
 	}
+
 	
 	getDatabaseState() {
 		return this.databaseReady.asObservable();

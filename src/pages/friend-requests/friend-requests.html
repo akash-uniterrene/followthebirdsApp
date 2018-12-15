@@ -4,7 +4,8 @@
   See http://ionicframework.com/docs/components/#navigation for more info on
   Ionic pages and navigation.
 -->
-<ion-content>
+<ion-content no-padding>
+<div>
 	<ion-list no-padding>
 	  <ion-item-divider color="light" *ngIf="pendindFriendLists.length <= 0">
 			No Friend Requests
@@ -13,11 +14,14 @@
         <ion-thumbnail item-start>
           <img [src]="imageURL+friend.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewProfile(friend.user_name)">
         </ion-thumbnail>
-        <h2 (click)="viewProfile(friend.user_name,friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
-		<div *ngIf="this.response == 'false'" >
-		<button ion-button padding (click)="confrimRequest(friend)">Confirm</button>
-		<button ion-button outline padding margin-left (click)="deleteRequest(friend)">Delete</button>
+        <div class="request_status">
+			<h2 (click)="viewProfile(friend.user_name,friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
+			<div *ngIf="this.response == 'false'" >
+			<button ion-button padding (click)="confrimRequest($event,friend.user_id)" >Confirm</button>
+			<button ion-button outline padding margin-left (click)="deleteRequest($event,friend.user_id)">Delete</button>
+			</div>
 		</div>
       </ion-item>
     </ion-list>
+</div>		
 </ion-content>

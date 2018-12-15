@@ -30,7 +30,7 @@ export class FriendsPage {
 		this.friendLists = data[0];
 	});
 	
-	this.user.getPendingRequest('friend_requests',parseInt(localStorage.getItem('user_id')))
+	this.user.getSentRequest('sent_requests',parseInt(localStorage.getItem('user_id')))
 	.then(data => {
 		this.pendindFriendLists = data[0];
 	});
@@ -38,10 +38,41 @@ export class FriendsPage {
 	this.user.getSuggestedUser('all',parseInt(localStorage.getItem('user_id')))
 	.then(data => {
 		this.getSuggestedUsers = data[0];
+		console.log(this.getSuggestedUsers);
 	});
-	
-	
+		
   }
+  
+	addAction(event,user) {
+	//	console.log(event.target.parentNode.parentNode.parentNode.innerText = "You are now Friends");
+		this.connectAction("friend-add",user.user_id);
+		event.target.parentNode.parentNode.innerText = "Friend request sent";	
+		this.pendindFriendLists.push(user);	
+	}
+	
+	removeAction(event,user_id) {
+		event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+		this.connectAction("friend-remove",user_id);
+	}
+	cancelRequestAction(event,user_id) {
+		this.connectAction("friend-cancel",user_id);
+		event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
+	}
+	
+	
+	connectAction(type,user_id){
+		let params :any = {
+			'do': type,
+			'id': user_id,
+			'my_id' : localStorage.getItem('user_id')
+		};
+		this.user.connection(params).subscribe((resp) => {						
+			
+		}, (err) => {
+		
+		});
+	}
+	
 
   viewProfile(user_name,user_id) {
 		this.navCtrl.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});

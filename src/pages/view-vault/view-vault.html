@@ -37,6 +37,12 @@
 	  <button ion-button icon-only color="royal" (tap)="deleteConfirm()" >
         <ion-icon name="trash"></ion-icon>
       </button>
+	  <button ion-button icon-only color="royal" (tap)="shareVaultCtrl()" *ngIf="type != 'image' && fileCount.length == '1'">
+        <ion-icon name="share"></ion-icon>
+      </button> 
+	  <button ion-button icon-only color="royal" (tap)="shareVaultCtrl()" *ngIf="type == 'image'">
+        <ion-icon name="share"></ion-icon>
+      </button>  
 	</ion-buttons>
    </ion-toolbar>	
 </ion-header>
@@ -78,6 +84,24 @@
 				<div class="item_select hide"></div>	
 			</ion-col>
 			<input type="file" #vaultAudio style="visibility: hidden; height: 0px" name="files[]" (change)="processWebFile($event)" accept=".mp3,audio/*" />
+		</ion-row>
+	</ion-grid>
+	<ion-grid class="photosGrid" *ngIf="type == 'files'">
+		<ion-row>
+			<ion-col class="selected_files"  *ngFor="let file of files; let i=index" col-12 (press)="pressEvent($event)">		
+				<ion-item >
+				  <ion-thumbnail item-start>
+					<img src="assets/followthebirdImgs/text-file-icon.png">
+				  </ion-thumbnail>
+				  <h2>Attachment.zip</h2>
+				  <button ion-button padding (click)="downloadAttachment(imageURL+file)">
+					Download
+				  </button>							  
+				</ion-item>	
+				<ion-checkbox *ngIf="activeAdd" (ionChange)="onChange(file, $event, i)" value="file" ></ion-checkbox>
+				<div class="item_select hide"></div>		
+			</ion-col>
+			<input type="file" #vaultFile style="visibility: hidden; height: 0px" name="files[]" (change)="processWebFile($event)" accept="zip/*" />
 		</ion-row>
 	</ion-grid>
 	

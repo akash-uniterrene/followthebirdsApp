@@ -46,7 +46,7 @@
   <ion-grid class="editGrid" *ngIf="profile.user_id == myId">
     <ion-row>
       <ion-col col-4 >
-        <button ion-button clear block full (click)="editProfile()"> 
+        <button ion-button clear block full (click)="editProfile(profile)"> 
             <ion-icon ios="ios-create-outline" md="ios-create-outline"></ion-icon>
             Edit Profile 
         </button>
@@ -151,7 +151,7 @@
 				
               </ion-list>
         </ion-col>
-        <button ion-button outline block class="mainEditProfile" *ngIf="profile.user_id == myId" (click)="editDetails()" >
+        <button ion-button outline block class="mainEditProfile" *ngIf="profile.user_id == myId" (click)="editDetails(profile)" >
           <ion-icon ios="ios-create-outline" md="ios-create-outline" ></ion-icon>
           Edit Details </button>
       </ion-row>
@@ -250,9 +250,9 @@
 							<img src="assets/followthebirdImgs/text-file-icon.png">
 						  </ion-thumbnail>
 						  <h2>Attachment.zip</h2>
-						  <button ion-button padding (click)="downloadAttachment(attch.source)">
+						  <a ion-button padding href="{{imageURL+attch.source}}" download>
 							Download
-						  </button>
+						  </a>
 						</ion-item>
 					</div>
 					<div *ngIf="feeds.post_type == 'shared'">

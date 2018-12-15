@@ -161,12 +161,12 @@ export class ProfilePage {
 		this.nav.setRoot('PhotosPage', {user_id: user_id});
 	}
 	
-	editProfile(){
-		this.nav.setRoot('EditProfilePage', {'user_id': parseInt(localStorage.getItem('user_id'))});
+	editProfile(profile){
+		this.nav.setRoot('EditProfilePage', {'profile': profile});
 	}
 	
-	editDetails(){
-		this.nav.setRoot('EditDetailsPage', {'user_id': parseInt(localStorage.getItem('user_id'))});
+	editDetails(profile){
+		this.nav.setRoot('EditDetailsPage', {'profile': profile});
 	}
 	
 
@@ -434,7 +434,7 @@ export class ProfilePage {
 		  buttons: [
 			{
 			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
-			  text: 'Remove Friend',
+			  text: 'Unfriend',
 			  handler: () => {
 				this.connectAction("friend-remove")
 			  }
@@ -579,13 +579,13 @@ export class ProfilePage {
 			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
 			  text: 'Report',
 			  handler: () => {
-				this.connectAction('friend-accept')
+				this.reportAction()
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
 			  text: 'Block',
 			  handler: () => {
-				this.connectAction("friend-decline")
+				this.reportAction()
 			  }
 			}
 		  ]
@@ -607,6 +607,29 @@ export class ProfilePage {
 			
 		}, (err) => {
 		
+		});
+	}
+	
+	reportAction(){
+		let params :any = {
+			'handle': 'user',
+			'id': this.profile.user_id,
+			'my_id' : localStorage.getItem('user_id')
+		};
+		this.user.report(params).subscribe((resp) => {						
+		  let toast = this.toastCtrl.create({
+			message: "Report has been submitted successfully",
+			duration: 3000,
+			position: 'top',
+			dismissOnPageChange: true
+		  });
+		}, (err) => {
+		  let toast = this.toastCtrl.create({
+			message: "Failed to Submit Report. Please Try Again",
+			duration: 3000,
+			position: 'top',
+			dismissOnPageChange: true
+		  });
 		});
 	}
 	

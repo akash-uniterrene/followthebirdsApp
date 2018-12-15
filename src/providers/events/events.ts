@@ -66,5 +66,18 @@ export class EventsProvider {
 	});
   }
   
+  create_event(cventInfo: any){
+	let seq = this.api.post('create_event', cventInfo).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+      
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
+  
   
 }

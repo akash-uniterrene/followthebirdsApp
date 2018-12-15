@@ -16,11 +16,20 @@ import { User } from '../../providers';
 export class VaultsPage {
   
   public vaults = [];
-	constructor(public navCtrl: NavController, public user: User, public navParams: NavParams, public modalCtrl: ModalController) {	  
+  public filter = 'all';
+  private handle = '';
+  private handle_id = '';
+  constructor(public navCtrl: NavController, public user: User, public navParams: NavParams, public modalCtrl: ModalController) {	  
+	if(navParams.get('filter')){
+		this.filter = navParams.get('filter');
+	}
+	this.handle = navParams.get('handle');
+	this.handle_id = navParams.get('handle_id');
+	console.log(this.handle+this.handle_id);
   }
 
   ionViewDidLoad() {
-	this.user.getVaultStorage({my_id:localStorage.getItem('user_id')})
+	this.user.getVaultStorage({my_id:localStorage.getItem('user_id'),filter:this.filter})
 		.then(data => {
 			let item = data[0];
 			for (var key in item) {
@@ -31,7 +40,7 @@ export class VaultsPage {
   }
   
   goBack(){
-	this.navCtrl.setRoot("HomePage");
+	this.navCtrl.pop();
   }
   
   createVault(){
@@ -40,7 +49,7 @@ export class VaultsPage {
   }
   
   viewVault(vault){
-	this.navCtrl.push('ViewVaultPage', {vault:vault});
+	this.navCtrl.push('ViewVaultPage', {vault:vault,handle:this.handle,handle_id:this.handle_id});
   }
 
 }

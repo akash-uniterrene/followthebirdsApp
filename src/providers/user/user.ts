@@ -71,7 +71,7 @@ export class User {
 
     return seq;
   }
-
+  
   /**
    * Send a POST request to our signup endpoint with the data
    * the user entered on the form.
@@ -191,6 +191,21 @@ export class User {
   }
   
   getPendingRequest(type:string,id:number) {
+	let frindlist = [];	
+	let seq = this.api.get('people/'+type+'/'+id, '').share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			frindlist.push(res);
+			resolve(frindlist);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+  
+  getSentRequest(type:string,id:number) {
 	let frindlist = [];	
 	let seq = this.api.get('people/'+type+'/'+id, '').share();
 	// don't have the data yet
@@ -428,5 +443,52 @@ export class User {
     return seq;
   }
  
- 
+  saveUserRecord(params: any){
+	let seq = this.api.post('save_user_records', params).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
+  
+  saveEmailAddress(params: any){
+	let seq = this.api.post('save_email', params).share();
+	// don't have the data yet
+	seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
+  
+  savePassword(params: any){
+	let seq = this.api.post('save_password', params).share();
+	// don't have the data yet
+	seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
+  
+  report(params: any) {
+    let seq = this.api.post('report', params).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
+  
 }

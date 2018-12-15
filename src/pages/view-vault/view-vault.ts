@@ -5,6 +5,7 @@ import { File } from '@ionic-native/file';
 import { User } from '../../providers';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { StorageProvider } from '../../providers/storage/storage';
 /**
  * Generated class for the ViewVaultPage page.
  *
@@ -32,6 +33,8 @@ export class ViewVaultPage {
    public delete_file : any = [];
    public activeAdd = false;
    public fileCount = '';
+   private handle = 'me';
+   private handle_id = '';
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -42,6 +45,7 @@ export class ViewVaultPage {
     public nav: NavController,
     public actionSheetCtrl: ActionSheetController,
     public platform: Platform, 
+	public storage: StorageProvider,
     private camera: Camera,
 	public modalCtrl: ModalController,
     public modal: ViewController,
@@ -50,6 +54,11 @@ export class ViewVaultPage {
 	private file: File
     ) {
 		this.vault = navParams.get('vault');
+		if(navParams.get('handle')){
+			this.handle = navParams.get('handle');
+			this.handle_id = navParams.get('handle_id');
+		}
+		console.log(this.handle+this.handle_id);
 		this.vaultFileOptions = formBuilder.group({
 			type: this.vault.type,
 			multiple: true,
@@ -249,6 +258,13 @@ export class ViewVaultPage {
 			return 'url(' + this.imageURL+url + ')'
 		}
   }
+  
+  downloadAttachment(url) {
+	this.storage.imageDownload(url,'Vault');
+	
+  }
+  
+  
   onChange(file, event, index){
 	console.log(event.checked);  
 	if(event.checked){
@@ -267,8 +283,49 @@ export class ViewVaultPage {
 	}		
 	//event.target.parentNode.classList.add('added')
 	
-	console.log(this.delete_file);
+	
   }
+  
+	shareVaultCtrl(): void
+	{
+		let prompt = this.alertCtrl.create({
+		title: 'Share Files',	
+		inputs : [
+		{
+			type:'radio',
+			label:'Share on status ',
+			value:'status'
+		},
+		{
+			type:'radio',
+			label:'Share with External',
+			value:'external'
+		}],
+		buttons : [
+		{
+			text: "Cancel",
+			handler: data => {
+			
+			}
+		},
+		{
+			text: "Share",
+			handler: data => {
+				this.shareFromVault(data);
+			}
+		}]});
+		prompt.present();
+	}
+	
+	shareFromVault(type){
+		var filtered = this.delete_file.filter(function (el) {
+		  return el != null;
+		});
+		
+		if(type == 'status'){
+			this.navCtrl.setRoot("WhatsOnMindPage",{'files':filtered,handle:this.handle,id:this.handle_id,vault_type:this.type});
+		}
+	}
   
 	deleteConfirm() {
 	  let alert = this.alertCtrl.create({
@@ -279,7 +336,7 @@ export class ViewVaultPage {
 			text: 'Cancel',
 			role: 'cancel',
 			handler: () => {
-			  console.log('Cancel clicked');
+			  
 			}
 		  },
 		  {

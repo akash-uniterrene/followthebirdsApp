@@ -39,26 +39,26 @@ export class FriendRequestsPage {
 		console.log(this.pendindFriendLists.length);
 	}
 		
-	confrimRequest(item) {
-		this.isAccept = true;
-		this.response = 'true';
-		this.connectAction(item,'friend-accept');
+	confrimRequest(event,user_id) {
+		console.log(event.target.parentNode);
+		event.target.parentNode.parentNode.parentNode.innerText = "You are now Friends";
+		//event.target.parentNode.parentNode.parentNode.classList.add('accept_request');
+		this.connectAction("friend-accept",user_id);
 	}
 
-	deleteRequest(item) {
-		this.isDelete = true;
-		this.response = 'true';
-		this.connectAction(item,'friend-decline');
+	deleteRequest(event,user_id) {
+		event.target.parentNode.parentNode.parentNode.innerText = "Friend Request Removed";
+		this.connectAction("friend-decline",user_id);
 	}	
 	
 	viewProfile(user_name,user_id) {
 		this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
 	} 
-	connectAction(item,type){
-		console.log(item);
+	
+	connectAction(type,user_id){
 		let params :any = {
 			'do': type,
-			'id': item.user_id,
+			'id': user_id,
 			'my_id' : localStorage.getItem('user_id')
 		};
 		this.user.connection(params).subscribe((resp) => {						

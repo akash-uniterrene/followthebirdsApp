@@ -14,7 +14,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'groups.html',
 })
 export class GroupsPage {
-
+	eventzone: groupzone = "discover";
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
