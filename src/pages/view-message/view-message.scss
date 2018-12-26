@@ -1,0 +1,71 @@
+page-view-message {
+	.conversation {
+		overflow: hidden;
+		width: 100%;
+	}
+	.conversation.right .conversation_user {
+		float: right;
+	}
+
+	.conversation_user {
+		border-radius: 50%;
+		width: 50px;
+		height: 50px;
+		display: block;
+		overflow: hidden;
+		margin: 7px 10px;
+		float: left;
+	}
+	.left .conversation_body {
+		background: #f4f4f4;
+		color: #000;
+		float: left;
+	}
+	.right .conversation_body {
+		background: #729ecc;
+		color: #fff;
+		float: right;
+	}
+	.conversation_body {		
+		display: block;
+		padding: 5px 15px;
+		float: left;
+		width: auto;
+		margin: 17px 5px;
+		border-radius: 15px;
+		max-width: 50%;
+		position: relative;
+	}
+	
+	.right .conversation_body:after {
+		content: '';
+		display: block;
+		position: absolute;
+		right: -13px;
+		top: 6px;
+		width: 0;
+		height: 0;
+		border: 8px solid transparent;
+		border-color: transparent transparent transparent #729ecc;
+		-webkit-box-shadow: 0 0 black;
+		box-shadow: 0 0 black;
+		z-index: 9;
+	}
+	
+	.left .conversation_body:after {
+		content: '';
+		display: block;
+		position: absolute;
+		left: -13px;
+		top: 6px;
+		width: 0;
+		height: 0;
+		border: 8px solid transparent;
+		border-color: transparent #f4f4f4 transparent transparent;
+		-webkit-box-shadow: 0 0 black;
+		box-shadow: 0 0 black;
+		z-index: 9;
+	}
+	
+	
+}

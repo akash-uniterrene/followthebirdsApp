@@ -83,6 +83,10 @@ export class HomePage {
     this.nav.setRoot('TabsPage');
   }
   
+  getMessages(){
+	this.navCtrl.setRoot("MessagesPage");  
+  }
+  
   getcountCarItem(){
 	  this.countCarItem = 99;
   }

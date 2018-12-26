@@ -39,7 +39,7 @@ export class UserSettingsPage {
   }
   
   listFriends(){
-	this.nav.push('FriendsPage',{'user_id':this.profile.user_id});
+	this.nav.setRoot('FriendsPage',{'user_id':this.profile.user_id});
   }
   
   listGroups(){

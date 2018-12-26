@@ -8,7 +8,7 @@
 	<ion-navbar color="primary">
 		<ion-title> Groups </ion-title>
 		<ion-buttons right>
-		  <button ion-button icon-only ><ion-icon name="add-circle"></ion-icon></button>
+		  <button ion-button icon-only (click)="createGroup()"><ion-icon name="add-circle"></ion-icon></button>
 		</ion-buttons>
 	</ion-navbar>
 	<ion-segment [(ngModel)]="groupzone">
@@ -28,20 +28,34 @@
 <ion-content>
 <div [ngSwitch]="groupzone">
 	<ion-grid *ngSwitchCase="'discover'">
-	  <ion-row>
-		<ion-col col-4> TEst </ion-col>
-		<ion-col col-4> TEst </ion-col>
-		<ion-col col-4> TEst </ion-col>
-		<ion-col col-4> TEst </ion-col>
-		<ion-col col-4> TEst </ion-col>
-		<ion-col col-4> TEst </ion-col>
+	  <ion-row >
+		<ion-col class="group_wrap" col-4 *ngFor="let group of groupLists.suggested" >
+		<div class="image-circle" (click)="viewGroup(group)">
+			<img [src]="imageURL+group.group_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewEvent(event)" /> 
+		</div>
+		<div (click)="viewGroup(group)">{{group.group_title}}</div>
+		</ion-col>
 	  </ion-row>
 	</ion-grid>
 	<ion-list *ngSwitchCase="'joined'">
-		hello
+		<ion-item *ngFor="let group of groupLists.joined" >
+			<ion-thumbnail item-start class="image-circle" (click)="viewGroup(group)">
+			  <img [src]="imageURL+group.group_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewEvent(event)" /> 
+			</ion-thumbnail>
+			<h2 (click)="viewGroup(group)">{{group.group_title}}</h2>
+			<p>{{group.group_members}} Members</p>
+			<button ion-button icon-only item-end clear><ion-icon name='more'></ion-icon></button>
+		</ion-item>
 	</ion-list>
 	<ion-list *ngSwitchCase="'manage'">
-		how r u
+		<ion-item *ngFor="let group of groupLists.manage" >
+			<ion-thumbnail item-start class="image-circle" (click)="viewGroup(group)">
+			  <img [src]="imageURL+group.group_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewEvent(event)" /> 
+			</ion-thumbnail>
+			<h2 (click)="viewGroup(group)">{{group.group_title}}</h2>
+			<p>{{group.group_members}} Members</p>
+			<button ion-button icon-only item-end clear><ion-icon name='more'></ion-icon></button>
+		</ion-item>
 	</ion-list>
 	
 </div>

@@ -19,7 +19,7 @@
     </ion-buttons>
     <ion-searchbar (input)="getItems($event)" ></ion-searchbar>
     <ion-buttons right>
-      <button ion-button icon-only><ion-icon ios="ios-chatbubbles" md="md-chatbubbles"></ion-icon></button>
+      <button ion-button icon-only (click)="getMessages()" ><ion-icon ios="ios-chatbubbles" md="md-chatbubbles"></ion-icon></button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>

@@ -1,0 +1,43 @@
+<ion-header>
+
+  <ion-toolbar color="primary">
+    <ion-buttons left (tap)="goBack()" >
+      <button ion-button icon-only color="royal">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title> {{ conversation.name }}</ion-title>
+   </ion-toolbar>
+</ion-header>
+<ion-content>
+	<ion-list >
+	  <div *ngFor="let message of messages.messages" class="conversation left {{myId}}" [ngClass]="{'right': message.user_id == myId, 'left': message.user_id != myId}">
+		<div class="conversation_user">
+		  <img [src]="imageURL+message.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
+		</div>
+		<div class="conversation_body">
+			{{message.message}}
+			<div *ngIf="message.image != ''"> <img [src]="imageURL+message.image"></div>			
+		</div>
+		<!-- <ion-note class="msg_time" *ngIf="isToday(message.time)">{{ message.time | date: 'h:mm a' }}</ion-note>
+		<ion-note class="msg_time" *ngIf="!isToday(message.time)">{{ message.time | date: 'dd MMM' }}</ion-note> -->
+	  </div>
+	</ion-list>
+</ion-content>
+<ion-footer no-padding>
+  <ion-toolbar>
+	<ion-buttons left (tap)="sendMessage()" >
+	  <button ion-button icon-only color="primary">
+		<ion-icon name="add-circle"></ion-icon>
+	  </button>
+	</ion-buttons>
+	<ion-item no-lines>
+	  <ion-input type="text" class="chat_message" placeholder="Send message" [(ngModel)]="message"></ion-input>
+	</ion-item>
+	<ion-buttons right (tap)="sendMessage()" >
+	  <button ion-button icon-only color="primary">
+		<ion-icon name="send"></ion-icon>
+	  </button>
+	</ion-buttons>
+  </ion-toolbar>
+</ion-footer>
