@@ -13,5 +13,37 @@ import { Api } from '../api/api';
 export class Groups {
 
   constructor(public api: Api) { }
+  
+   /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  getgroups(params?: any) {
+	let grouplist = [];	
+	let seq = this.api.get('groups', params).share();
+
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			grouplist.push(res);
+			resolve(grouplist);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+  create_group(groupInfo: any){
+	let seq = this.api.post('create_group', groupInfo).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+      
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
 
 }

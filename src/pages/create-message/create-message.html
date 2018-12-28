@@ -1,0 +1,16 @@
+<ion-header>
+	<ion-navbar color="primary">
+		<ion-searchbar (input)="getItems($event)" placeholder="Type a name or group" ></ion-searchbar>
+	</ion-navbar>
+</ion-header>
+
+<ion-content>
+ <ion-list no-lines>
+    <ion-item *ngFor="let item of items" >
+     <ion-avatar item-start (click)="viewMessage(item)">
+      <img [src]="imageURL+item.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
+      </ion-avatar>
+      <h2 (click)="viewMessage(item)" >{{item.user_firstname}} {{item.user_lastname}}</h2>
+    </ion-item>
+  </ion-list>
+</ion-content>

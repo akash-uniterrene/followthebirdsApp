@@ -16,6 +16,7 @@ import { MyApp } from './app.component';
 import { StorageProvider } from '../providers/storage/storage';
 import { Post } from '../providers/post/post';
 import { EventsProvider } from '../providers/events/events';
+import { Groups } from '../providers/groups/groups';
 import { ForgetPasswordProvider } from '../providers/forget-password/forget-password';
 
 import { SQLitePorter } from '@ionic-native/sqlite-porter';
@@ -90,6 +91,7 @@ export function provideSettings(storage: Storage) {
     StorageProvider,
 	Post,
 	EventsProvider,
+	Groups,
     ForgetPasswordProvider,
 	FileTransfer,
 	FileTransferObject,

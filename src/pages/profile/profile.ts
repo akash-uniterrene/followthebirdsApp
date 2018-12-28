@@ -80,7 +80,6 @@ export class ProfilePage {
     ) {
 		this.profileName = navParams.get('user_name') || localStorage.getItem('user_name');
 		this.profile_id = navParams.get('user_id') || localStorage.getItem('user_id');
-		//console.log('here',navParams.get('user_name'));
 		if(navParams.get('user_name')){
 			this.headerActive = true;
 		}
@@ -125,7 +124,6 @@ export class ProfilePage {
 			for (var key in item) {
 			  this.photos.push(item[key]);
 			}
-			console.log(this.photos);
 		});
 		
 		this.user.getfriends(parseInt(this.profile_id))
@@ -516,6 +514,15 @@ export class ProfilePage {
 		this.profile.i_follow = true;
 	}
 	
+	messageAction(profile){
+		let recipient = {
+			name:profile.user_firstname+' '+profile.user_lastname,
+			picture:profile.user_picture,
+			id:profile.user_id
+	    };
+		this.navCtrl.push('ViewMessagePage', {conversation: recipient});
+	}
+	
 	viewComments(comments,post_id,){
 		const commentsModal = this.modalCtrl.create('CommentsPage',{comments,'post_id':post_id,'handle':'post'});
 		commentsModal.present();
@@ -540,7 +547,6 @@ export class ProfilePage {
 		{
 			text: "Cancel",
 			handler: data => {
-			console.log("cancel clicked");
 			}
 		},
 		{

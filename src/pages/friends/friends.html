@@ -72,7 +72,7 @@
 			</ion-thumbnail>
 			<h2 (click)="viewProfile(friend.user_name,friend.user_id)">{{friend.user_firstname}} {{friend.user_lastname}}</h2>
 			<p>	{{friend.mutual_friends_count}} Mutual Friends <p>	
-			<button ion-button item-end icon-start padding>
+			<button ion-button item-end icon-start padding (click)="messageAction(friend)">
 			  <ion-icon name="chatbubbles"></ion-icon>
 			  Message
 			</button>

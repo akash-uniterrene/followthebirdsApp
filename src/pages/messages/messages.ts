@@ -22,7 +22,7 @@ export class MessagesPage {
   }
 
   ionViewDidLoad() {
-    this.user.getMessages({user_id:localStorage.getItem('user_id')}).then(data => {
+    this.user.getConversations({user_id:localStorage.getItem('user_id')}).then(data => {
 		let item = data[0];
 		for (var key in item) {
 			if(item[key].multiple_recipients){
@@ -37,6 +37,10 @@ export class MessagesPage {
   
   viewMessage(conversation){
 	  this.navCtrl.push('ViewMessagePage', {conversation: conversation});
+  }
+  
+  createConversation(){
+	this.navCtrl.push('CreateMessagePage');
   }
   
   isToday(data){
@@ -63,6 +67,10 @@ export class MessagesPage {
 		 }
 	 }
 	 
+  }
+  
+  goBack(){
+	this.navCtrl.setRoot('HomePage');
   }
   
 

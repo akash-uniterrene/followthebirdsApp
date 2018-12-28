@@ -294,7 +294,7 @@ export class User {
   }
   
   viewVault(params?: any){
-	  console.log(params);
+	console.log(params);
 	let items = [];	
 	let seq = this.api.get('view_vault', params).share();
 	// don't have the data yet
@@ -490,5 +490,63 @@ export class User {
 
     return seq;
   }
+  
+  getConversations(params: any){
+	console.log(params);
+	let messages = [];	
+	let seq = this.api.get('get_conversations', params).share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			messages.push(res);
+			resolve(messages);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});  
+  }
+  
+  getMessages(params: any){
+	let messages = [];
+	let seq = this.api.get('get_messages', params).share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			messages.push(res);
+			resolve(messages);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});  
+  }
+  
+  viewMessage(params: any){
+	console.log(params);
+	let messages = [];	
+	let seq = this.api.get('view_conversation', params).share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			messages = res;
+			resolve(messages);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});  
+  }
+  
+  postMessage(params: any){
+	let seq = this.api.post('post_message', params).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq; 
+  }
+  
+
   
 }

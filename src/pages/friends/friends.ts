@@ -59,6 +59,14 @@ export class FriendsPage {
 		event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.remove();
 	}
 	
+	messageAction(profile){
+		let recipient = {
+			name:profile.user_firstname+' '+profile.user_lastname,
+			picture:profile.user_picture,
+			id:profile.user_id
+	    };
+		this.navCtrl.push('ViewMessagePage', {conversation: recipient});
+	}
 	
 	connectAction(type,user_id){
 		let params :any = {

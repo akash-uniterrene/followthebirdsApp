@@ -6,12 +6,17 @@
         <ion-icon name="arrow-back"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title> {{ conversation.name }}</ion-title>
+	<div class="conversation_user">
+	  <img [src]="imageURL+conversation.picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" style="height: 100%;">
+	</div>
+    <ion-title class="chat-head"> {{ conversation.name }}</ion-title>
    </ion-toolbar>
 </ion-header>
 <ion-content>
 	<ion-list >
 	  <div *ngFor="let message of messages.messages" class="conversation left {{myId}}" [ngClass]="{'right': message.user_id == myId, 'left': message.user_id != myId}">
+		<ion-note class="msg_time" *ngIf="isToday(message.time)">{{ message.time | date: 'h:mm a' }}</ion-note>
+		<ion-note class="msg_time" *ngIf="!isToday(message.time)">{{ message.time | date: 'dd MMM' }}</ion-note> 
 		<div class="conversation_user">
 		  <img [src]="imageURL+message.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
 		</div>
@@ -19,10 +24,16 @@
 			{{message.message}}
 			<div *ngIf="message.image != ''"> <img [src]="imageURL+message.image"></div>			
 		</div>
-		<!-- <ion-note class="msg_time" *ngIf="isToday(message.time)">{{ message.time | date: 'h:mm a' }}</ion-note>
-		<ion-note class="msg_time" *ngIf="!isToday(message.time)">{{ message.time | date: 'dd MMM' }}</ion-note> -->
+		
 	  </div>
 	</ion-list>
+	<ion-row class="media_list">
+		<ion-col *ngFor="let photo of publishPhotos" col-4 class="publisher-photos">		
+			<div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(photo)" (click)="viewImage(photo)">
+			</div>
+		</ion-col>
+	</ion-row>
+	<input type="file" #postPhoto style="visibility: hidden; height: 0px;position:absolute" name="files[]" (change)="processWebImage($event)" multiple/>	
 </ion-content>
 <ion-footer no-padding>
   <ion-toolbar>
@@ -30,9 +41,15 @@
 	  <button ion-button icon-only color="primary">
 		<ion-icon name="add-circle"></ion-icon>
 	  </button>
+	  <button ion-button icon-only color="primary">
+		<ion-icon name="camera"></ion-icon>
+	  </button>
+	  <button ion-button icon-only color="primary" (tap)="uploadFromGallery()"> 
+		<ion-icon ios="ios-image" md="md-image"></ion-icon>
+	  </button>	  
 	</ion-buttons>
 	<ion-item no-lines>
-	  <ion-input type="text" class="chat_message" placeholder="Send message" [(ngModel)]="message"></ion-input>
+	  <ion-input type="text" class="chat_message" placeholder="Send message" [(ngModel)]="chatInfo.message"></ion-input>
 	</ion-item>
 	<ion-buttons right (tap)="sendMessage()" >
 	  <button ion-button icon-only color="primary">
