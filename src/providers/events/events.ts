@@ -53,17 +53,17 @@ export class EventsProvider {
   }
   
   getEventProfile(id:number,params: any){
-	let event :any;
-	let seq = this.api.get('event-profile/'+id, params).share();
-	// don't have the data yet
-	return new Promise(resolve => {
-		seq.subscribe((res: any) => {
-			event = res;
-			resolve(event);
-		}, err => {
-			console.error('ERROR', err);
+		let event :any;
+		let seq = this.api.get('event-profile/'+id, params).share();
+		// don't have the data yet
+		return new Promise(resolve => {
+			seq.subscribe((res: any) => {
+				event = res;
+				resolve(event);
+			}, err => {
+				console.error('ERROR', err);
+			});
 		});
-	});
   }
   
   create_event(cventInfo: any){

@@ -119,10 +119,9 @@ export class SignupPage {
       this.loading.present();
       //Attempt to login in through our User service
       this.user.signup(this.account).subscribe((resp) => {
-
         this.loading.dismiss();
         this.storage.setUser(resp);
-        this.navCtrl.push(MainPage);
+        this.navCtrl.setRoot(MainPage);
       }, (err) => {
 
         this.navCtrl.push(MainPage);

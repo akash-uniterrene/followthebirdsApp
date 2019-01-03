@@ -298,8 +298,8 @@ export class ViewVaultPage {
 		},
 		{
 			type:'radio',
-			label:'Share with External',
-			value:'external'
+			label:'Share with Message',
+			value:'message'
 		}],
 		buttons : [
 		{
@@ -325,6 +325,11 @@ export class ViewVaultPage {
 		if(type == 'status'){
 			this.navCtrl.setRoot("WhatsOnMindPage",{'files':filtered,handle:this.handle,id:this.handle_id,vault_type:this.type});
 		}
+		
+		if(type == 'message'){
+			this.navCtrl.setRoot("MessagesPage",{'files':filtered,handle:this.handle,id:this.handle_id,vault_type:this.type});
+		}
+		
 	}
   
 	deleteConfirm() {

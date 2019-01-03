@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, Nav, NavParams,  ToastController, MenuController, ModalController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, Nav, NavParams, Platform, ActionSheetController, ToastController, MenuController, ModalController, AlertController } from 'ionic-angular';
 import { FirstRunPage} from '../';
 import { Post } from '../../providers/post/post';
 import { Camera, CameraOptions } from '@ionic-native/camera';
@@ -54,12 +54,14 @@ export class PostPage {
     public toastCtrl: ToastController,
     public navParams: NavParams,  
     private camera: Camera,
+	public actionSheetCtrl: ActionSheetController,
     public menu: MenuController,
 	private photoViewer: PhotoViewer,
     public nav: Nav,
 	public modalCtrl: ModalController,
 	private transfer: FileTransfer,
 	private file: File,
+	private platform: Platform,
 	private alertCtrl: AlertController	
   ) {
   }
@@ -138,55 +140,162 @@ export class PostPage {
 	commentsModal.present();
   }
   
-    sharePostCtrl(post_id): void
+ sharePostCtrl(post_id): void
+  {
+	let prompt = this.alertCtrl.create({
+	title: 'Share this post',	
+	inputs : [
 	{
-		let prompt = this.alertCtrl.create({
-		title: 'Share this post',	
-		inputs : [
-		{
-			type:'radio',
-			label:'Share post now ',
-			value:post_id
-		},
-		{
-			type:'radio',
-			label:'Write Post',
-			value:post_id
-		}],
-		buttons : [
-		{
-			text: "Cancel",
-			handler: data => {
-			console.log("cancel clicked");
-			}
-		},
-		{
-			text: "Share",
-			handler: data => {
-				this.sharePost('share',post_id);
-			}
-		}]});
-		prompt.present();
-	}
+		type:'radio',
+		label:'Share post now ',
+		value:post_id
+	},
+	{
+		type:'radio',
+		label:'Write Post',
+		value:post_id
+	}],
+	buttons : [
+	{
+		text: "Cancel",
+		handler: data => {
+		console.log("cancel clicked");
+		}
+	},
+	{
+		text: "Share",
+		handler: data => {
+			this.sharePost('share',post_id);
+		}
+	}]});
+	prompt.present();
+  }
 	
-	sharePost(type,id){
-		this.post.sharePost({'do':type,id:id,my_id:localStorage.getItem('user_id')}).subscribe((resp) => {
-		  let toast = this.toastCtrl.create({
-			message: "Post has been shared successfully",
-			duration: 3000,
-			position: 'top',
-			dismissOnPageChange: true
-		  });
-        toast.present();	
-		}, (err) => {
-        let toast = this.toastCtrl.create({
-          message: "Unable to post. Retry",
-          duration: 3000,
-          position: 'top',
-          dismissOnPageChange: true
-        });
-        toast.present();
-      });
+  postActivity(event,post): void
+  {
+	let  buttons : any = [
+		{
+		  icon: !this.platform.is('ios') ? 'ios-bookmark' : null,	
+		  text: 'Save Post',
+		  handler: () => {
+			this.reactAction('save_post',post.post_id);
+		  }
+		}
+	];	
+	if(post.author_id != localStorage.getItem('user_id')){
+		let report : any = {
+		  icon: !this.platform.is('ios') ? 'ios-flag' : null,		
+		  text: 'Report Post',
+		  handler: () => {
+			this.reportAction("post",post.post_id)
+		  }
+		};
+		
+		let hide : any = {
+		  icon: !this.platform.is('ios') ? 'ios-eye-off' : null,		
+		  text: 'Hide Post',
+		  handler: () => {
+			event.target.parentNode.parentNode.parentNode.parentNode.remove();
+			this.reactAction("hide_post",post.post_id)
+		  }
+		};
+		
+		
+		buttons.push(report);
+		buttons.push(hide);
 	}
+	if(post.author_id == localStorage.getItem('user_id')){
+		let btn : any = {
+		  icon: !this.platform.is('ios') ? 'ios-trash' : null,		
+		  text: 'Delete Post',
+		  handler: () => {
+			const confirm = this.alertCtrl.create({
+			  title: 'Delete post?',
+			  message: 'Once you delete you can not undo this step.',
+			  buttons: [
+				{
+				  text: 'Cancel',
+				  handler: () => {
+					
+				  }
+				}
+				,{
+				  text: 'Delete',
+				  handler: () => {
+					event.target.parentNode.parentNode.parentNode.parentNode.remove();
+					this.reactAction("delete_post",post.post_id)
+				  }
+				}
+			  ]
+			});
+			confirm.present();  
+		  }
+		};
+		buttons.push(btn);
+	}
+	const actionSheet = this.actionSheetCtrl.create({
+	  buttons
+	});
+	actionSheet.present();
+  }
+  
+
+  sharePost(type,id){
+	this.post.sharePost({'do':type,id:id,my_id:localStorage.getItem('user_id')}).subscribe((resp) => {
+	  let toast = this.toastCtrl.create({
+		message: "Post has been shared successfully",
+		duration: 3000,
+		position: 'top',
+		dismissOnPageChange: true
+	  });
+	toast.present();	
+	}, (err) => {
+	let toast = this.toastCtrl.create({
+	  message: "Unable to post. Retry",
+	  duration: 3000,
+	  position: 'top',
+	  dismissOnPageChange: true
+	});
+	toast.present();
+  });
+  }
+	
+  reactAction(type,post_id){
+	let params :any = {
+		'do': type,
+		'id': post_id,
+		'my_id' : localStorage.getItem('user_id')
+	};
+	this.post.reaction(params).subscribe((resp) => {						
+		
+	}, (err) => {
+	
+	});
+  }
+  
+  reportAction(handle,id){
+	let params :any = {
+		'handle': handle,
+		'id': id,
+		'my_id' : localStorage.getItem('user_id')
+	};
+	this.user.report(params).subscribe((resp) => {						
+	  let toast = this.toastCtrl.create({
+		message: "Report has been submitted successfully",
+		duration: 3000,
+		position: 'top',
+		dismissOnPageChange: true
+	  });
+	  toast.present();
+	}, (err) => {
+	  let toast = this.toastCtrl.create({
+		message: "Failed to Submit Report. Please Try Again",
+		duration: 3000,
+		position: 'top',
+		dismissOnPageChange: true
+	  });
+	  toast.present();
+	});
+  }
   
 }

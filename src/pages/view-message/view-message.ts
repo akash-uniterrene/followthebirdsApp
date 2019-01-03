@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController, ModalController } from 'ionic-angular';
 import { User } from '../../providers';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 /**
  * Generated class for the ViewMessagePage page.
  *
@@ -20,7 +21,7 @@ export class ViewMessagePage {
   private conversation : any = [];
   private messages : any = [];
   private imageURL = "https://dev.followthebirds.com/content/uploads/";
-  
+  private group = false;
   public publishPhotos : any = [];
   
   public chatBox : any = {
@@ -43,7 +44,7 @@ export class ViewMessagePage {
   
   private recipients = [];
   
-  constructor(public navCtrl: NavController, public user: User, formBuilder: FormBuilder, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public user: User, formBuilder: FormBuilder, public modalCtrl: ModalController, private camera: Camera, public toastCtrl: ToastController, public loadingCtrl: LoadingController, public navParams: NavParams) {
 	  this.postPhotoOptions = formBuilder.group({
 		file: [],
 		type: "photos",
@@ -52,12 +53,12 @@ export class ViewMessagePage {
 		user_id : localStorage.getItem('user_id')
 	  });
 	  this.conversation = navParams.get('conversation') || [];
-	  
+	  this.group = navParams.get('group') || false;
+	  console.log(this.group);
 	  if(this.conversation.conversation_id) {
 		this.chatInfo['conversation_id'] = this.conversation.conversation_id;
 	  } else {
 		this.recipients.push(this.conversation.id);
-		console.log(this.conversation);
 		this.chatInfo['recipients'] = this.recipients;
 	  }
 	}
@@ -65,18 +66,48 @@ export class ViewMessagePage {
 	ionViewDidLoad() {	 
 	  if(this.conversation.conversation_id) {		
 		this.user.viewMessage({user_id:localStorage.getItem('user_id'),conversation_id:this.conversation.conversation_id}).then(data => {
-			this.messages = data;	
+			this.messages = data['messages'];	
 		});
 	  } else {
 		this.user.getMessages({user_id:localStorage.getItem('user_id'),ids:this.conversation.id}).then(data => {
-		   this.messages = data[0];
+		   if(data[0].messages){
+			   this.messages = data[0].messages;   
+		   }	   
 		   if(data[0].conversation_id){
-			console.log(data[0].conversation_id);	
 			this.chatInfo['conversation_id'] = data[0].conversation_id;
 		   }
 		});
 	  }
 	}
+	
+	takeCameraSnap(){
+		const options: CameraOptions = {
+		  quality: 100,
+		  destinationType: this.camera.DestinationType.DATA_URL,
+		  sourceType: this.camera.PictureSourceType.CAMERA,
+		  encodingType: this.camera.EncodingType.JPEG,
+		  mediaType: this.camera.MediaType.PICTURE,
+		  allowEdit:true,
+		  targetWidth: 500,
+		  targetHeight: 500,
+		  saveToPhotoAlbum: true,
+		  correctOrientation: true //Corrects Android orientation quirks
+		};	
+		
+		this.camera.getPicture(options).then((imageData) => {
+		  // imageData is either a base64 encoded string or a file URI
+		   this.postPhotoOptions.patchValue({ 'file': "data:image/jpeg;base64,"+imageData }); 
+		   this.postPhotoOptions.patchValue({ 'multiple': false });
+		   this.uploadPhoto(this.postPhotoOptions);
+		 }, (err) => {
+			alert('Unable to take photo');
+		 });
+	}
+	
+	uploadFromVault(){
+		let profileModal = this.modalCtrl.create("VaultsPage", {'filter':"image",handle:'chat',conversation_id:this.conversation.conversation_id});
+		profileModal.present();
+    }
   
   sendMessage(){
 	  this.user.postMessage(this.chatInfo).subscribe((resp) => {	
@@ -84,7 +115,8 @@ export class ViewMessagePage {
 		this.chatBox.image = resp['image'];
 		this.chatBox.message = resp['message'];
 		this.chatBox.time = resp['time'];
-		this.messages.messages.push(this.chatBox);
+		this.messages.push(this.chatBox);
+		this.publishPhotos = [];
 	}, (err) => {
 		
 	});
@@ -113,6 +145,15 @@ export class ViewMessagePage {
 	 }
 	 
   }
+  
+	messageAction(profile){
+		let recipient = {
+			name:profile.user_firstname+' '+profile.user_lastname,
+			picture:profile.user_picture,
+			id:profile.user_id
+		};
+		this.navCtrl.setRoot('ViewMessagePage', {conversation: recipient});
+	}
   
   getBackgroundStyle(url) {
 	if(!url){
@@ -145,7 +186,7 @@ export class ViewMessagePage {
 	 this.user.photoUploader(params).subscribe((resp) => {
 		loading.dismiss();	
 		this.publishPhotos.push(resp);
-		this.chatInfo['photo'] = JSON.stringify(this.publishPhotos);
+		this.chatInfo['photo'] = JSON.stringify(this.publishPhotos[0]);
 	}, (err) => {
 		loading.dismiss();		
 	  let toast = this.toastCtrl.create({
@@ -158,6 +199,6 @@ export class ViewMessagePage {
 	}
   
   goBack(){
-	  this.navCtrl.pop();
+	this.navCtrl.setRoot('MessagesPage');
   }
 }

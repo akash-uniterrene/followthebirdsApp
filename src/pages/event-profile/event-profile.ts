@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, Nav, NavParams, ActionSheetController, ModalController, AlertController, ToastController, Platform, MenuController, LoadingController, } from 'ionic-angular';
-import { FirstRunPage} from '../';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Post } from '../../providers/post/post';
 import { EventsProvider } from '../../providers/events/events';
@@ -78,11 +77,11 @@ export class EventProfilePage {
   ) {
 	  this.eventProfileId = navParams.get('eventProfile') || 3;
 	  this.events.getEventProfile(parseInt(this.eventProfileId),{'user_id':localStorage.getItem('user_id'),'filter':'all'}).then(data => {
-		this.eventProfile = data;
-		this.getPost();	
-		this.postElement['handle'] = "event";
-		this.postElement['id'] = this.eventProfile['event_id'];	
-	 });
+			this.eventProfile = data;
+			this.getPost();	
+			this.postElement['handle'] = "event";
+			this.postElement['id'] = this.eventProfile['event_id'];	
+		});
 	this.coverPhotoOptions = formBuilder.group({
 		file: "assets/followthebirdImgs/coverimage.png",
 		type: "photos",
@@ -157,9 +156,15 @@ export class EventProfilePage {
 		const options: CameraOptions = {
 		  quality: 100,
 		  destinationType: this.camera.DestinationType.DATA_URL,
+		  sourceType: this.camera.PictureSourceType.CAMERA,
 		  encodingType: this.camera.EncodingType.JPEG,
-		  mediaType: this.camera.MediaType.PICTURE
-		};
+		  mediaType: this.camera.MediaType.PICTURE,
+		  allowEdit:true,
+		  targetWidth: 500,
+		  targetHeight: 500,
+		  saveToPhotoAlbum: true,
+		  correctOrientation: true //Corrects Android orientation quirks
+		};	
 		
 		this.camera.getPicture(options).then((imageData) => {
 		  // imageData is either a base64 encoded string or a file URI
@@ -235,6 +240,77 @@ export class EventProfilePage {
 		});
 	}
 	
+	eventOptionAction(event){
+		if(event.event_admin != localStorage.getItem('user_id')){
+		   const actionSheet = this.actionSheetCtrl.create({
+			  buttons: [
+				{
+				  icon: !this.platform.is('ios') ? 'ios-camera' : null,	
+				  text: 'Save Event',
+				  handler: () => {
+					
+				  }
+				},{
+				  icon: !this.platform.is('ios') ? 'close' : null,
+				  text: 'Cancel',
+				  role: 'cancel',
+				  handler: () => {
+				  }
+				}
+			  ]
+			});
+			actionSheet.present();
+		} else {
+			const actionSheet = this.actionSheetCtrl.create({
+			  buttons: [
+				{
+				  icon: !this.platform.is('ios') ? 'ios-create' : null,	
+				  text: 'Edit Event',
+				  handler: () => {
+					//this.editEvent(event.event_id);
+				  }
+				},{
+				  icon: !this.platform.is('ios') ? 'ios-trash' : null,		
+				  text: 'Delete Event',
+				  handler: () => {
+					const confirm = this.alertCtrl.create({
+					  title: 'Delete event?',
+					  message: 'Once you delete you can not undo this step.',
+					  buttons: [
+						{
+						  text: 'Cancel',
+						  handler: () => {
+							
+						  }
+						}
+						,{
+						  text: 'Delete',
+						  handler: () => {
+							this.deleteEvent();
+						  }
+						}
+					  ]
+					});
+					confirm.present();    
+					
+				  }
+				},{
+				  icon: !this.platform.is('ios') ? 'close' : null,
+				  text: 'Cancel',
+				  role: 'cancel',
+				  handler: () => {
+				  }
+				}
+			  ]
+			});
+			actionSheet.present();
+		}
+		
+	}
+	
+	getMembers(type){
+		this.navCtrl.push("EventMembersPage",{event_id:this.eventProfile.event_id,type:type});
+	}
   
     eventGoAction(type,uid){
 		this.connectAction(type);
@@ -246,11 +322,16 @@ export class EventProfilePage {
 		this.is_going = 0;
 	}
 
+	eventInviteAction(event,uid){
+		event.target.innerText = "Invited";
+		this.connectAction('event-invite',uid);
+	}
+	
 	eventInterestAction(type){
 		this.connectAction(type);
 		this.is_interested = 1;
 	}
-
+	
 	eventUninterestAction(type){
 		this.connectAction(type);
 		this.is_interested = 0;
@@ -331,6 +412,30 @@ export class EventProfilePage {
 			
 		}, (err) => {
 		
+		});
+	}
+	
+	deleteEvent(){
+		let params = {
+			id:this.eventProfile.event_id,
+			my_id: localStorage.getItem('user_id'),
+			handle:'event'
+		}
+		this.user.activityDelete(params).subscribe((resp) => {
+			let toast = this.toastCtrl.create({
+				message: "Event Deleted",
+				duration: 3000,
+				position: 'top'
+			});
+			toast.present();
+			this.navCtrl.setRoot('HomePage');
+		}, (err) => {
+			let toast = this.toastCtrl.create({
+				message: "Failed to Delete event! Try Again later",
+				duration: 3000,
+				position: 'top'
+			});
+			toast.present();
 		});
 	}
 

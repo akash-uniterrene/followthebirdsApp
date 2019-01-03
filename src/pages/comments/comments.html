@@ -15,7 +15,7 @@
 	<ion-list no-lines *ngFor="let comment of comments" text-wrap>
 	  <ion-item >
 		<ion-avatar item-start>
-		  <img [src]="imageURL+comment.author_picture">
+		  <img [src]="imageURL+comment.author_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
 		</ion-avatar>
 		<ion-label class="commant-wrap"> 
 			<div  class="comment-box" >

@@ -46,4 +46,18 @@ export class Groups {
     return seq;
   }
 
+  getGroupProfile(id:number,params: any){
+		let event :any;
+		let seq = this.api.get('group-profile/'+id, params).share();
+		// don't have the data yet
+		return new Promise(resolve => {
+			seq.subscribe((res: any) => {
+				event = res;
+				resolve(event);
+			}, err => {
+				console.error('ERROR', err);
+			});
+		});
+  }
+
 }

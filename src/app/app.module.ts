@@ -26,8 +26,11 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file';
 import { AlbumProvider } from '../providers/album/album';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
+
+import {IonTagsInputModule} from "@angular/ionic-tags-input";
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -53,6 +56,7 @@ export function provideSettings(storage: Storage) {
   ],
   imports: [
     BrowserModule,
+	IonTagsInputModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {

@@ -14,11 +14,15 @@ import { User } from '../../providers';
   templateUrl: 'messages.html',
 })
 export class MessagesPage {
+  public onlineUsers = [];
+  public offlineUsers = [];
   messagezone: string = "messages";
   public messages : any = [];
   public groups : any = [];
   private imageURL = "https://dev.followthebirds.com/content/uploads/";
   constructor(public navCtrl: NavController, public user: User, public navParams: NavParams) {
+	  this.getOnlineUsers();
+	  this.getOfflineUsers();
   }
 
   ionViewDidLoad() {
@@ -35,12 +39,33 @@ export class MessagesPage {
 	});
   }
   
-  viewMessage(conversation){
-	  this.navCtrl.push('ViewMessagePage', {conversation: conversation});
+  getOnlineUsers(){
+	 this.user.getOnlineUsers({user_id: parseInt(localStorage.getItem('user_id'))})
+	.then(data => {
+		this.onlineUsers = data[0];
+	}); 
   }
   
+  getOfflineUsers(){
+	 this.user.getOfflineUsers({user_id: parseInt(localStorage.getItem('user_id'))})
+	.then(data => {
+		this.offlineUsers = data[0];
+	}); 
+  }
+  
+  
+  
+  viewMessage(conversation){
+	  this.navCtrl.setRoot('ViewMessagePage', {conversation: conversation});
+  }
+  
+  viewMessageGroup(conversation,group){
+	  this.navCtrl.setRoot('ViewMessagePage', {conversation: conversation,group:group});
+  }
+  
+  
   createConversation(){
-	this.navCtrl.push('CreateMessagePage');
+	this.navCtrl.setRoot('CreateMessagePage');
   }
   
   isToday(data){
@@ -68,7 +93,15 @@ export class MessagesPage {
 	 }
 	 
   }
-  
+	messageAction(profile){
+		let recipient = {
+			name:profile.user_firstname+' '+profile.user_lastname,
+			picture:profile.user_picture,
+			id:profile.user_id
+		};
+		this.navCtrl.push('ViewMessagePage', {conversation: recipient});
+	}
+	
   goBack(){
 	this.navCtrl.setRoot('HomePage');
   }

@@ -162,6 +162,44 @@ export class User {
 	});
   }
   
+   /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  getOnlineUsers(params?: any) {
+	let onlineUsers = [];	
+	let seq = this.api.get('get_online_users', params).share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			onlineUsers.push(res);
+			resolve(onlineUsers);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+  /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
+  getOfflineUsers(params?: any) {
+	let onlineUsers = [];	
+	let seq = this.api.get('get_offline_users', params).share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			onlineUsers.push(res);
+			resolve(onlineUsers);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+  
+  
   queryUsers(id:number,params?: any) {
     let frindlist = [];	
 	let seq = this.api.get('search/'+id, params).share();
@@ -310,6 +348,18 @@ export class User {
   
   createNewVault(params){
     let seq = this.api.post('create-vault', params).share();
+
+    seq.subscribe((res: any) => {
+     
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+      return seq;
+  }
+  
+  activityDelete(params){
+    let seq = this.api.post('activity-delete', params).share();
 
     seq.subscribe((res: any) => {
      

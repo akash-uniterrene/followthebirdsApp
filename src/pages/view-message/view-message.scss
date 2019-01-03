@@ -83,6 +83,8 @@ page-view-message {
         background-position: center center !important; 
     }
 	.media_list {
+		position: absolute;
+		width: 100%;
 		border: 1px solid #e0e0e0;
 		border-radius: 15px;
 		border-bottom: 0;
@@ -91,4 +93,23 @@ page-view-message {
 		border-right: 1px solid #e8e8e8;
 	}
 	
+	.group_avater_wrap {
+		position: relative;
+		max-width: 40px;
+		overflow: hidden;
+		border-radius: 50%;
+	}
+	
+	.group_avater:first-child {
+		position: absolute;
+		left: -18px;
+		border-radius: 0px;
+	}
+	
+	.group_avater:last-child {
+		position: absolute;
+		right: -18px;
+		top: 0;
+		border-radius: 0px;
+	}
 }

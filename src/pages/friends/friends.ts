@@ -15,6 +15,7 @@ import { User } from '../../providers';
   templateUrl: 'friends.html',
 })
 export class FriendsPage {
+	public onlineUsers = [];
 	private profile_id : number;
 	friendLists: any;
 	friendzone: string = "suggested";
@@ -41,6 +42,13 @@ export class FriendsPage {
 		console.log(this.getSuggestedUsers);
 	});
 		
+  }
+  
+  getOnlineUsers(){
+	 this.user.getOnlineUsers({user_id: parseInt(localStorage.getItem('user_id'))})
+	.then(data => {
+		this.onlineUsers = data[0];
+	}); 
   }
   
 	addAction(event,user) {

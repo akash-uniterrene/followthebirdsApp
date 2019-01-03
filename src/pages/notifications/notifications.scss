@@ -8,4 +8,11 @@ page-notifications {
 	ion-item.item.item-block.item-md.seen {
 		background: #fff;
 	}
+	
+	.msg_time {
+		width: 100%;
+		display: block;
+		overflow: hidden;
+		font-size: 11px;
+	}
 }

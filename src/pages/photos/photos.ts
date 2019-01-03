@@ -71,7 +71,8 @@ export class PhotosPage {
 	getAlbum(album_id){
 		this.navCtrl.push("AlbumPage",{'album_id':album_id});
 	}
-  goBack(){
+	
+	goBack(){
 	  this.navCtrl.setRoot("HomePage");
   }
   

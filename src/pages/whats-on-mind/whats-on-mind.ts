@@ -146,7 +146,7 @@ export class WhatsOnMindPage {
   }
 
   closeModal(){
-    this.modal.dismiss();
+    this.navCtrl.setRoot('HomePage');
   }
   
   setUser(){    
@@ -172,7 +172,7 @@ export class WhatsOnMindPage {
       //Attempt to login in through our User service
       this.post.publishPost(this.publisherInfo).subscribe((resp) => {
         this.loading.dismiss();
-        this.navCtrl.setRoot("HomePage");
+        this.closeModal();
       }, (err) => {
         this.loading.dismiss();
         let toast = this.toastCtrl.create({
@@ -314,9 +314,15 @@ export class WhatsOnMindPage {
 		const options: CameraOptions = {
 		  quality: 100,
 		  destinationType: this.camera.DestinationType.DATA_URL,
+		  sourceType: this.camera.PictureSourceType.CAMERA,
 		  encodingType: this.camera.EncodingType.JPEG,
-		  mediaType: this.camera.MediaType.PICTURE
-		};
+		  mediaType: this.camera.MediaType.PICTURE,
+		  allowEdit:true,
+		  targetWidth: 500,
+		  targetHeight: 500,
+		  saveToPhotoAlbum: true,
+		  correctOrientation: true //Corrects Android orientation quirks
+		};	
 		
 		this.camera.getPicture(options).then((imageData) => {
 		  // imageData is either a base64 encoded string or a file URI
