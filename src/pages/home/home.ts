@@ -5,6 +5,7 @@ import { Post } from '../../providers/post/post';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
+
 /**
  * Generated class for the HomePage page.
  *
@@ -25,7 +26,6 @@ type PageList = PageItem[]
 export class HomePage {
 	public savedUser : any;
 	public user_live_notifications_counter = '';
-	public user_live_messages_counter = '';
 	public user_live_requests_counter = '';
   pages: PageList;
 	introduction = 'PostPage';  

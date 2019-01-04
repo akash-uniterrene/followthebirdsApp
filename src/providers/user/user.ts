@@ -34,12 +34,14 @@ export class User {
 		private file: File
 	)  { 
 					
-		}
+		}	
 	fileTransfer: FileTransferObject = this.transfer.create();
   /**
    * Send a POST request to our login endpoint with the data
    * the user entered on the form.
    */
+	
+
   login(accountInfo: any) {
     let seq = this.api.post('sign_in', accountInfo).share();
 

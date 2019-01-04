@@ -14,6 +14,7 @@ import { User } from '../../providers';
   templateUrl: 'messages.html',
 })
 export class MessagesPage {
+	public user_live_messages_counter = '';
   public onlineUsers = [];
   public offlineUsers = [];
   messagezone: string = "messages";
@@ -22,7 +23,8 @@ export class MessagesPage {
   private imageURL = "https://dev.followthebirds.com/content/uploads/";
   constructor(public navCtrl: NavController, public user: User, public navParams: NavParams) {
 	  this.getOnlineUsers();
-	  this.getOfflineUsers();
+		this.getOfflineUsers();
+		this.getProfileData(localStorage.getItem('user_id'));
   }
 
   ionViewDidLoad() {
@@ -37,6 +39,17 @@ export class MessagesPage {
 		 
 		}		
 	});
+	}
+	
+	getProfileData(id){
+		this.user.updateProfile(id).subscribe((resp) => {	
+			this.user_live_messages_counter = resp['user_live_messages_counter'];
+			if(this.user_live_messages_counter == '0'){
+				this.user_live_messages_counter = '';
+			}
+		}, (err) => {
+			
+		});	
   }
   
   getOnlineUsers(){
