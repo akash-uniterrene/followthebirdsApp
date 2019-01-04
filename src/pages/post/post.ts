@@ -66,7 +66,6 @@ export class PostPage {
 	private alertCtrl: AlertController	
   ) {
   }
- 
   ionViewDidLoad() {
 	this.isAndroid = this.platform.is("android");
 	this.postElement['handle'] = "me";
