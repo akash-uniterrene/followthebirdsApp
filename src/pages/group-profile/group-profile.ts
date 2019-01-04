@@ -108,6 +108,51 @@ export class GroupProfilePage {
 		});
   }
 
+	settingAction(){
+		const actionSheet = this.actionSheetCtrl.create({
+		  title: 'Settings',
+		  buttons: [
+			{
+			  icon: !this.platform.is('ios') ? 'ios-create' : null,	
+			  text: 'Edit Group Details',
+			  handler: () => {
+					this.editGroup();
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'ios-trash' : null,		
+			  text: 'Delete Group',
+			  handler: () => {
+					const confirm = this.alertCtrl.create({
+						title: 'Delete group?',
+						message: 'Once you delete you can not undo this step.',
+						buttons: [
+						{
+							text: 'Cancel',
+							handler: () => {
+							}
+						}
+						,{
+							text: 'Delete',
+							handler: () => {							
+								this.deleteGroup()
+							}
+						}
+						]
+					});
+					confirm.present();  
+			  }
+			},{
+			  icon: !this.platform.is('ios') ? 'close' : null,
+			  text: 'Cancel',
+			  role: 'cancel',
+			  handler: () => {
+			  }
+			}
+		  ]
+		});
+		actionSheet.present();
+	}
+
  
   getBackgroundStyle(url) {
 		if(!url){
@@ -322,6 +367,32 @@ export class GroupProfilePage {
 			
 		}, (err) => {
 		
+		});
+	}
+	editGroup(){
+		this.navCtrl.push("GroupEditPage",{'group':this.groupProfile});
+	}
+	deleteGroup(){
+		let params = {
+			id:this.groupProfile.group_id,
+			my_id: localStorage.getItem('user_id'),
+			handle:'group'
+		}
+		this.user.activityDelete(params).subscribe((resp) => {
+			let toast = this.toastCtrl.create({
+				message: "Group Deleted",
+				duration: 3000,
+				position: 'top'
+			});
+			toast.present();
+			this.navCtrl.setRoot('HomePage');
+		}, (err) => {
+			let toast = this.toastCtrl.create({
+				message: "Failed to Delete group! Try Again later",
+				duration: 3000,
+				position: 'top'
+			});
+			toast.present();
 		});
 	}
 

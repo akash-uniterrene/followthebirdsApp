@@ -23,7 +23,10 @@ type PageList = PageItem[]
   templateUrl: 'home.html',
 })
 export class HomePage {
-  public savedUser : any;
+	public savedUser : any;
+	public user_live_notifications_counter = '';
+	public user_live_messages_counter = '';
+	public user_live_requests_counter = '';
   pages: PageList;
 	introduction = 'PostPage';  
 	settingsPage = 'UserSettingsPage';
@@ -32,17 +35,18 @@ export class HomePage {
 	NotificationsPage = 'NotificationsPage';	
 	profilePageParams = { id: localStorage.getItem('user_id') };
 	countCarItem = 99;
+	badgeCount = 3;
   constructor(
     public navCtrl: NavController, 
-	public user: User,
-	public post: Post,  
-	public storage: StorageProvider,
-	public toastCtrl: ToastController,
+		public user: User,
+		public post: Post,  
+		public storage: StorageProvider,
+		public toastCtrl: ToastController,
     public navParams: NavParams,  
     private camera: Camera,
     public menu: MenuController,
     public nav: Nav 
-    ) {
+   ) {
      // localStorage.setItem('user_intro', 'false');
     
 		this.menu.enable(false); 
@@ -50,6 +54,7 @@ export class HomePage {
 		this.getProfileData(localStorage.getItem('user_id'));
 		this.sliderOpen();
 	  }	  	  
+	
 	sliderOpen(){		 
 		if(localStorage.getItem('user_firstname') || localStorage.getItem('user_id')){
 		  if(localStorage.getItem('user_intro') != "true" && localStorage.getItem('user_picture_id') == 'null'){
@@ -100,19 +105,41 @@ export class HomePage {
 	  console.log(ev.target.value);
 	  this.navCtrl.setRoot("SearchPage",{'event':ev.target.value});
   }
-  
+	
+	resetAlert(type){
+		this.user.resetAlert({my_id:localStorage.getItem('user_id'),type:type}).subscribe((resp) => {
+			if(type == 'notifications'){
+				this.user_live_notifications_counter = '';
+			}
+			if(type == 'requests'){
+				this.user_live_requests_counter = '';
+			}
+		}, (err) => {
+			
+		});	
+	}
   
   getProfileData(id){
-	this.user.updateProfile(id).subscribe((resp) => {	
-		this.storage.setUser(resp);			
-	}, (err) => {
-	  let toast = this.toastCtrl.create({
-		message: "unable to refresh",
-		duration: 3000,
-		position: 'top'
-	  });
-	  toast.present();
-	});	
+		this.user.updateProfile(id).subscribe((resp) => {	
+			this.storage.setUser(resp);			
+			this.user_live_notifications_counter = resp['user_live_notifications_counter'];
+			this.user_live_requests_counter = resp['user_live_requests_counter'];
+			if(this.user_live_requests_counter == '0'){
+				this.user_live_requests_counter = '';
+			}
+			if(this.user_live_notifications_counter == '0'){
+				this.user_live_notifications_counter = '';
+			}
+			
+			this.user_live_messages_counter = resp['user_live_messages_counter'];
+		}, (err) => {
+			let toast = this.toastCtrl.create({
+			message: "unable to refresh",
+			duration: 3000,
+			position: 'top'
+			});
+			toast.present();
+		});	
   }
   
 

@@ -303,61 +303,66 @@ export class User {
   }   
   
   getNotifications(params?: any){
-	let notificationsList = [];	
-	let seq = this.api.get('notifications/'+localStorage.getItem('user_id'), params).share();
+		let notificationsList = [];	
+		let seq = this.api.get('notifications/'+localStorage.getItem('user_id'), params).share();
 
-	// don't have the data yet
-	return new Promise(resolve => {
-		seq.subscribe((res: any) => {
-			notificationsList.push(res);
-			resolve(notificationsList);
-		}, err => {
-			console.error('ERROR', err);
+		// don't have the data yet
+		return new Promise(resolve => {
+			seq.subscribe((res: any) => {
+				notificationsList.push(res);
+				resolve(notificationsList);
+			}, err => {
+				console.error('ERROR', err);
+			});
 		});
-	});
   }
   
   getVaultStorage(params?: any) {
-	let vaults = [];	
-	let seq = this.api.get('vault', params).share();
-	// don't have the data yet
-	return new Promise(resolve => {
-		seq.subscribe((res: any) => {
-			vaults.push(res);
-			resolve(vaults);
-		}, err => {
-			console.error('ERROR', err);
+		let vaults = [];	
+		let seq = this.api.get('vault', params).share();
+		// don't have the data yet
+		return new Promise(resolve => {
+			seq.subscribe((res: any) => {
+				vaults.push(res);
+				resolve(vaults);
+			}, err => {
+				console.error('ERROR', err);
+			});
 		});
-	});
   }
   
   viewVault(params?: any){
-	console.log(params);
 	let items = [];	
-	let seq = this.api.get('view_vault', params).share();
-	// don't have the data yet
-	return new Promise(resolve => {
-		seq.subscribe((res: any) => {
-			items.push(res);
-			resolve(items);
-		}, err => {
-			console.error('ERROR', err);
+		let seq = this.api.get('view_vault', params).share();
+		// don't have the data yet
+		return new Promise(resolve => {
+			seq.subscribe((res: any) => {
+				items.push(res);
+				resolve(items);
+			}, err => {
+				console.error('ERROR', err);
+			});
 		});
-	});
   }
   
   createNewVault(params){
     let seq = this.api.post('create-vault', params).share();
-
-    seq.subscribe((res: any) => {
-     
+    seq.subscribe((res: any) => {  
     }, err => {
       console.error('ERROR', err);
     });
-
-      return seq;
+    return seq;
   }
-  
+	
+	resetAlert(params?: any){
+		let seq = this.api.post('reset', params).share();
+    seq.subscribe((res: any) => {  
+    }, err => {
+      console.error('ERROR', err);
+    });
+    return seq;
+	}
+	
   activityDelete(params){
     let seq = this.api.post('activity-delete', params).share();
 

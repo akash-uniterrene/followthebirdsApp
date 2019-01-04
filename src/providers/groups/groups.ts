@@ -44,7 +44,19 @@ export class Groups {
     });
 
     return seq;
-  }
+	}
+	
+	edit_group(groupInfo: any){
+		let seq = this.api.post('edit_group', groupInfo).share();
+		seq.subscribe((res: any) => {
+			// If the API returned a successful response, mark the user as logged in
+		}, err => {
+			console.error('ERROR', err);
+		});
+		return seq;
+	}
+		
+		
 
   getGroupProfile(id:number,params: any){
 		let event :any;

@@ -239,7 +239,7 @@
 							<source [src]="imageURL+vid.source" type="video/mp4"/>
 						</video>
 					</div>
-					<div *ngIf="feeds.post_type == 'audio'">
+					<div *ngIf="feeds.post_type == 'audio'" style="text-align: center;">
 						<audio controls *ngFor="let aud of feeds.audio">
 						  <source [src]="imageURL+aud.source" type="audio/mpeg">
 						  Your browser does not support the audio element.
