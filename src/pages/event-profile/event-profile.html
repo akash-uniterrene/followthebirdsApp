@@ -48,7 +48,7 @@
           <button ion-button clear block full > <ion-icon name="share" ></ion-icon> Share </button>
 	  </ion-col>
 	  <ion-col ion-col col-3>
-          <button ion-button clear block full > <ion-icon name="ios-more"></ion-icon> more </button>
+          <button ion-button clear block full (click)="eventOptionAction(eventProfile)" > <ion-icon name="ios-more"></ion-icon> more </button>
 	  </ion-col>
 	  
     </ion-row>
@@ -85,7 +85,7 @@
 	  <ion-segment-button value="details">
 		<button ion-button clear block full>               
 		  About
-	  </button>
+		</button>
 	  </ion-segment-button>
 	  <ion-segment-button value="timeline">
 		<button ion-button clear block full>               
@@ -113,18 +113,18 @@
 		  <ion-grid class="editInfoGrid lowHeight">
 			  <ion-row>
 				<ion-col col-4>
-				  <button ion-button block full>               
-					  7.3K
+				  <button ion-button block full (click)="getMembers('event_going')">               
+					  {{eventProfile.event_going}}
 				  </button>
 				</ion-col>
 				<ion-col col-4>
-					<button ion-button block full (click)="viewPhotos(profile.user_id)">               
-					  11K
+					<button ion-button block full (click)="getMembers('event_interested')">               
+					  {{eventProfile.event_interested}}
 					</button>
 				  </ion-col>
 				  <ion-col col-4>
-					<button ion-button block full (click)="listFriends()">                  
-					  705
+					<button ion-button block full (click)="getMembers('event_invited')">                  
+					  {{eventProfile.event_invited}}
 					</button>
 				  </ion-col>
 			  </ion-row>
@@ -141,19 +141,18 @@
 				  </ion-col>
 				  <ion-col col-4 class="no-border">
 					<button ion-button clear block full (click)="listFriends()">                  
-					  Share
+					  Invited
 					</button>
 				  </ion-col>
 			  </ion-row>
-			  
 		  </ion-grid>
 			<ion-list style="border-top: 9px solid #e8e8e8;" no-lines>
-			   <ion-item *ngFor="let invite of eventProfile.invites">
+			   <ion-item *ngFor="let invite of eventProfile.invites | slice:0:10; let i=index" >
 				<ion-avatar item-start>
 				  <img [src]="imageURL+invite.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">
 				</ion-avatar>
 				<h2>{{invite.user_firstname}} {{invite.user_lastname}}</h2>
-				<button ion-button item-end outline padding-left padding-right (click)="connectAction('event-invite',invite.user_id)">
+				<button ion-button item-end outline padding-left padding-right (click)="eventInviteAction($event,invite.user_id)">
 				  Invite
 				</button>
 			  </ion-item>
@@ -183,7 +182,7 @@
 					<source [src]="imageURL+vid.source" type="video/mp4"/>
 				</video>
 			</div>
-			<div *ngIf="feeds.post_type == 'audio'">
+			<div *ngIf="feeds.post_type == 'audio'" style="text-align: center;">
 				<audio controls *ngFor="let aud of feeds.audio">
 				  <source [src]="imageURL+aud.source" type="audio/mpeg">
 				  Your browser does not support the audio element.

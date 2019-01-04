@@ -240,9 +240,15 @@ export class ProfilePage {
 		const options: CameraOptions = {
 		  quality: 100,
 		  destinationType: this.camera.DestinationType.DATA_URL,
+		  sourceType: this.camera.PictureSourceType.CAMERA,
 		  encodingType: this.camera.EncodingType.JPEG,
-		  mediaType: this.camera.MediaType.PICTURE
-		};
+		  mediaType: this.camera.MediaType.PICTURE,
+		  allowEdit:true,
+		  targetWidth: 500,
+		  targetHeight: 500,
+		  saveToPhotoAlbum: true,
+		  correctOrientation: true //Corrects Android orientation quirks
+		};	
 		
 		this.camera.getPicture(options).then((imageData) => {
 		  // imageData is either a base64 encoded string or a file URI
@@ -528,6 +534,60 @@ export class ProfilePage {
 		commentsModal.present();
 	}
 	
+ postActivity(event,post): void
+  {
+	let  buttons : any = [
+		{
+		  icon: !this.platform.is('ios') ? 'ios-bookmark' : null,	
+		  text: 'Save Post',
+		  handler: () => {
+			this.reactAction('save_post',post.post_id);
+		  }
+		},
+		{
+		  icon: !this.platform.is('ios') ? 'ios-eye-off' : null,		
+		  text: 'Hide from timeline',
+		  handler: () => {
+			event.target.parentNode.parentNode.parentNode.parentNode.remove();
+			this.reactAction("hide_post",post.post_id)
+		  }
+		}
+	];	
+	if(post.author_id == localStorage.getItem('user_id')){
+		let btn : any = {
+		  icon: !this.platform.is('ios') ? 'ios-trash' : null,		
+		  text: 'Delete Post',
+		  handler: () => {
+			const confirm = this.alertCtrl.create({
+			  title: 'Delete post?',
+			  message: 'Once you delete you can not undo this step.',
+			  buttons: [
+				{
+				  text: 'Cancel',
+				  handler: () => {
+					
+				  }
+				}
+				,{
+				  text: 'Delete',
+				  handler: () => {
+					event.target.parentNode.parentNode.parentNode.parentNode.remove();
+					this.reactAction("delete_post",post.post_id)
+				  }
+				}
+			  ]
+			});
+			confirm.present();  
+		  }
+		};
+		buttons.push(btn);
+	}
+	const actionSheet = this.actionSheetCtrl.create({
+	  buttons
+	});
+	actionSheet.present();
+  }
+  
 	sharePostCtrl(post_id): void
 	{
 		let prompt = this.alertCtrl.create({
@@ -577,6 +637,19 @@ export class ProfilePage {
         toast.present();
       });
 	}
+	
+	reactAction(type,post_id){
+		let params :any = {
+			'do': type,
+			'id': post_id,
+			'my_id' : localStorage.getItem('user_id')
+		};
+		this.post.reaction(params).subscribe((resp) => {						
+			
+		}, (err) => {
+		
+		});
+	  }
   
 	moreAction() {
 		const actionSheet = this.actionSheetCtrl.create({
@@ -585,13 +658,13 @@ export class ProfilePage {
 			  icon: !this.platform.is('ios') ? 'ios-person-add' : null,	
 			  text: 'Report',
 			  handler: () => {
-				this.reportAction()
+				this.reportAction('user',this.profile.user_id)
 			  }
 			},{
 			  icon: !this.platform.is('ios') ? 'ios-close' : null,		
 			  text: 'Block',
 			  handler: () => {
-				this.reportAction()
+				this.blockAction()
 			  }
 			}
 		  ]
@@ -616,10 +689,10 @@ export class ProfilePage {
 		});
 	}
 	
-	reportAction(){
+	reportAction(handle,id){
 		let params :any = {
-			'handle': 'user',
-			'id': this.profile.user_id,
+			'handle': handle,
+			'id': id,
 			'my_id' : localStorage.getItem('user_id')
 		};
 		this.user.report(params).subscribe((resp) => {						
@@ -629,6 +702,7 @@ export class ProfilePage {
 			position: 'top',
 			dismissOnPageChange: true
 		  });
+		  toast.present();
 		}, (err) => {
 		  let toast = this.toastCtrl.create({
 			message: "Failed to Submit Report. Please Try Again",
@@ -636,6 +710,7 @@ export class ProfilePage {
 			position: 'top',
 			dismissOnPageChange: true
 		  });
+		  toast.present();
 		});
 	}
 	
@@ -663,5 +738,9 @@ export class ProfilePage {
 		  this.arrayPosition = this.arrayPosition + 1;
 		  infiniteScroll.complete();
 		}, 500);
+	}
+	
+	blockAction(){
+		
 	}
 }

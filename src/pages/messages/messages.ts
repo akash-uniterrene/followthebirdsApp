@@ -14,11 +14,17 @@ import { User } from '../../providers';
   templateUrl: 'messages.html',
 })
 export class MessagesPage {
+	public user_live_messages_counter = '';
+  public onlineUsers = [];
+  public offlineUsers = [];
   messagezone: string = "messages";
   public messages : any = [];
   public groups : any = [];
   private imageURL = "https://dev.followthebirds.com/content/uploads/";
   constructor(public navCtrl: NavController, public user: User, public navParams: NavParams) {
+	  this.getOnlineUsers();
+		this.getOfflineUsers();
+		this.getProfileData(localStorage.getItem('user_id'));
   }
 
   ionViewDidLoad() {
@@ -33,14 +39,46 @@ export class MessagesPage {
 		 
 		}		
 	});
+	}
+	
+	getProfileData(id){
+		this.user.updateProfile(id).subscribe((resp) => {	
+			this.user_live_messages_counter = resp['user_live_messages_counter'];
+			if(this.user_live_messages_counter == '0'){
+				this.user_live_messages_counter = '';
+			}
+		}, (err) => {
+			
+		});	
   }
+  
+  getOnlineUsers(){
+	 this.user.getOnlineUsers({user_id: parseInt(localStorage.getItem('user_id'))})
+	.then(data => {
+		this.onlineUsers = data[0];
+	}); 
+  }
+  
+  getOfflineUsers(){
+	 this.user.getOfflineUsers({user_id: parseInt(localStorage.getItem('user_id'))})
+	.then(data => {
+		this.offlineUsers = data[0];
+	}); 
+  }
+  
+  
   
   viewMessage(conversation){
-	  this.navCtrl.push('ViewMessagePage', {conversation: conversation});
+	  this.navCtrl.setRoot('ViewMessagePage', {conversation: conversation});
   }
   
+  viewMessageGroup(conversation,group){
+	  this.navCtrl.setRoot('ViewMessagePage', {conversation: conversation,group:group});
+  }
+  
+  
   createConversation(){
-	this.navCtrl.push('CreateMessagePage');
+	this.navCtrl.setRoot('CreateMessagePage');
   }
   
   isToday(data){
@@ -68,7 +106,15 @@ export class MessagesPage {
 	 }
 	 
   }
-  
+	messageAction(profile){
+		let recipient = {
+			name:profile.user_firstname+' '+profile.user_lastname,
+			picture:profile.user_picture,
+			id:profile.user_id
+		};
+		this.navCtrl.push('ViewMessagePage', {conversation: recipient});
+	}
+	
   goBack(){
 	this.navCtrl.setRoot('HomePage');
   }

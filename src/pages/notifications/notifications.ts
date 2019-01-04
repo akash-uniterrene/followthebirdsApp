@@ -50,6 +50,30 @@ export class NotificationsPage {
 	this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
   }
   
+  isToday(data){
+	 var date = data.split(' ');
+	 var today = new Date();
+	 var dd = today.getDate();
+	 var mm = today.getMonth()+1; 
+	 var yyyy = today.getFullYear();
+	 
+	 var pDate = date[0].split('-');
+	 if(pDate[0] != yyyy ){
+		 return false;
+	 }else{
+		 if(pDate[1] != mm){
+			 return false;
+		 }else{
+			 if(pDate[2] != dd){
+				 return false;
+			 }else{
+				 return true;
+			 }
+		 }
+	 }
+	 
+  }
+  
   doInfinite(infiniteScroll) {
 	setTimeout(() => {
 	  this.user.getNotifications({'page': this.pageCount}).then(data => {

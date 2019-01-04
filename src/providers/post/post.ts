@@ -91,7 +91,17 @@ export class Post {
     return seq;
   }
   
-  
+  reaction(params : any){
+	let seq = this.api.post('reaction', params).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
   
   get_feelings(){
 	  return this.feeling;

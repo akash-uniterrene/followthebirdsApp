@@ -71,7 +71,7 @@
 			</ion-row>
 		</ion-card>
 		<ion-card *ngFor="let event of eventLists.suggested" >
-			<img [src]="imageURL+event.event_cover" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewEvent(event)" />
+			<img [src]="imageURL+event.event_cover" onError="this.src='assets/followthebirdImgs/blank_event.jpg'" (click)="viewEvent(event)" />
 			<ion-card-content>
 			  <span style="color:red;" >{{event.event_start_date | date: 'MMM dd h:mm a' }}</span>
 			  <ion-card-title (click)="viewEvent(event)">
@@ -83,11 +83,17 @@
 			</ion-card-content>
 
 			<ion-row no-padding style="border-top: 0.4px solid #000000a3;">
-			  <ion-col text-right>
-				<button ion-button clear small color="dark" icon-start >
+			  <ion-col text-right *ngIf="event.i_joined.is_interested == '0'">
+				<button ion-button clear small color="dark" icon-start  (click)="eventInterestAction('event-interest',event.event_id)" >
 				  <ion-icon name='star-outline' style="font-size: 25px;"></ion-icon>
 				  Interested
 				</button>
+			  </ion-col> 
+			  <ion-col text-right *ngIf="event.i_joined.is_interested == '1'">		
+				<button ion-button clear small color="dark" icon-start (click)="eventUninterestAction('event-uninterest',event.event_id)">
+				  <ion-icon name='star' style="font-size: 25px;"></ion-icon>
+				  Interested
+				</button>		
 			  </ion-col>
 			  <ion-col text-left>
 				<button ion-button clear small color="dark" icon-start>
@@ -103,7 +109,7 @@
 			No events to show
 		</ion-item-divider>
 		<ion-card *ngFor="let event of eventLists.interested" >
-		<img [src]="imageURL+event.event_cover" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewEvent(event)" />
+		<img [src]="imageURL+event.event_cover" onError="this.src='assets/followthebirdImgs/blank_event.jpg'" (click)="viewEvent(event)" />
 
 		<ion-card-content>
 		  <p color="danger" >{{event.event_start_date | date: 'MMM dd h:mm a' }}</p>
@@ -143,7 +149,7 @@
 			No events to show
 		</ion-item-divider>  
 		<ion-card *ngFor="let event of eventLists.invited" >
-		<img [src]="imageURL+event.event_cover" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewEvent(event)" />
+		<img [src]="imageURL+event.event_cover" onError="this.src='assets/followthebirdImgs/blank_event.jpg'" (click)="viewEvent(event)" />
 
 		<ion-card-content>
 		  <p color="danger" >{{event.event_start_date | date: 'MMM dd h:mm a' }}</p>
@@ -155,11 +161,17 @@
 		  </p>
 		</ion-card-content>
 		<ion-row no-padding style="border-top: 0.4px solid #000000a3;">
-		  <ion-col text-right>
-			<button ion-button clear small color="dark" icon-start >
+		  <ion-col text-right *ngIf="event.i_joined.is_interested == '0'">
+			<button ion-button clear small color="dark" icon-start  (click)="eventInterestAction('event-interest',event.event_id)" >
 			  <ion-icon name='star-outline' style="font-size: 25px;"></ion-icon>
 			  Interested
 			</button>
+		  </ion-col> 
+		  <ion-col text-right *ngIf="event.i_joined.is_interested == '1'">		
+			<button ion-button clear small color="dark" icon-start (click)="eventUninterestAction('event-uninterest',event.event_id)">
+			  <ion-icon name='star' style="font-size: 25px;"></ion-icon>
+			  Interested
+			</button>		
 		  </ion-col>
 		  <ion-col text-left>
 			<button ion-button clear small color="dark" icon-start>
@@ -177,7 +189,7 @@
 			No events to show
 		</ion-item-divider>
 		<ion-card *ngFor="let event of eventLists.manage" >
-		<img [src]="imageURL+event.event_cover" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewEvent(event)"/>
+		<img [src]="imageURL+event.event_cover" onError="this.src='assets/followthebirdImgs/blank_event.jpg'" (click)="viewEvent(event)"/>
 
 		<ion-card-content>
 		  <p color="danger" >{{event.event_start_date | date: 'MMM dd h:mm a' }}</p>

@@ -64,8 +64,9 @@
 	   </ion-list>
 	   <ion-list *ngSwitchCase="'friends'">
 	    <ion-item-divider color="light">
-			Active : 300
+			Active : {{onlineUsers.length}}
 		</ion-item-divider>
+		
 		<ion-item *ngFor="let friend of friendLists">
 			<ion-thumbnail item-start (click)="viewProfile(friend.user_name,friend.user_id)">
 			  <img src="https://dev.followthebirds.com/content/uploads/{{friend.user_picture}}" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'">

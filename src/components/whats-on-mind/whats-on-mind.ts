@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ModalController, Nav } from 'ionic-angular';
+import { IonicPage, NavController, Nav, NavParams, ActionSheetController,Platform,  ViewController,ToastController,LoadingController,ModalController } from 'ionic-angular';
 
 import { User } from '../../providers';
 /**
@@ -20,20 +20,16 @@ export class WhatsOnMindComponent {
   userPic: string;
   
   constructor(
-    private modal: ModalController,
-    private nav: Nav,
+    private navCtrl: NavController,
 	public user: User,
+	public nav: Nav,
   ) {
-    console.log('Hello WhatsOnMindComponent Component');
-    this.text = 'Hello World';
     this.userPic = this.user.getProfilePic();
     
   }
   
   updateStatus(){
-	  console.log(this.handle);
-    const modal = this.modal.create('WhatsOnMindPage',this.handle);
-    modal.present();
+    this.nav.setRoot('WhatsOnMindPage',this.handle);
   }
   
   

@@ -29,6 +29,7 @@ export class GroupCreatePage {
   }
   
   createGroup(){
+	  console.log(this.group);
 	this.groups.create_group(this.group).subscribe((resp) => {
 		let toast = this.toastCtrl.create({
 			message: "Group has been successfully created",
