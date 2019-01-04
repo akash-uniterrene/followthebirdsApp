@@ -131,7 +131,6 @@ export class HomePage {
 				this.user_live_notifications_counter = '';
 			}
 			
-			this.user_live_messages_counter = resp['user_live_messages_counter'];
 		}, (err) => {
 			let toast = this.toastCtrl.create({
 			message: "unable to refresh",
