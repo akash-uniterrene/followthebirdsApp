@@ -25,8 +25,9 @@ type PageList = PageItem[]
 })
 export class HomePage {
 	public savedUser : any;
-	public user_live_notifications_counter = '';
-	public user_live_requests_counter = '';
+	public user_live_notifications_counter = localStorage.getItem('user_live_notifications_counter');
+	public user_live_messages_counter = localStorage.getItem('user_live_messages_counter');
+	public user_live_requests_counter = localStorage.getItem('user_live_requests_counter');
   pages: PageList;
 	introduction = 'PostPage';  
 	settingsPage = 'UserSettingsPage';
@@ -42,10 +43,10 @@ export class HomePage {
 		public post: Post,  
 		public storage: StorageProvider,
 		public toastCtrl: ToastController,
-    public navParams: NavParams,  
-    private camera: Camera,
-    public menu: MenuController,
-    public nav: Nav 
+		public navParams: NavParams,  
+		private camera: Camera,
+		public menu: MenuController,
+		public nav: Nav 
    ) {
      // localStorage.setItem('user_intro', 'false');
     
@@ -97,7 +98,6 @@ export class HomePage {
   }
 
   ionViewDidLoad() {
-    
     console.log('ionViewDidLoad HomePage');
   }
   
@@ -105,33 +105,22 @@ export class HomePage {
 	  console.log(ev.target.value);
 	  this.navCtrl.setRoot("SearchPage",{'event':ev.target.value});
   }
-	
-	resetAlert(type){
-		this.user.resetAlert({my_id:localStorage.getItem('user_id'),type:type}).subscribe((resp) => {
-			if(type == 'notifications'){
-				this.user_live_notifications_counter = '';
-			}
-			if(type == 'requests'){
-				this.user_live_requests_counter = '';
-			}
-		}, (err) => {
-			
-		});	
-	}
   
   getProfileData(id){
 		this.user.updateProfile(id).subscribe((resp) => {	
 			this.storage.setUser(resp);			
-			this.user_live_notifications_counter = resp['user_live_notifications_counter'];
-			this.user_live_requests_counter = resp['user_live_requests_counter'];
-			if(this.user_live_requests_counter == '0'){
-				this.user_live_requests_counter = '';
+			localStorage.setItem('user_live_notifications_counter',resp['user_live_notifications_counter']);
+			localStorage.setItem('user_live_requests_counter',resp['user_live_requests_counter']);
+			localStorage.setItem('user_live_messages_counter',resp['user_live_messages_counter']);
+			if(localStorage.getItem('user_live_notifications_counter') == '0'){
+				localStorage.setItem('user_live_notifications_counter','0')
 			}
-			if(this.user_live_notifications_counter == '0'){
-				this.user_live_notifications_counter = '';
+			if(localStorage.getItem('user_live_requests_counter') == '0'){
+				localStorage.setItem('user_live_requests_counter','0')
 			}
-			
-			this.user_live_messages_counter = resp['user_live_messages_counter'];
+			if(localStorage.getItem('user_live_messages_counter') == '0'){
+				localStorage.setItem('user_live_messages_counter','0')
+			}
 		}, (err) => {
 			let toast = this.toastCtrl.create({
 			message: "unable to refresh",

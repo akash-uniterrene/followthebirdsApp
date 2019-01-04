@@ -28,6 +28,11 @@ export class MessagesPage {
   }
 
   ionViewDidLoad() {
+	this.user.resetAlert({my_id:localStorage.getItem('user_id'),type:'messages'}).subscribe((resp) => {
+		localStorage.setItem('user_live_messages_counter','0')
+	}, (err) => {
+		
+	});	    
     this.user.getConversations({user_id:localStorage.getItem('user_id')}).then(data => {
 		let item = data[0];
 		for (var key in item) {

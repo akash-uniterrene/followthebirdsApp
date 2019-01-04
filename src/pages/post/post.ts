@@ -45,6 +45,7 @@ export class PostPage {
    public sharedInfo = [];
    private pageCount = 2;
    private arrayPosition = 0;
+   private isAndroid = false;
    private mediapath = "https://dev.followthebirds.com/content/uploads/";
    constructor(
     public navCtrl: NavController, 
@@ -67,6 +68,7 @@ export class PostPage {
   }
  
   ionViewDidLoad() {
+	this.isAndroid = this.platform.is("android");
 	this.postElement['handle'] = "me";
 	this.postElement['id'] = '';  
     this.post.getfeeds('newsfeed',localStorage.getItem('user_id'),localStorage.getItem('user_id'),{})

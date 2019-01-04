@@ -31,12 +31,16 @@ export class FriendRequestsPage {
   
   
 	}
-	ionViewDidLoad() {		
+	ionViewDidLoad() {	
+		this.user.resetAlert({my_id:localStorage.getItem('user_id'),type:'friend_requests'}).subscribe((resp) => {
+			localStorage.setItem('user_live_requests_counter','0')
+		}, (err) => {
+			
+		});
 		this.user.getPendingRequest('friend_requests',parseInt(localStorage.getItem('user_id')))
 		.then(data => {
 			this.pendindFriendLists = data[0];
 		});
-		console.log(this.pendindFriendLists.length);
 	}
 		
 	confrimRequest(event,user_id) {

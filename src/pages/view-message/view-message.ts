@@ -23,7 +23,7 @@ export class ViewMessagePage {
   private imageURL = "https://dev.followthebirds.com/content/uploads/";
   private group = false;
   public publishPhotos : any = [];
-  
+  myId = localStorage.getItem('user_id');
   public chatBox : any = {
 	image: "",
 	message: "dummy",

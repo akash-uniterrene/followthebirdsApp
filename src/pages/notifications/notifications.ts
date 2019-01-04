@@ -29,9 +29,15 @@ export class NotificationsPage {
 		public actionSheetCtrl: ActionSheetController,
 		public loadingCtrl: LoadingController
 	) {
-  }
+		this.user.resetAlert({my_id:localStorage.getItem('user_id'),type:'notifications'}).subscribe((resp) => {
+			localStorage.setItem('user_live_notifications_counter','0')
+		}, (err) => {
+			
+		});  
+	}
 
   ionViewDidLoad() {
+	
     this.user.getNotifications().then(data => {
 		let item = data[0];
 		for (var key in item) {
