@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PhotoViewer,PhotoViewerOptions } from '@ionic-native/photo-viewer';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { Observable, Subject, ReplaySubject} from 'rxjs';
 /**
  * Generated class for the GroupProfilePage page.
  *
@@ -28,6 +29,7 @@ export class GroupProfilePage {
   public groupProfile : any = [];
   public postElement = [];
   public groupDetailszone : string = "timeline";
+  sub : any = '';
   private imageURL = "https://dev.followthebirds.com/content/uploads/";	
   post_type: any = {
     shared: 'shared',
@@ -68,12 +70,14 @@ export class GroupProfilePage {
     private file: File,
     private alertCtrl: AlertController	
   ) {
-    this.groupProfile = navParams.get('groupProfile');
-    this.groups.getGroupProfile(parseInt(this.groupProfile.group_id),{'user_id':localStorage.getItem('user_id'),'filter':'all'}).then(data => {
-			this.groupProfile = data;
-			this.postElement['handle'] = "group";
+		this.groupProfile = navParams.get('groupProfile');
+		this.groups.getGroupProfile(parseInt(this.groupProfile.group_id),{'user_id':localStorage.getItem('user_id'),'filter':'all'}).then(data => {
+		  this.groupProfile = data;
+		  localStorage.setItem('last_post_live','posts_group-'+this.groupProfile.posts[0].post_id);
+		  this.postElement['handle'] = "group";
 		  this.postElement['id'] = this.groupProfile['group_id'];	
 		});
+		
     this.coverPhotoOptions = formBuilder.group({
       file: "assets/followthebirdImgs/coverimage.png",
       type: "photos",
@@ -84,9 +88,14 @@ export class GroupProfilePage {
     });
   }
 
-  ionViewDidLoad() {
-    console.log(this.groupProfile);
-  }
+	ionViewDidEnter(){
+		this.sub = Observable.interval(10000)
+			.subscribe((val) => { this.getLiveLitePost() });
+	}
+  
+	ionViewDidLeave() {
+		this.sub.unsubscribe();
+	}
   
   getCoverBackgroundStyle() {
     if(!this.groupProfile.group_cover){
@@ -369,6 +378,7 @@ export class GroupProfilePage {
 		
 		});
 	}
+	
 	editGroup(){
 		this.navCtrl.push("GroupEditPage",{'group':this.groupProfile});
 	}
@@ -394,6 +404,20 @@ export class GroupProfilePage {
 			});
 			toast.present();
 		});
+	}
+	
+	getLiveLitePost(){
+		this.user.getLiveLitePost({user_id: localStorage.getItem('user_id'),type_id:this.groupProfile.group_id,last_post_live: localStorage.getItem('last_post_live')}).then((data) => {	
+			let item : any = data;
+			if(item.length > 0){
+				localStorage.setItem('last_post_live','posts_group-'+data[0].post_id);
+				for (var key in item) {
+				  this.groupProfile.posts.unshift(item[key]);
+				}
+			}
+		}, (err) => {
+				
+		});	
 	}
 
 }

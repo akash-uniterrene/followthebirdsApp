@@ -38,5 +38,30 @@ ion-icon {
 	}
   }
   
- 
- }
+
+}
+.pg_wrapper {
+    display: block;
+    overflow: hidden;
+    clear: both;
+}
+
+.pg_2x {
+    width: 50%;
+    float: left;
+    border-right: 2px solid #fff;
+    height: 180px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.pg_4x {
+    height: 50%;
+    float: left;
+    width: 49%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: 1px;
+}

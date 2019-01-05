@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PhotoViewer,PhotoViewerOptions } from '@ionic-native/photo-viewer';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { Observable, Subject, ReplaySubject} from 'rxjs';
 /**
  * Generated class for the ProfilePage page.
  *
@@ -30,6 +31,7 @@ export class ProfilePage {
 	photos : any = [];
 	profilePhotoOptions: FormGroup;
 	coverPhotoOptions: FormGroup;
+	sub : any = '';
 	private imageURL = "https://dev.followthebirds.com/content/uploads/";
 	private myId :number = parseInt(localStorage.getItem('user_id'));
 	headerActive = false;
@@ -102,11 +104,12 @@ export class ProfilePage {
 		this.post.getfeeds('posts_profile',this.profile_id,localStorage.getItem('user_id'),{'filter':'all'})
 		.then(data => {
 			let item = data[0];
+			localStorage.setItem('last_post_live','posts_profile-'+item[0].post_id);
 			for (var key in item) {
 			  this.postFeeds.push(item[key]);
 			}
 		});
-  }
+	}
 	
 	ionViewDidLoad(){
 		this.user.getProfile(parseInt(localStorage.getItem('user_id')),{'user_name':this.profileName}).then(data => {
@@ -135,6 +138,15 @@ export class ProfilePage {
 		});
 		
 		
+	}
+	
+	ionViewDidEnter(){
+		this.sub = Observable.interval(10000)
+			.subscribe((val) => { this.getLiveLitePost() });
+	}
+  
+	ionViewDidLeave() {
+		this.sub.unsubscribe();
 	}
 	
 	doRefresh(refresher) {
@@ -722,6 +734,19 @@ export class ProfilePage {
 	  this.navCtrl.setRoot("SearchPage");
 	}
 	
+	getLiveLitePost(){
+		this.user.getLiveLitePost({user_id: localStorage.getItem('user_id'),type_id:this.profile_id,last_post_live: localStorage.getItem('last_post_live')}).then((data) => {	
+			let item : any = data;
+			if(item.length > 0){
+				localStorage.setItem('last_post_live','posts_profile-'+data[0].post_id);
+				for (var key in item) {
+				  this.postFeeds.unshift(item[key]);
+				}
+			}
+		}, (err) => {
+				
+		});	
+	}
 	
 	doInfinite(infiniteScroll) {
 		setTimeout(() => {

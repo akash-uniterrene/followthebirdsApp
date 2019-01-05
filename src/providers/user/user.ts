@@ -74,6 +74,37 @@ export class User {
     return seq;
   }
   
+  getLiveLiteData(params?: any){  
+	let seq = this.api.post('live-data', params).share();
+
+    seq.subscribe((res: any) => {
+      // If the API returned a successful response, mark the user as logged in
+      if (res.status == 'success') {
+        this._loggedIn(res);
+      }
+    }, err => {
+      console.error('ERROR', err);
+    });
+
+    return seq;
+  }
+  
+  getLiveLitePost(params?: any){  
+	let user :any;
+	let seq = this.api.get('live-posts', params).share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			user = res;
+			resolve(user);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+  
+  
   /**
    * Send a POST request to our signup endpoint with the data
    * the user entered on the form.

@@ -19,12 +19,22 @@ export class SearchPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public items: Items, public user: User) { 
 	this.event = navParams.get('event');
   }
+  
+  ionViewDidEnter(){
+	this.getItems(this.event);
+  }
 
   /**
    * Perform a service for the proper items.
    */
   getItems(ev) {
-    let val = ev.target.value;
+	let val = '';  
+	if(ev.target){
+		val = ev.target.value;
+	} else {
+		val = ev;
+	}
+    
     if (!val || !val.trim()) {
       this.currentItems = [];
       return;
@@ -65,5 +75,8 @@ export class SearchPage {
 		
 		});
 	} */
+	goBack(){
+	  this.navCtrl.setRoot("HomePage");
+	}
 
 }

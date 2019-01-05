@@ -8,6 +8,7 @@ import { StorageProvider } from '../../providers/storage/storage';
 import { PhotoViewer,PhotoViewerOptions } from '@ionic-native/photo-viewer';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { Observable, Subject, ReplaySubject} from 'rxjs';
 /**
  * Generated class for the PostPage page.
  *
@@ -41,6 +42,7 @@ export class PostPage {
 	group_cover: 'updated group cover',
 	event_cover: 'updated event cover'
   };
+   sub : any = '';
    public postElement = [];
    public sharedInfo = [];
    private pageCount = 2;
@@ -65,7 +67,9 @@ export class PostPage {
 	private platform: Platform,
 	private alertCtrl: AlertController	
   ) {
+	  
   }
+  
   ionViewDidLoad() {
 	this.isAndroid = this.platform.is("android");
 	this.postElement['handle'] = "me";
@@ -74,11 +78,23 @@ export class PostPage {
     .then(data => {
 		this.postFeeds = [];
 		let item = data[0];
+		localStorage.setItem('last_post_live','newsfeed-'+item[0].post_id);
 		for (var key in item) {
 		  this.postFeeds.push(item[key]);
 		}
     });
+	
+	
   }
+  
+	  ionViewDidEnter(){
+		this.sub = Observable.interval(10000)
+			.subscribe((val) => { this.getLiveLitePost() });
+	  }
+	  
+	  ionViewDidLeave() {
+		this.sub.unsubscribe();
+	  }
   
   doInfinite(infiniteScroll) {
     setTimeout(() => {
@@ -240,7 +256,14 @@ export class PostPage {
 	actionSheet.present();
   }
   
-
+  getBackgroundStyle(url) {
+		if(!url){
+			return 'url(assets/followthebirdImgs/no-profile-img.jpeg)'
+		} else {
+			return 'url(' + this.mediapath+url + ')'
+		}
+	}
+	
   sharePost(type,id){
 	this.post.sharePost({'do':type,id:id,my_id:localStorage.getItem('user_id')}).subscribe((resp) => {
 	  let toast = this.toastCtrl.create({
@@ -299,4 +322,18 @@ export class PostPage {
 	});
   }
   
+  getLiveLitePost(){
+	this.user.getLiveLitePost({user_id: localStorage.getItem('user_id'),last_post_live: localStorage.getItem('last_post_live')}).then((data) => {	
+		let item : any = data;
+		if(item.length > 0){
+			localStorage.setItem('last_post_live','newsfeed-'+data[0].post_id);
+			for (var key in item) {
+			  this.postFeeds.unshift(item[key]);
+			}
+		}
+	}, (err) => {
+			
+	});	
+  }	
 }
+  

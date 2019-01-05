@@ -5,7 +5,7 @@ import { Post } from '../../providers/post/post';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { User } from '../../providers';
 import { StorageProvider } from '../../providers/storage/storage';
-
+import { Observable, Subject, ReplaySubject} from 'rxjs';
 /**
  * Generated class for the HomePage page.
  *
@@ -28,13 +28,13 @@ export class HomePage {
 	public user_live_notifications_counter = localStorage.getItem('user_live_notifications_counter');
 	public user_live_messages_counter = localStorage.getItem('user_live_messages_counter');
 	public user_live_requests_counter = localStorage.getItem('user_live_requests_counter');
-  pages: PageList;
+	pages: PageList;
+	sub : any = '';
 	introduction = 'PostPage';  
 	settingsPage = 'UserSettingsPage';
 	profilePage = 'ProfilePage';
 	FriendRequestsPage = 'FriendRequestsPage';	
 	NotificationsPage = 'NotificationsPage';	
-	profilePageParams = { id: localStorage.getItem('user_id') };
 	countCarItem = 99;
 	badgeCount = 3;
   constructor(
@@ -49,9 +49,10 @@ export class HomePage {
 		public nav: Nav 
    ) {
      // localStorage.setItem('user_intro', 'false');
-    
-		this.menu.enable(false); 
-		  
+		this.sub = Observable.interval(10000)
+		.subscribe((val) => { this.getLiveLiteData() });
+		
+		this.menu.enable(false);   
 		this.getProfileData(localStorage.getItem('user_id'));
 		this.sliderOpen();
 	  }	  	  
@@ -97,38 +98,43 @@ export class HomePage {
 	  this.countCarItem = 99;
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad HomePage');
+  ionViewWillUnload() {
+    this.sub.unsubscribe();
   }
   
   getItems(ev) {
-	  console.log(ev.target.value);
 	  this.navCtrl.setRoot("SearchPage",{'event':ev.target.value});
   }
   
   getProfileData(id){
-		this.user.updateProfile(id).subscribe((resp) => {	
-			this.storage.setUser(resp);			
-			localStorage.setItem('user_live_notifications_counter',resp['user_live_notifications_counter']);
-			localStorage.setItem('user_live_requests_counter',resp['user_live_requests_counter']);
-			localStorage.setItem('user_live_messages_counter',resp['user_live_messages_counter']);
-			if(localStorage.getItem('user_live_notifications_counter') == '0'){
-				localStorage.setItem('user_live_notifications_counter','0')
-			}
-			if(localStorage.getItem('user_live_requests_counter') == '0'){
-				localStorage.setItem('user_live_requests_counter','0')
-			}
-			if(localStorage.getItem('user_live_messages_counter') == '0'){
-				localStorage.setItem('user_live_messages_counter','0')
-			}
-		}, (err) => {
-			let toast = this.toastCtrl.create({
+	this.user.updateProfile(id).subscribe((resp) => {	
+		this.storage.setUser(resp);			
+		this.user_live_notifications_counter = resp['user_live_notifications_counter'];
+		this.user_live_requests_counter = resp['user_live_requests_counter'];
+		this.user_live_messages_counter = resp['user_live_messages_counter'];
+	}, (err) => {
+		let toast = this.toastCtrl.create({
+		message: "unable to refresh",
+		duration: 3000,
+		position: 'top'
+		});
+		toast.present();
+	});	
+  }
+  
+  getLiveLiteData(){
+	this.user.getLiveLiteData({id: localStorage.getItem('user_id')}).subscribe((resp) => {	
+		this.user_live_notifications_counter = resp['user_live_notifications_counter'];
+		this.user_live_requests_counter = resp['user_live_requests_counter'];
+		this.user_live_messages_counter = resp['user_live_messages_counter'];
+	}, (err) => {
+		let toast = this.toastCtrl.create({
 			message: "unable to refresh",
 			duration: 3000,
 			position: 'top'
-			});
-			toast.present();
-		});	
+		});
+		toast.present();
+	});	
   }
   
 

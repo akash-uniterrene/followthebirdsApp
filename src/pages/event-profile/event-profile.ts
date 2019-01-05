@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PhotoViewer,PhotoViewerOptions } from '@ionic-native/photo-viewer';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
+import { Observable, Subject, ReplaySubject} from 'rxjs';
 /**
  * Generated class for the EventProfilePage page.
  *
@@ -51,7 +52,7 @@ export class EventProfilePage {
 	group_cover: 'updated group cover',
 	event_cover: 'updated event cover'
   };
-  
+  sub : any = '';
   private myId : number = parseInt(localStorage.getItem('user_id'));
   private imageURL = "https://dev.followthebirds.com/content/uploads/";	
   constructor(
@@ -92,14 +93,20 @@ export class EventProfilePage {
 	});
   }
 
-  ionViewDidLoad() {
-
-  }
+	ionViewDidEnter(){
+		this.sub = Observable.interval(10000)
+			.subscribe((val) => { this.getLiveLitePost() });
+	}
+  
+	ionViewDidLeave() {
+		this.sub.unsubscribe();
+	}
   
   getPost(){
 	this.post.getfeeds('posts_event',this.eventProfile['event_id'],localStorage.getItem('user_id'))
 		.then(data => {
 			let item = data[0];
+			localStorage.setItem('last_post_live','posts_event-'+item[0].post_id);
 			for (var key in item) {
 			  this.postFeeds.push(item[key]);
 			}
@@ -438,5 +445,18 @@ export class EventProfilePage {
 			toast.present();
 		});
 	}
-
+	
+	getLiveLitePost(){
+		this.user.getLiveLitePost({user_id: localStorage.getItem('user_id'),type_id:this.eventProfileId,last_post_live: localStorage.getItem('last_post_live')}).then((data) => {	
+			let item : any = data;
+			if(item.length > 0){
+				localStorage.setItem('last_post_live','posts_event-'+data[0].post_id);
+				for (var key in item) {
+				  this.postFeeds.unshift(item[key]);
+				}
+			}
+		}, (err) => {
+				
+		});	
+	}
 }
