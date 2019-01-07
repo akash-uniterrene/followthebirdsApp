@@ -155,12 +155,13 @@ export class ProfilePage {
 		  refresher.complete();
 		}, 2000);
 	}
+	
+	viewPost(post) {
+		this.nav.push('ViewPostPage', {post: post});
+	}
 	  
-	viewImage(url){
-		const option : PhotoViewerOptions = {
-		  share: true
-		};
-		this.photoViewer.show(this.imageURL+url,"Image Preview",option);
+	viewImage(photo){
+		this.nav.push('ViewPhotoPage', {photo: photo});
 	}
   
 	viewProfile(user_name,user_id) {

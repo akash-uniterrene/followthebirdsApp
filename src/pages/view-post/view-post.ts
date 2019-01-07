@@ -63,6 +63,10 @@ export class ViewPostPage {
 	}
   }
   
+  viewProfile(user_name,user_id) {
+	this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
+  }
+  
   postActivity(event,post): void
   {
 	let  buttons : any = [

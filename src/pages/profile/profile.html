@@ -232,43 +232,44 @@
 					</ion-item>
 					<ion-card-content>
 						<p style="padding-bottom: 3px;padding-left: 10px;">{{feeds.text}}</p>
-					</ion-card-content>   
-					<div class="pg_wrapper" *ngIf="feeds.photos_num <= 2">
-						<div class="pg_{{feeds.photos_num}}x" *ngFor="let photo of feeds.photos">
-							<img [src]="imageURL+photo.source" (click)="viewImage(photo.source)">
+					</ion-card-content>
+					<div (click)= "viewPost(feeds)">	
+						<div class="pg_wrapper" *ngIf="feeds.photos_num <= 2">
+							<div class="pg_{{feeds.photos_num}}x" *ngFor="let photo of feeds.photos">
+								<img [src]="imageURL+photo.source" (click)="viewImage(photo)">
+							</div>	
 						</div>	
-					</div>	
-					<div class="pg_wrapper" *ngIf="feeds.photos_num > 2">
-						<div class="pg_2x" [style.backgroundImage]="getBackgroundStyle(feeds.photos[0].source)" ></div>
-						<div class="pg_2x" >
-							<div class="pg_{{feeds.photos_num}}x" *ngFor="let photo of feeds.photos | slice:1:feeds.photos_num; " [style.backgroundImage]="getBackgroundStyle(photo.source)" (click)="viewImage('')">
+						<div class="pg_wrapper" *ngIf="feeds.photos_num > 2">
+							<div class="pg_2x" [style.backgroundImage]="getBackgroundStyle(feeds.photos[0].source)" ></div>
+							<div class="pg_2x" >
+								<div class="pg_{{feeds.photos_num}}x" *ngFor="let photo of feeds.photos | slice:1:feeds.photos_num; " [style.backgroundImage]="getBackgroundStyle(photo.source)" (click)="viewImage(photo)">
+								</div>
 							</div>
 						</div>
-					</div>
 					
-					<div *ngIf="feeds.post_type == 'video'">
-						<video *ngFor="let vid of feeds.video" style="width:100%" controls preload="metadata" webkit-playsinline="webkit-playsinline" class="videoPlayer">
-							<source [src]="imageURL+vid.source" type="video/mp4"/>
-						</video>
-					</div>
-					<div *ngIf="feeds.post_type == 'audio'" style="text-align: center;">
-						<audio controls *ngFor="let aud of feeds.audio">
-						  <source [src]="imageURL+aud.source" type="audio/mpeg">
-						  Your browser does not support the audio element.
-						</audio>
-					</div>	
-					<div *ngIf="feeds.post_type == 'file'">
-						<ion-item *ngFor="let attch of feeds.file" >
-						  <ion-thumbnail item-start>
-							<img src="assets/followthebirdImgs/text-file-icon.png">
-						  </ion-thumbnail>
-						  <h2>Attachment.zip</h2>
-						  <a ion-button padding href="{{imageURL+attch.source}}" download>
-							Download
-						  </a>
-						</ion-item>
-					</div>
-					<div *ngIf="feeds.post_type == 'shared'">
+						<div *ngIf="feeds.post_type == 'video'">
+							<video *ngFor="let vid of feeds.video" style="width:100%" controls preload="metadata" webkit-playsinline="webkit-playsinline" class="videoPlayer">
+								<source [src]="imageURL+vid.source" type="video/mp4"/>
+							</video>
+						</div>
+						<div *ngIf="feeds.post_type == 'audio'" style="text-align: center;">
+							<audio controls *ngFor="let aud of feeds.audio">
+							  <source [src]="imageURL+aud.source" type="audio/mpeg">
+							  Your browser does not support the audio element.
+							</audio>
+						</div>	
+						<div *ngIf="feeds.post_type == 'file'">
+							<ion-item *ngFor="let attch of feeds.file" >
+							  <ion-thumbnail item-start>
+								<img src="assets/followthebirdImgs/text-file-icon.png">
+							  </ion-thumbnail>
+							  <h2>Attachment.zip</h2>
+							  <a ion-button padding href="{{imageURL+attch.source}}" download>
+								Download
+							  </a>
+							</ion-item>
+						</div>
+						<div *ngIf="feeds.post_type == 'shared'">
 						<ion-card>
 							<ion-item text-wrap>
 							  <ion-avatar item-start (click)="viewProfile(feeds.origin.user_name)">
@@ -282,7 +283,7 @@
 							</ion-item>
 							<ion-card-content>
 								<p style="padding-bottom: 3px;padding-left: 20px;">{{feeds.origin.text}}</p>
-								<img *ngFor="let photo of feeds.origin.photos" [src]="imageURL+photo.source" (click)="viewImage(photo.source)">
+								<img *ngFor="let photo of feeds.origin.photos" [src]="imageURL+photo.source" (click)="viewImage(photo)">
 								<div *ngIf="feeds.origin.post_type == 'video'">
 									<video *ngFor="let originvid of feeds.origin.video" style="width:100%" controls preload="metadata" webkit-playsinline="webkit-playsinline" class="videoPlayer">
 										<source [src]="imageURL+originvid.source" type="video/mp4"/>
@@ -307,6 +308,7 @@
 								</div>		
 							</ion-card-content>
 						</ion-card>
+					</div>
 					</div>
 					<ion-row>
 					  <ion-col>

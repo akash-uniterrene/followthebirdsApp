@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, Nav, NavParams, ActionSheetController, AlertController, ToastController, Platform, MenuController, ModalController, LoadingController } from 'ionic-angular';
 import { User } from '../../providers';
 import { Post } from '../../providers/post/post';
 
@@ -18,7 +18,17 @@ import { Post } from '../../providers/post/post';
 export class ViewPhotoPage {
   public photo : any = [];
   private imageURL = "https://dev.followthebirds.com/content/uploads/";
-  constructor(public navCtrl: NavController, public navParams: NavParams, public user: User, public viewCtrl:ViewController,public modalCtrl: ModalController, public post: Post) {
+  constructor(public navCtrl: NavController, 
+    public user: User,
+    public post: Post,  
+    public toastCtrl: ToastController,
+    public navParams: NavParams,  
+	public actionSheetCtrl: ActionSheetController,
+	public alertCtrl: AlertController,
+    public menu: MenuController,
+    public nav: Nav,
+	public modalCtrl: ModalController,
+	private platform: Platform) {
 	  this.photo = this.navParams.get('photo') || [];
   }
 
@@ -29,12 +39,21 @@ export class ViewPhotoPage {
 	});
   }
   
+  viewComments(comments,post_id,handle){
+	const commentsModal = this.modalCtrl.create('CommentsPage',{comments,'post_id':post_id,'handle':handle});
+	commentsModal.present();
+  }
+  
   getBackgroundStyle(url) {
 	if(!url){
 		return 'url(assets/followthebirdImgs/no-profile-img.jpeg)'
 	} else {
 		return 'url(' + this.imageURL+url + ')'
 	}
+  }
+  
+  goBack(){
+	 this.navCtrl.pop(); 
   }
 
 }
