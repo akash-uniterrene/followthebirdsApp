@@ -141,7 +141,7 @@ export class ProfilePage {
 	}
 	
 	ionViewDidEnter(){
-		this.sub = Observable.interval(3000)
+		this.sub = Observable.interval(20000)
 			.subscribe((val) => { this.getLiveLitePost() });
 	}
   
@@ -736,7 +736,8 @@ export class ProfilePage {
 	}
 	
 	getLiveLitePost(){
-		this.user.getLiveLitePost({user_id: localStorage.getItem('user_id'),type_id:this.profile_id,last_post_live: localStorage.getItem('last_post_live')}).then((data) => {	
+		console.log(this.profile_id);
+		/* this.user.getLiveLitePost({user_id: localStorage.getItem('user_id'),type_id:this.profile_id,last_post_live: localStorage.getItem('last_post_live')}).then((data) => {	
 			let item : any = data;
 			if(item.length > 0){
 				localStorage.setItem('last_post_live','posts_profile-'+data[0].post_id);
@@ -746,7 +747,7 @@ export class ProfilePage {
 			}
 		}, (err) => {
 				
-		});	
+		}); */
 	}
 	
 	doInfinite(infiniteScroll) {

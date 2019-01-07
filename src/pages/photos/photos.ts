@@ -61,12 +61,11 @@ export class PhotosPage {
 	
 	
   }
-	viewImage(url){
-		const option : PhotoViewerOptions = {
-			  share: true
-			};
-		this.photoViewer.show(this.imageURL+url,"Image Preview",option);
-	}
+  
+  viewImage(photo){
+	this.nav.push('ViewPhotoPage', {photo: photo});
+  }
+  
 	
 	getAlbum(album_id){
 		this.navCtrl.push("AlbumPage",{'album_id':album_id});
@@ -74,7 +73,7 @@ export class PhotosPage {
 	
 	goBack(){
 	  this.navCtrl.setRoot("HomePage");
-  }
+    }
   
   
   getBackgroundStyle(url) {

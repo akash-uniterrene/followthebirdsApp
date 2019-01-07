@@ -14,7 +14,7 @@
   <ion-refresher (ionRefresh)="doRefresh($event)">
      <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div class="profileAndCover" [style.backgroundImage]="getCoverBackgroundStyle()"  (click)="viewImage(profile.user_cover)">
+  <div class="profileAndCover" [style.backgroundImage]="getCoverBackgroundStyle()" >
 	<input type="file" #coverPhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'cover')" />
     <button ion-button class="editcoverBtn" (click)="uploadCoverPicture()" *ngIf="profile.user_id == myId">
         <ion-icon color="white" name="camera" role="img" class="icon icon-ios ion-ios-camera" aria-label="camera"></ion-icon>
@@ -28,7 +28,7 @@
 	  
         <div class="profileWrap">
           <div class="profileImgArea">
-            <img [src]="imageURL+profile.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" (click)="viewImage(profile.user_picture)">            
+            <img [src]="imageURL+profile.user_picture" onError="this.src='assets/followthebirdImgs/no-profile-img.jpeg'" >            
           </div>
 			<input type="file" #profilePhoto style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event,'profile')" />
 			<button ion-fab class="profile-img" (click)="uploadProfilePicture()" *ngIf="profile.user_id == myId">					
@@ -187,7 +187,7 @@
                 <p>Photos</p>
             </ion-col>
             <ion-col *ngFor="let photo of photos | slice:0:6; let i=index" [id]="i" col-4>		
-              <div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(photo.source)" >                
+              <div class="ImgWrapBig" [style.backgroundImage]="getBackgroundStyle(photo.source)" (click)="viewImage(photo)">                
               </div>
             </ion-col>
         </ion-row>
@@ -236,13 +236,13 @@
 					<div (click)= "viewPost(feeds)">	
 						<div class="pg_wrapper" *ngIf="feeds.photos_num <= 2">
 							<div class="pg_{{feeds.photos_num}}x" *ngFor="let photo of feeds.photos">
-								<img [src]="imageURL+photo.source" (click)="viewImage(photo)">
+								<img [src]="imageURL+photo.source" >
 							</div>	
 						</div>	
 						<div class="pg_wrapper" *ngIf="feeds.photos_num > 2">
 							<div class="pg_2x" [style.backgroundImage]="getBackgroundStyle(feeds.photos[0].source)" ></div>
 							<div class="pg_2x" >
-								<div class="pg_{{feeds.photos_num}}x" *ngFor="let photo of feeds.photos | slice:1:feeds.photos_num; " [style.backgroundImage]="getBackgroundStyle(photo.source)" (click)="viewImage(photo)">
+								<div class="pg_{{feeds.photos_num}}x" *ngFor="let photo of feeds.photos | slice:1:feeds.photos_num; " [style.backgroundImage]="getBackgroundStyle(photo.source)" >
 								</div>
 							</div>
 						</div>
@@ -283,7 +283,7 @@
 							</ion-item>
 							<ion-card-content>
 								<p style="padding-bottom: 3px;padding-left: 20px;">{{feeds.origin.text}}</p>
-								<img *ngFor="let photo of feeds.origin.photos" [src]="imageURL+photo.source" (click)="viewImage(photo)">
+								<img *ngFor="let photo of feeds.origin.photos" [src]="imageURL+photo.source" >
 								<div *ngIf="feeds.origin.post_type == 'video'">
 									<video *ngFor="let originvid of feeds.origin.video" style="width:100%" controls preload="metadata" webkit-playsinline="webkit-playsinline" class="videoPlayer">
 										<source [src]="imageURL+originvid.source" type="video/mp4"/>
