@@ -61,11 +61,11 @@ export class MyApp {
       this.statusBar.backgroundColorByHexString('#750bb5');
       //this.statusBar.styleBlackOpaque();
       this.splashScreen.hide();
-	  platform.registerBackButtonAction(() => {
+	 /*  platform.registerBackButtonAction(() => {
         if (this.alertShown==false) {
           this.presentConfirm();  
         }
-	 }, 0)
+	 }, 0) */
    });
     this.initTranslate();
   }
