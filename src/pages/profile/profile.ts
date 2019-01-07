@@ -141,7 +141,7 @@ export class ProfilePage {
 	}
 	
 	ionViewDidEnter(){
-		this.sub = Observable.interval(10000)
+		this.sub = Observable.interval(3000)
 			.subscribe((val) => { this.getLiveLitePost() });
 	}
   
@@ -250,7 +250,7 @@ export class ProfilePage {
   
 	takeCameraSnap(type){
 		const options: CameraOptions = {
-		  quality: 100,
+		  quality: 500,
 		  destinationType: this.camera.DestinationType.DATA_URL,
 		  sourceType: this.camera.PictureSourceType.CAMERA,
 		  encodingType: this.camera.EncodingType.JPEG,
@@ -546,7 +546,7 @@ export class ProfilePage {
 		commentsModal.present();
 	}
 	
- postActivity(event,post): void
+  postActivity(event,post): void
   {
 	let  buttons : any = [
 		{

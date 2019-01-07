@@ -24,7 +24,7 @@
 			</div>			
 		</ion-label>		
 	  </ion-item>
-	  <ion-item class="reply_option" *ngIf="post_comment.handle == 'post'">
+	  <ion-item class="reply_option" >
 		<p class="reply-box" (click)="setReplyComment(comment.comment_replies,comment.comment_id)"> Reply </p>
 		<p class="reply-box allreply-box" *ngIf="comment.comment_replies_count > 1" (click)="setReplyComment(comment.comment_replies,comment.comment_id)"> view all {{comment.comment_replies_count}} replies</p>
 	  </ion-item>

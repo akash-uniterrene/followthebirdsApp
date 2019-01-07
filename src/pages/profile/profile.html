@@ -235,7 +235,7 @@
 					</ion-card-content>   
 					<div class="pg_wrapper" *ngIf="feeds.photos_num <= 2">
 						<div class="pg_{{feeds.photos_num}}x" *ngFor="let photo of feeds.photos">
-							<img [src]="mediapath+photo.source" (click)="viewImage(photo.source)">
+							<img [src]="imageURL+photo.source" (click)="viewImage(photo.source)">
 						</div>	
 					</div>	
 					<div class="pg_wrapper" *ngIf="feeds.photos_num > 2">

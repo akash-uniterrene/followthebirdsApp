@@ -131,7 +131,7 @@ export class GeneralInfoSlidePage {
   
 	takeCameraSnap(type){
 		const options: CameraOptions = {
-		  quality: 100,
+		  quality: 500,
 		  destinationType: this.camera.DestinationType.DATA_URL,
 		  sourceType: this.camera.PictureSourceType.CAMERA,
 		  encodingType: this.camera.EncodingType.JPEG,

@@ -87,14 +87,14 @@ export class PostPage {
 	
   }
   
-	  ionViewDidEnter(){
-		this.sub = Observable.interval(10000)
-			.subscribe((val) => { this.getLiveLitePost() });
-	  }
-	  
-	  ionViewDidLeave() {
-		this.sub.unsubscribe();
-	  }
+  ionViewDidEnter(){
+	this.sub = Observable.interval(3000)
+		.subscribe((val) => { this.getLiveLitePost() });
+  }
+  
+  ionViewDidLeave() {
+	this.sub.unsubscribe();
+  }
   
   doInfinite(infiniteScroll) {
     setTimeout(() => {
@@ -127,8 +127,13 @@ export class PostPage {
   }
   
   
+  
+  viewPost(post) {
+	this.nav.push('ViewPostPage', {post: post});
+  }
+  
   viewProfile(user_name,user_id) {
-		this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
+	this.nav.setRoot('ProfilePage', {user_name: user_name,user_id:user_id});
   } 
 
   downloadAttachment(filePath){
@@ -256,7 +261,7 @@ export class PostPage {
 	actionSheet.present();
   }
   
-  getBackgroundStyle(url) {
+	getBackgroundStyle(url) {
 		if(!url){
 			return 'url(assets/followthebirdImgs/no-profile-img.jpeg)'
 		} else {
@@ -296,6 +301,7 @@ export class PostPage {
 	
 	});
   }
+  
   
   reportAction(handle,id){
 	let params :any = {

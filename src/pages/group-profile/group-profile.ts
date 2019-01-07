@@ -89,7 +89,7 @@ export class GroupProfilePage {
   }
 
 	ionViewDidEnter(){
-		this.sub = Observable.interval(10000)
+		this.sub = Observable.interval(3000)
 			.subscribe((val) => { this.getLiveLitePost() });
 	}
   

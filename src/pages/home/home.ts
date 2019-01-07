@@ -49,7 +49,7 @@ export class HomePage {
 		public nav: Nav 
    ) {
      // localStorage.setItem('user_intro', 'false');
-		this.sub = Observable.interval(10000)
+		this.sub = Observable.interval(3000)
 		.subscribe((val) => { this.getLiveLiteData() });
 		
 		this.menu.enable(false);   

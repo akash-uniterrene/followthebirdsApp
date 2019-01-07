@@ -181,6 +181,24 @@ export class User {
    * Send a POST request to our signup endpoint with the data
    * the user entered on the form.
    */
+  getPhoto(user_id:number,params?: any) {	
+	let photo :any;
+	let seq = this.api.get('photo/'+user_id, params).share();
+	// don't have the data yet
+	return new Promise(resolve => {
+		seq.subscribe((res: any) => {
+			photo = res;
+			resolve(photo);
+		}, err => {
+			console.error('ERROR', err);
+		});
+	});
+  }
+  
+  /**
+   * Send a POST request to our signup endpoint with the data
+   * the user entered on the form.
+   */
   getfriends(id:number) {
 	let frindlist = [];	
 	let seq = this.api.get('friends/'+id, '').share();
